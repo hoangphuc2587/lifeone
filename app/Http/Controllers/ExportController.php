@@ -9,7 +9,6 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use DB;
 use Auth;
-use App\T_IRAI;
 class ExportController extends Controller implements FromCollection, WithHeadings
 {
     use Exportable;

@@ -43,7 +43,7 @@ class LoginController extends Controller
             $request->session()->put('page_click',1);
             $request->session()->put('page_center',5);
             $request->session()->put('total_row_on_one_page',50);
-            $request->session()->put('field_sort','T_IRAI.IRAI_ID');
+            //$request->session()->put('field_sort','T_IRAI.IRAI_ID');
             $request->session()->put('query_sort','asc');
             if($request->session()->has('search_by_kojigyoya_name'))
                 $request->session()->forget('search_by_kojigyoya_name');

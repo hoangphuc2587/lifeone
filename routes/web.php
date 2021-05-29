@@ -54,7 +54,6 @@
     route::Get('/detail-list','DetailController@detail_list');
 
     route::get('/search-detail/{id}','DetailController@search_detail')->name('search_detail');
-    route::get('/search-print/{id}/{hansu}','PrintController@search_print')->name('search_print');
 
     route::post('/search-print','PrintController@post_search_print')->name('post_search_print');
 

@@ -9,7 +9,7 @@
     <meta http-equiv='expires' content='0'>
     <meta http-equiv='pragma' content='no-cache'>
 
-    <title>日程調整依頼一覧画面</title>
+    <title>依頼一覧画面</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
@@ -64,6 +64,12 @@
         padding-right: 0px;
         padding-bottom: 30px;
         padding-left: 10px;
+    }
+
+    .title-header{
+        font-weight: 700;
+        text-align: center;
+        font-size: 36px;
     }
 
     .container {
@@ -244,8 +250,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
-                        <h1 data-type="header" id="iujvh"><span id="home">ライフワン日程調整依頼一覧</span>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <h1 data-type="header" id="iujvh"><span id="home">ライフワン依頼一覧</span>
+                        </h1>
+                        
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <h1 data-type="header" class="title-header"><span>仕入先名</span>
                         </h1>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -257,7 +268,9 @@
                     <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2 error "
                         style="margin-left: 25px;"> CSV出力 </button>
                     <button type="submit" name="submit" value="submit_print"
-                        class="btn btn-primary mb-2 error">印刷</button>
+                        class="btn btn-primary mb-2 error">PDF</button>
+                    <button type="submit" name="submit" value="submit_print"
+                        class="btn btn-primary mb-2 error">Excel</button>                        
                     <button type="submit" name="submit" value="submit_detail"
                         class="btn btn-primary mb-2 error">詳細</button>
                 </div>
@@ -431,15 +444,16 @@
                             <thead>
                                 <tr class="blue-tr">
                                     <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
-                                        width="144px"><a>全てチェック</a></th>
-                                    <th scope="col" class="th2" width="68px">目的</th>
-                                    <th scope="col" class="th3" width="132px">ID</th>
-                                    <th scope="col" class="th4" width="181px">設置者名</th>
-                                    <th scope="col" class="th5" width="163px">設置先住所</th>
-                                    <th scope="col" class="th6" width="86px">状況</th>
-                                    <th scope="col" class="th7" class="th1" width="108px">変更可否</th>
-                                    <th scope="col" class="th8" width="126px">コメント有</th>
-                                    <th scope="col" class="th9" width="auto">協力店様名</th>
+                                        width="130px"><a>全てチェック</a></th>
+                                    <th scope="col" class="th2" width="100px">依頼内容</th>
+                                    <th scope="col" class="th3" width="90px">依頼日</th>
+                                    <th scope="col" class="th4" width="132px">ID</th>
+                                    <th scope="col" class="th5" width="163px">状況</th>
+                                    <th scope="col" class="th6" width="86px">メーカー</th>
+                                    <th scope="col" class="th7" width="108px">配送先情報</th>
+                                    <th scope="col" class="th8" width="126px">備考有</th>
+                                    <th scope="col" class="th9" width="126px">納品希望有</th>
+                                    <th scope="col" class="th10" width="auto">フリースペース</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -463,14 +477,14 @@
                                 <tr class="blue-tr">
                                     <th scope="col" class="th1" style="text-decoration: underline;" width="144px">
                                         <a>全てチェック</a></th>
-                                    <th scope="col" class="th2" width="68px">目的</th>
-                                    <th scope="col" class="th3" width="132px">ID</th>
-                                    <th scope="col" class="th4" width="181px">設置者名</th>
-                                    <th scope="col" class="th5" width="163px">設置先住所</th>
-                                    <th scope="col" class="th6" width="86px">状況</th>
-                                    <th scope="col" class="th7" width="108px">変更可否</th>
-                                    <th scope="col" class="th8" width="126px">コメント有</th>
-                                    <th scope="col" class="th9" width="auto">協力店様名</th>
+                                    <th scope="col" class="th2" width="68px">依頼内容</th>
+                                    <th scope="col" class="th3" width="132px">依頼日</th>
+                                    <th scope="col" class="th4" width="181px">ID</th>
+                                    <th scope="col" class="th5" width="163px">状況</th>
+                                    <th scope="col" class="th6" width="86px">メーカー</th>
+                                    <th scope="col" class="th7" width="108px">配送先情報</th>
+                                    <th scope="col" class="th8" width="126px">備考有</th>
+                                    <th scope="col" class="th9" width="auto">納品希望有</th>
                                 </tr>
                             </thead>
                             <tbody>

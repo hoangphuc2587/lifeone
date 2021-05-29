@@ -8,7 +8,6 @@ use Session;
 use Illuminate\Support\MessageBag;
 use Hash;
 use App\MTantWeb;
-use App\T_IRAI;
 use DB;
 class DetailController extends Controller
 {
