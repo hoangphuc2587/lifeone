@@ -1,0 +1,135 @@
+a.btn{
+  color: #fff !important;
+  cursor: pointer;
+}
+table.table-top td span {
+    border: 1px solid #000;
+    padding: 0px 10px 0px 5px;
+    margin-right: -1px;
+}
+table.table-top td span:first-child{
+    border:none
+}
+
+table.table-top td {
+    display: flex;
+    margin-right: 15px;
+}
+table.table-top td:last-child {
+    margin: 0;
+}
+table.table-top tr {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.table-radio .radio,
+.table-radio .radio__label,
+.table-radio .radio__label:after,
+.table-radio .radio__label:before {
+  box-sizing: border-box;
+}
+
+.table-radio .radio__container:nth-child(1) {
+  padding-bottom: 35px;
+  margin-bottom: 28px;
+  border-bottom: 1px dotted #dbdbdb;
+}
+
+.table-radio .radio-inline {
+  display: inline-block;
+  width: 100%;
+}
+.table-radio .radio {
+  display: none;
+  opacity: 0;
+  width: 0;
+  margin: 0;
+  overflow: hidden;
+  -webkit-appearance: none;
+}
+.table-radio .radio__label {
+      border: 1px solid #000;
+      height: 32px;
+  width: 100%;
+  display: inline-block;
+  position: relative;
+  padding: 5px 10px 5px 10px;
+  cursor: pointer;
+  vertical-align: bottom;
+  color: #000;
+  font: 300 14px/20px Helvetica, Arial, sans-serif;
+  transition: color 200ms ease;
+}
+.table-radio .radio__label:before, .radio__label:after {
+  position: absolute;
+  content: "";
+  border-radius: 50%;
+  transition: border-color 200ms ease, -webkit-transform 200ms ease;
+  transition: transform 200ms ease, border-color 200ms ease;
+  transition: transform 200ms ease, border-color 200ms ease, -webkit-transform 200ms ease;
+}
+.table-radio .radio__label:before {
+  right: -30px;
+  top: 5px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #c5c5c5;
+}
+.table-radio .radio__label:after {
+  top: 10px;
+  right: -25px;
+  width: 10px;
+  height: 10px;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  background-color: #3c91e6;
+}
+.table-radio .radio__label:hover {
+  color: #3c91e6;
+}
+.table-radio .radio__label:hover:before {
+  border-color: #fb872b;
+}
+.table-radio .radio:checked + .radio__label {
+  color: rgba(0, 0, 0, 0.87);
+}
+.table-radio .radio:checked + .radio__label:before {
+  border-color: #3c91e6;
+}
+.table-radio .radio:checked + .radio__label:after {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+table textarea.text-control {
+    width: 100%;
+}
+button.btn {
+    cursor: pointer;
+}
+.not_edit input {
+    background: #e1e1e1;
+    box-shadow: none;
+    border: 1px solid #000;
+}
+.not-edit table.table-top input {
+    background: #e1e1e1;
+    border: 1px solid #000;
+}
+.not-edit .not_edit #checknull{
+  display: none !important;
+}
+.modal-open {
+    overflow: scroll !important;
+}
+.modal-body {
+    text-align: center;
+}
+.print-page textarea {
+    background: #fff;
+    border: none;
+}
+.input-yl input {
+    background: #ff9;
+    border: 1px solid #000;
+}

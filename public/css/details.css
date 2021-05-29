@@ -1,0 +1,395 @@
+        .table-bordered,
+        .table-bordered th,
+        .table-bordered td,
+        .table-bordered tr {
+            border-color: black;
+        }
+        .table-bordered th.grey-th {
+            font-weight: normal !important;
+            text-align: center;
+            background-color: #e1e1e1;
+            border-bottom: none;
+        }
+        .sticky {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            padding: 25px 0;
+            border-bottom: 1px solid black;
+        }
+        table textarea.text-control {
+            border: 1px solid #000;
+        }
+    @media (min-width: 770px) {       
+    
+        #iy899 {
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            text-align: right;
+        }
+
+        h1.title {
+            font-weight: 700;
+            font-size: 25px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            padding-right: 0px;
+        }
+
+        .container {
+            width: 1200px;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .top-f-left {
+            float: left;
+            margin-top: 10px;
+            margin-right: 15px;
+            margin-bottom: 8px;
+            margin-left: 0px;
+        }
+
+        .btn-primary {
+            width: 100px;
+        }
+
+        /************************************/
+
+        body {
+            font-size: 14px;
+        }
+
+        #itq5 {
+            display: inline-block;
+            padding: 5px 0 5px 0;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 0 !important;
+            /* background-color: #ffccff;*/
+            float: left;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        #itq6 {
+            padding: 5px 0 5px 0;
+            width: 100px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 0 !important;
+            display: block;
+            float: left;
+        }
+
+        #itq7 {
+            padding: 25px 0 0 10px;
+            display: inline-block;
+            float: left;
+            text-align: left;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 0 !important;
+            float: left;
+        }
+
+        #itq8 {
+            padding: 10px 0 0 25px;
+            width: 170px;
+            text-align: center;
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 0 !important;
+            float: right;
+        }
+
+        label {
+            margin-right: 2px;
+            margin-left: 2px;
+        }
+
+        .col-12 {
+            padding: 0 !important;
+        }
+
+        .row {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        table {
+            table-layout: fixed !important;
+            width: 100% !important;
+            margin-bottom: 0 !important;
+        }      
+
+        
+
+        .table-no-border td.bordered {
+            /* border: 1px solid black; */
+        }
+        /* The sticky class is added to the navbar with JS when it reaches its scroll position */        
+
+        label.text-control {
+            border: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            background: transparent !important;
+        }
+
+        textarea.text-control {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            border: none;
+            resize: none;
+            background: transparent !important;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+        .life-id{
+            width: 119px;
+        }
+        .life-name{
+            width: 225px;
+        }
+        .life-title-1{
+            width: 225px;
+        }
+        .life-kname{
+            width: 135px;
+        }
+        .life-kojigyosa{
+            width: 150px;
+        }
+        .life-tenpo-name{
+            width: 240px;
+        }
+        .life-postino{
+            width: 90px;
+        }
+        .life-address{
+            width: 474px;
+        }
+        .life-title-tel{
+            margin-left: 49px !important;
+        }
+        .life-tel{
+            width: 150px;
+        }
+        .life-hr{
+            margin-top: 70px;
+        }
+        .life-img{
+            padding-left:25px !important;
+        }
+        .life-check{
+            padding-left:25px !important;
+        }
+        .table-radio .radio__label{
+                /* border: 1px solid #000; */
+            text-align: center;
+        }
+
+        .title-check-mb {
+            display: none;
+        }
+        .top-mb, .title-mb, .table-mb, .show-mb, .show-mb textarea {
+            display: none;
+        }
+    }
+    @media (max-width: 768px) {
+        .modal-dialog {
+            min-height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: auto;
+        }
+        textarea {
+            overflow-y: hidden !important;
+        }
+        body {
+            font-size: 12px;
+        }
+
+        .top-pc, .title-pc, .table-pc, .show-pc, .show-pc textarea {
+            display: none;
+        }
+        .top-mb {
+            margin: 0;
+            font-size: 14px;
+        }
+        .top-mb div {
+            margin: 5px 0;
+        }
+        table.table-top tr {
+            display: block;
+        }
+
+        table.table-top {
+            width: 100%;
+            max-width: 100%;
+        }
+        table.table-top td{
+            display: block;
+            margin: 0 !important;
+        }
+
+        table.table-top input {
+            border: none;
+        }
+        .life-hr {
+            border: 1px solid #000;
+            height: 0;
+        }
+
+        .container-fluid.sticky, .container-fluid.sticky .container {
+            padding: 0;
+        }
+
+
+        h1.title {
+            font-size: 18px;
+        }
+
+        .container-fluid.sticky p#iy899{
+            margin-top: 15px;
+        }
+        .button-header {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .container-fluid.header {
+                z-index: 99999;
+            padding-top: 40px;
+            padding-bottom: 15px;
+        }
+
+        .user-header {
+            position: absolute;
+            top: -45px;
+            right: 0;
+        }
+
+        .user-header p {
+            display: block;
+            float: right;
+        }
+        label.radio__label {
+            border: none !important;
+        }
+        table.table-no-border {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        table.table-no-border textarea {
+            border: 1px solid #000;
+        }
+        .title-check-pc {
+            display: none;
+        }
+        table.table-radio {
+            width: 100%;
+        }
+
+        tr.mbc-1, tr.mbc-2 {
+            width: 50%;
+            float: left;
+        }
+
+        .table-radio .radio__label:before {
+            left: 0;
+        }
+
+        tr.mbc-1 td {
+            position: relative;
+        }
+
+        table.table-radio td {
+            width: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        table.table-radio td label.radio__label {padding-left: 40px;}
+
+        .title-check-mb {
+            position: absolute;
+            left: 23px;
+            top: 7px;
+        }
+
+        .table-radio .radio__label:after {
+            left: 5px;
+        }
+        tr.mbc-text-1 {
+            width: 50%;
+            position: absolute;
+            top: 22%;
+            right: 0;
+        }
+        tr.mbc-1 .radio__label,tr.mbc-2 .radio__label,tr.mbc-3 .radio__label {
+            padding-left: 46px !important;
+        }
+        td.bordered.comment1-mb {
+            position: absolute;
+            top: -355px;
+            z-index: 9999;
+                width: 93%;
+        }
+        h1#itq5 {
+            font-size: 20px;
+            width: 70%;
+            float: left;
+        }
+        h2#itq8 {
+            width: 30%;
+            float: left;
+            font-size: 20px;
+            text-align: right;
+                color: #f00;
+        }
+        .life-hr {
+            margin-top: 120px;
+        }
+        textarea {
+            width: 100%;
+        }
+        .col-12.show-mb {
+            padding: 10px;
+        }
+    }
+    @media (min-width: 770px) and (max-width: 1024px) {
+        span, p, td {
+            font-size: 10px;
+        }
+
+        input {
+            width: auto !important;
+        }
+
+        label {
+            font-size: 8px !important;
+            width: 80% !important;
+        }
+        table.table-top tr {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
