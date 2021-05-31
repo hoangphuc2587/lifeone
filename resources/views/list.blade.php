@@ -228,6 +228,9 @@
     #home:hover {
         cursor: pointer;
     }
+    .table2 th {
+        vertical-align: middle !important;
+    }
     </style>
 </head>
 
@@ -439,21 +442,21 @@
                 </div>
                 <div class="row">
                     <div class="table-cover">
-                        <table class="table table-bordered tbale2"
-                            style="margin-bottom: 0px !important;border:2px solid black">
+                        <table class="table table-bordered table2"
+                            style="margin-bottom: 0px !important;border:2px solid black; font-size:12px">
                             <thead>
                                 <tr class="blue-tr">
                                     <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
-                                        width="130px"><a>全てチェック</a></th>
-                                    <th scope="col" class="th2" width="100px">依頼内容</th>
-                                    <th scope="col" class="th3" width="90px">依頼日</th>
-                                    <th scope="col" class="th4" width="132px">ID</th>
-                                    <th scope="col" class="th5" width="163px">状況</th>
-                                    <th scope="col" class="th6" width="86px">メーカー</th>
-                                    <th scope="col" class="th7" width="108px">配送先情報</th>
-                                    <th scope="col" class="th8" width="126px">備考有</th>
-                                    <th scope="col" class="th9" width="126px">納品希望有</th>
-                                    <th scope="col" class="th10" width="auto">フリースペース</th>
+                                        width="97"><a>全てチェック</a></th>
+                                    <th scope="col" class="th2" width="100">依頼内容</th>
+                                    <th scope="col" class="th3" width="85">依頼日</th>
+                                    <th scope="col" class="th4" width="100">ID</th>
+                                    <th scope="col" class="th5" width="100">状況</th>
+                                    <th scope="col" class="th6" width="100">メーカー</th>
+                                    <th scope="col" class="th7" width="150">配送先情報</th>
+                                    <th scope="col" class="th8" width="63">備考有</th>
+                                    <th scope="col" class="th9" width="85">納品希望有</th>
+                                    <th scope="col" class="th10" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
                                 </tr>
                             </thead>
                             <tbody>
