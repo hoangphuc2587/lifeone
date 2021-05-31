@@ -27,6 +27,8 @@ class ListController extends Controller
     }
     public function show(Request $request)
     {
+        $page_click = 1;
+        $page_center = 1;
         if($request->session()->has('page_click') && $request->session()->has('page_center') && $request->session()->has('total_row_on_one_page') && $request->session()->has('field_sort') && $request->session()->has('query_sort') ){
             $page_click             =  $request->session()->get('page_click');
             $page_center            =  $request->session()->get('page_center');
