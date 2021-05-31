@@ -1,0 +1,235 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.14-MariaDB
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema life_one
+--
+
+CREATE DATABASE IF NOT EXISTS life_one;
+USE life_one;
+
+--
+-- Definition of table `m_kbn_web`
+--
+
+DROP TABLE IF EXISTS `m_kbn_web`;
+CREATE TABLE `m_kbn_web` (
+  `KBN_CD` varchar(50) NOT NULL,
+  `KBN_NAME` varchar(255) NOT NULL,
+  `KBNMSAI_CD` varchar(255) NOT NULL,
+  `KBNMSAI_NAME` varchar(255) NOT NULL,
+  `KBNMSAI_BIKO` varchar(255) DEFAULT NULL,
+  `DEL_FLG` tinyint(1) unsigned DEFAULT 0,
+  `ADD_TANTCD` varchar(50) DEFAULT NULL,
+  `ADD_YMD` datetime DEFAULT NULL,
+  `UPD_TANTCD` varchar(50) NOT NULL,
+  `UPD_YMD` datetime NOT NULL,
+  PRIMARY KEY (`KBN_CD`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `m_kbn_web`
+--
+
+/*!40000 ALTER TABLE `m_kbn_web` DISABLE KEYS */;
+/*!40000 ALTER TABLE `m_kbn_web` ENABLE KEYS */;
+
+
+--
+-- Definition of table `m_tant_web`
+--
+
+DROP TABLE IF EXISTS `m_tant_web`;
+CREATE TABLE `m_tant_web` (
+  `TANT_CD` varchar(50) NOT NULL,
+  `PASSWORD` varchar(255) DEFAULT NULL,
+  `PW_UPD_YMD` datetime DEFAULT NULL,
+  `TANT_NAME` varchar(255) DEFAULT NULL,
+  `HACYUSAKI_CD` varchar(255) DEFAULT NULL,
+  `DEL_FLG` tinyint(1) unsigned DEFAULT 0,
+  `ADD_TANTCD` varchar(50) DEFAULT NULL,
+  `ADD_YMD` datetime DEFAULT NULL,
+  `UPD_TANTCD` varchar(50) NOT NULL,
+  `UPD_YMD` datetime NOT NULL,
+  PRIMARY KEY (`TANT_CD`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `m_tant_web`
+--
+
+/*!40000 ALTER TABLE `m_tant_web` DISABLE KEYS */;
+INSERT INTO `m_tant_web` (`TANT_CD`,`PASSWORD`,`PW_UPD_YMD`,`TANT_NAME`,`HACYUSAKI_CD`,`DEL_FLG`,`ADD_TANTCD`,`ADD_YMD`,`UPD_TANTCD`,`UPD_YMD`) VALUES 
+ ('90001','$2y$10$Bmkb7iD5TJZInGdRhZIW3eeXO5zvSPhaNXJ3lgVkwHgc6DAywieZm','2021-05-29 11:39:41','クラフト情報システム１',NULL,0,NULL,NULL,'90001','2021-05-29 11:39:41');
+/*!40000 ALTER TABLE `m_tant_web` ENABLE KEYS */;
+
+
+--
+-- Definition of table `t_file`
+--
+
+DROP TABLE IF EXISTS `t_file`;
+CREATE TABLE `t_file` (
+  `HACYU_ID` varchar(50) NOT NULL,
+  `JYUNJO` int(10) unsigned NOT NULL,
+  `TANT_CD` varchar(255) DEFAULT NULL,
+  `FILE_NAME` varchar(255) DEFAULT NULL,
+  `FILE_PATH` varchar(255) NOT NULL,
+  `MAIL_FLG` int(10) unsigned DEFAULT 0,
+  `DEL_FLG` tinyint(1) unsigned DEFAULT 0,
+  `ADD_TANTCD` varchar(50) DEFAULT NULL,
+  `ADD_YMD` datetime DEFAULT NULL,
+  `UPD_TANTCD` varchar(50) NOT NULL,
+  `UPD_YMD` datetime NOT NULL,
+  PRIMARY KEY (`HACYU_ID`,`JYUNJO`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t_file`
+--
+
+/*!40000 ALTER TABLE `t_file` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_file` ENABLE KEYS */;
+
+
+--
+-- Definition of table `t_hacyu`
+--
+
+DROP TABLE IF EXISTS `t_hacyu`;
+CREATE TABLE `t_hacyu` (
+  `HACYU_ID` varchar(50) NOT NULL,
+  `IRAI_CD` varchar(255) DEFAULT NULL,
+  `STS_CD` varchar(255) DEFAULT NULL,
+  `HACYU_SYBET_CD` varchar(255) DEFAULT NULL,
+  `HACYU_SYBET_NAME` varchar(255) DEFAULT NULL,
+  `HAISO_SYBET_CD` varchar(255) DEFAULT NULL,
+  `IRAI_DAY` datetime DEFAULT NULL,
+  `IRAI_YMD_NAME` varchar(255) DEFAULT NULL,
+  `IRAI_YMD` date DEFAULT NULL,
+  `CO_NAME` varchar(255) DEFAULT NULL,
+  `CO_POSTNO` varchar(255) DEFAULT NULL,
+  `CO_ADDRESS` varchar(255) DEFAULT NULL,
+  `CO_TELNO` varchar(255) DEFAULT NULL,
+  `CO_FAX` varchar(255) DEFAULT NULL,
+  `CO_TANT_NAME` varchar(255) DEFAULT NULL,
+  `HACYUSAKI_CD` varchar(255) DEFAULT NULL,
+  `HACYUSAKI_NAME` varchar(255) DEFAULT NULL,
+  `HAISO_INF` varchar(255) DEFAULT NULL,
+  `NONYUSAKI_POSTNO` varchar(255) DEFAULT NULL,
+  `NONYUSAKI_ADDRESS` varchar(255) DEFAULT NULL,
+  `NONYUSAKI_NAME` varchar(255) DEFAULT NULL,
+  `NONYUSAKI_TELNO` varchar(255) DEFAULT NULL,
+  `NONYUSAKI_TANT_NAME` varchar(255) DEFAULT NULL,
+  `KENMEI` varchar(255) DEFAULT NULL,
+  `MESSAGE` text DEFAULT NULL,
+  `SYOKEI` int(10) unsigned DEFAULT NULL,
+  `SORYO` int(10) unsigned DEFAULT NULL,
+  `SYOHIZEI` int(10) unsigned DEFAULT NULL,
+  `SUM` int(10) unsigned DEFAULT NULL,
+  `NEBIKI_SUM` int(10) unsigned DEFAULT NULL,
+  `COMMENT1` text DEFAULT NULL,
+  `COMMENT2` text DEFAULT NULL,
+  `FREE` text DEFAULT NULL,
+  `HAISOGYOSYA_MULTI_FLG` tinyint(1) unsigned DEFAULT NULL,
+  `HAISOGYOSYA3_1_LABEL` varchar(255) DEFAULT NULL,
+  `HAISOGYOSYA3_2_LABEL` varchar(255) DEFAULT NULL,
+  `HAISOGYOSYA1` varchar(255) DEFAULT NULL,
+  `DENPYONO1` varchar(255) DEFAULT NULL,
+  `HAISOGYOSYA2` varchar(255) DEFAULT NULL,
+  `DENPYONO2` varchar(255) DEFAULT NULL,
+  `RENRAKUSAKI2` varchar(255) DEFAULT NULL,
+  `HAISOGYOSYA3_1` varchar(255) DEFAULT NULL,
+  `DENPYONO3_1` varchar(255) DEFAULT NULL,
+  `HAISOGYOSYA3_2` varchar(255) DEFAULT NULL,
+  `DENPYONO3_2` varchar(255) DEFAULT NULL,
+  `DRIVER_NAME` varchar(255) DEFAULT NULL,
+  `RENRAKUSAKI4` varchar(255) DEFAULT NULL,
+  `NO_DENPYO_FLG` tinyint(1) unsigned DEFAULT NULL,
+  `BIKO` text DEFAULT NULL,
+  `NOHIN_KIBO_FLG` tinyint(1) unsigned DEFAULT NULL,
+  `PDF_PATH` varchar(255) DEFAULT NULL,
+  `EXCEL_PATH` varchar(255) DEFAULT NULL,
+  `TAIO_TANT_CD` varchar(255) DEFAULT NULL,
+  `TAIO_CD` varchar(255) DEFAULT NULL,
+  `HAC_ANS_YMD` datetime DEFAULT NULL,
+  `REF_FLG` tinyint(1) unsigned DEFAULT NULL,
+  `VISIVLE_FLG` tinyint(1) unsigned DEFAULT NULL,
+  `DEL_FLG` tinyint(1) unsigned DEFAULT 0,
+  `ADD_TANTCD` varchar(50) DEFAULT NULL,
+  `ADD_YMD` datetime DEFAULT NULL,
+  `UPD_TANTCD` varchar(50) NOT NULL,
+  `UPD_YMD` datetime NOT NULL,
+  PRIMARY KEY (`HACYU_ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t_hacyu`
+--
+
+/*!40000 ALTER TABLE `t_hacyu` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_hacyu` ENABLE KEYS */;
+
+
+--
+-- Definition of table `t_hacyumsai`
+--
+
+DROP TABLE IF EXISTS `t_hacyumsai`;
+CREATE TABLE `t_hacyumsai` (
+  `HACYU_ID` varchar(50) NOT NULL,
+  `HACYUMSAI_ID` int(10) unsigned DEFAULT NULL,
+  `SPLIT_NO` int(10) unsigned DEFAULT NULL,
+  `CTGORY` varchar(255) DEFAULT NULL,
+  `MAKER` varchar(255) DEFAULT NULL,
+  `HINBAN` varchar(255) DEFAULT NULL,
+  `TANKA` int(10) unsigned DEFAULT NULL,
+  `SURYO` int(10) unsigned DEFAULT NULL,
+  `KINGAK` int(10) unsigned DEFAULT NULL,
+  `SIKIRI_RATE` int(10) unsigned DEFAULT NULL,
+  `NEBIKI_TANKA` int(10) unsigned DEFAULT NULL,
+  `NEBIKI_GAK` int(10) unsigned DEFAULT NULL,
+  `NEBIKI_YM` varchar(255) DEFAULT NULL,
+  `NOHIN_KIBO_YMD` date DEFAULT NULL,
+  `BIKO` text DEFAULT NULL,
+  `KAITO_NOKI` date DEFAULT NULL,
+  `NOHIN_YMD` date DEFAULT NULL,
+  `NYUKA_ID` varchar(255) DEFAULT NULL,
+  `DEL_FLG` tinyint(3) unsigned DEFAULT 0,
+  `ADD_TANTCD` varchar(50) DEFAULT NULL,
+  `ADD_YMD` datetime DEFAULT NULL,
+  `UPD_TANTCD` varchar(50) NOT NULL,
+  `UPD_YMD` datetime NOT NULL,
+  PRIMARY KEY (`HACYU_ID`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t_hacyumsai`
+--
+
+/*!40000 ALTER TABLE `t_hacyumsai` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_hacyumsai` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
