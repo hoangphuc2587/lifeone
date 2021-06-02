@@ -138,7 +138,7 @@
     <div class="container">
         <img data-type="image" src="{{ asset('img/lifeone_logo.jpg') }}" class="c2858"/>
         <div class="header-box">
-            <h1 data-type="header" id="izra">ライフワン日程調整依頼システム
+            <h1 data-type="header" id="izra">ライフワンWEB発注システム
             </h1>
         </div>
         <form class="form-block c3508" method="post" novalidate>
