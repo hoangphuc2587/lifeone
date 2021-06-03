@@ -16,13 +16,10 @@ class DetailController extends Controller
         $this->middleware('auth');
     }
 
-    public function show(Request $request)
+    public function show()
     {
-        if($request->session()->has('data_search_list_detail')){
-            $datas = $request->session()->get('data_search_list_detail');
-        }
-        $request->session()->forget('data_search_list_detail');
-        return view('detail',compact('datas'));
+       
+        return view('detail');
     }
     public function search_detail($id){
         $datas = DB::table('T_IRAI')

@@ -109,7 +109,7 @@
         border-image-width: initial;
         border-image-outset: initial;
         border-image-repeat: initial;
-        width: 1200px;
+        width: 100%;
         margin-top: 20px;
         margin-right: auto;
         margin-bottom: 0px;
@@ -254,8 +254,8 @@
 
 <body>
     <form action="{{  route('post_search_print')}}" method="POST" class="form_list">
-        <div class="container-fluid sticky">
-            <div class="container-fluid grey-bg">
+        <div class="container-fluid">
+            <div class="container grey-bg">
                 <div class="header-box">
                 </div>
                 <div class="row">
@@ -315,7 +315,7 @@
                                     </label>
                                 </td>
                                 <td class="search-panel-2">
-                                    <input type="checkbox" <?php if(Session::has('search_reply')){ echo 'checked';} ?>
+                                    <input type="checkbox"
                                         class="search_reply" value="未回答" style="position: relative; top: 4px;" />
                                     <label>完了</label> 
                                 </td>
