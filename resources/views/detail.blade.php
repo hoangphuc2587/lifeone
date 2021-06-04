@@ -48,6 +48,13 @@
     .total-num{
         margin-left: 110px;
     }
+    .total-num-98{
+        margin-left: 98px;
+    }
+    .total-num-90{
+        margin-left: 90px;
+    }
+
     .title-cmt{
         font-size: 11px;
     }
@@ -554,11 +561,11 @@
                             0
                             </span>
                         </div>
-                        <div>
+                        <div style="border-bottom: 1px solid;">
                             <span>
                             消費税
                             </span>
-                            <span class="total-num">
+                            <span class="total-num-98">
                             0
                             </span>
                         </div>
@@ -571,17 +578,16 @@
                             </span>
                         </div>
                     </div>
-                    <div>
+                    <div class="ml-1">
                         <div>
                             <span>
-                            小計
+                            値引額合計
                             </span>
-                            <span>
+                            <span class="total-num-90">
                             0
                             </span>
                         </div>
                     </div>
-
                 </div>
 
 
