@@ -325,11 +325,11 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xl-1 col-lg-9 col-md-9 col-sm-9 col-12">
+                    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12">
                    
                     </div>
 
-                    <div class="col-xl-3 col-lg-9 col-md-9 col-sm-9 col-12" style="padding-left: 100px;">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" style="padding-left: 100px;">
                         <div>
                             <label>依頼内容</label>
                             <select>
@@ -358,21 +358,21 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4 col-lg-9 col-md-9 col-sm-9 col-12" style="margin-right: -70px;">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-right: -70px;">
                         <div>
                             <label>依頼日</label>
                             <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/><label style="padding:0px 15px">～</label><input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
                         </div>
                     </div>
 
-                    <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12" style="margin-right: -35px;">
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12" style="margin-right: -35px;">
                         <div>
                             <label>ID</label>
                             <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px;"/>    
                         </div>
                     </div>
 
-                    <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12">
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12">
                         <div>
                             <label>状況</label>
                             <select>
@@ -616,9 +616,9 @@
                                         <input name="" class="save_list_checkbox" type="checkbox" value="">
                                     </td>
                                     <td>発注書</td>
-                                    <td>24/03/2021</td>
                                     <td></td>
-                                    <td>0400123090</td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td>TOTO</td>
                                     <td>群馬県伊勢崎市中町</td>
@@ -633,7 +633,7 @@
                                         <input name="" class="save_list_checkbox" type="checkbox" value="">
                                     </td>
                                     <td>仮発注書</td>
-                                    <td>24/03/2021</td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

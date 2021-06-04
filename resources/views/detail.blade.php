@@ -33,9 +33,20 @@
         font-weight: bold;
         padding-left: 235px;
     }
+    .brg-input{
+        background-color: #FFF2CC;
+        border: 1px solid black;
+    }
     .tb_list_checkbox{
         width: 10px !important;
         height: 10px !important;
+    }
+    .total{
+        margin-left: 480px;
+        font-size: 12px;
+    }
+    .total-num{
+        margin-left: 110px;
     }
     .title-cmt{
         font-size: 11px;
@@ -44,6 +55,12 @@
         resize: none;
         width: 950px;
         height: 100px;
+    }
+
+    .textarea-cmt-1{
+        resize: none;
+        width: 600px;
+        height: 60px;
     }
     .text-btn-tb{
         font-size:10px;
@@ -442,15 +459,15 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
                             <label>納品日：</label>
-                            <input type="text" placeholder=""  style="width: 120px; background: #FFF2CC; "/>        
+                            <input type="text" placeholder="" class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
                 </div>
 
-                <div class="row mt-3 mb-3">
+                <div class="row mt-3">
                     <div class="table-cover">
                         <table class="table table-bordered table2"
-                            style="margin-bottom: 0px !important; border:2px solid black; font-size:12px; line-height: 2.5;">
+                            style="margin-bottom: 0px !important; border:2px solid black; font-size:12px; line-height: 3.5;">
                             <thead>
                                 <tr class="blue-tr">
                                     <th scope="col" class="th2" width="25">№</th>
@@ -458,14 +475,14 @@
                                     <th scope="col" class="th4" width="63">メーカー</th>
                                     <th scope="col" class="th5" width="100">品番</th>
                                     <th scope="col" class="th6" width="63">単価</th>
-                                    <th  style="background: #FFF2CC;" scope="col" class="th7" width="35">数量</th>
+                                    <th class="brg-input" scope="col" class="th7" width="35">数量</th>
                                     <th scope="col" class="th8" width="63">金額</th>
                                     <th scope="col" class="th9" width="45">掛率</th>
                                     <th scope="col" class="th9" width="63">値引額</th>
                                     <th scope="col" class="th9" width="63">値引予定月</th>
                                     <th scope="col" class="th9" width="63">納品希望日</th>
                                     <th scope="col" class="th9" width="100">備考</th>
-                                    <th style="background: #FFF2CC;" scope="col" class="th9" width="100">納品日</th>
+                                    <th class="brg-input" scope="col" class="th9" width="100">納品日</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -475,14 +492,14 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="background: #FFF2CC;"></td>
+                                    <td class="brg-input"></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="background: #FFF2CC;"></td>
+                                    <td class="brg-input"></td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
@@ -490,14 +507,14 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="background: #FFF2CC;"></td>
+                                    <td class="brg-input"></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="background: #FFF2CC;"></td>
+                                    <td class="brg-input"></td>
                                 </tr>  
                                 <tr>
                                     <td>3</td>
@@ -505,27 +522,70 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="background: #FFF2CC;"></td>
+                                    <td class="brg-input"></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td style="background: #FFF2CC;"></td>
+                                    <td class="brg-input"></td>
                                 </tr>    
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div class="row">
-
+                <div class="row total">
+                    <div>
+                        <div>
+                            <span>
+                            小計
+                            </span>
+                            <span class="total-num">
+                            0
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                            送料
+                            </span>
+                            <span class="total-num">
+                            0
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                            消費税
+                            </span>
+                            <span class="total-num">
+                            0
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                            合計
+                            </span>
+                            <span class="total-num">
+                            0
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span>
+                            小計
+                            </span>
+                            <span>
+                            0
+                            </span>
+                        </div>
+                    </div>
 
                 </div>
 
 
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12" style="padding-left: 30px;">
                         <table class="table-no-border">
                             <tbody>
@@ -546,7 +606,7 @@
                                 </tr>
                                 <tr>
                                     <td class="bordered">
-                                        <textarea class="textarea-cmt" style="background: #FFF2CC;">
+                                        <textarea class="textarea-cmt brg-input">
                                         </textarea>
                                     </td>
                                 </tr>
@@ -597,6 +657,199 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row mt-4">
+                    <label style="padding-left: 25px;">【ドライバー情報】</label>
+                </div>
+                <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+                        <div>
+                            <label style="padding-left: 15px;">・ 配送業者</label>
+                            <select style="width: 155px;" class="brg-input">
+                                <option>
+                                    
+                                </option>
+                                <option value="T_IRAI.IRAI_ID"
+                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
+                                    ID</option>
+                                <option value="SETSAKI_NAME"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
+                                    設置者名</option>
+                                <option value="SETSAKI_ADDRESS"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
+                                    設置先住所</option>
+                                <option value="M_KBN_WEB.KBNMSAI_NAME"
+                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
+                                    変更可否</option>
+                                <option value="COMMENT1"
+                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
+                                    コメント有</option>
+                                <option value="KOJIGYOSYA_NAME"
+                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
+                                    協力店様名</option>
+                            </select>
+                        </div>
+                   </div>
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div>
+                            <label>送り状№</label>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 330px;"/>
+                        </div>
+                   </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+                        <div>
+                            <label style="padding-left: 15px;">・ 配送業者</label>
+                            <select style="width: 155px;" class="brg-input">
+                                <option>
+                                    
+                                </option>
+                                <option value="T_IRAI.IRAI_ID"
+                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
+                                    ID</option>
+                                <option value="SETSAKI_NAME"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
+                                    設置者名</option>
+                                <option value="SETSAKI_ADDRESS"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
+                                    設置先住所</option>
+                                <option value="M_KBN_WEB.KBNMSAI_NAME"
+                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
+                                    変更可否</option>
+                                <option value="COMMENT1"
+                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
+                                    コメント有</option>
+                                <option value="KOJIGYOSYA_NAME"
+                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
+                                    協力店様名</option>
+                            </select>
+                        </div>
+                   </div>
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div>
+                            <label>送り状№</label>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 330px;"/>
+                        </div>
+                   </div>
+
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div>
+                            <label>連絡先</label>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 195px;"/>
+                        </div>
+                   </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+                        <div>
+                            <label style="padding-left: 15px;">・ 配送業者</label>
+                            <select style="width: 155px;" class="brg-input">
+                                <option>
+                                    
+                                </option>
+                                <option value="T_IRAI.IRAI_ID"
+                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
+                                    ID</option>
+                                <option value="SETSAKI_NAME"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
+                                    設置者名</option>
+                                <option value="SETSAKI_ADDRESS"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
+                                    設置先住所</option>
+                                <option value="M_KBN_WEB.KBNMSAI_NAME"
+                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
+                                    変更可否</option>
+                                <option value="COMMENT1"
+                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
+                                    コメント有</option>
+                                <option value="KOJIGYOSYA_NAME"
+                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
+                                    協力店様名</option>
+                            </select>
+                        </div>
+                   </div>
+                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3col-12">
+                        <div>
+                            <label>送り状№</label>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 235px;"/>
+                        </div>
+                   </div>
+
+                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" style="margin-right: -70px;">
+                        <div>
+                            <label style="padding-left: 15px;">配送業者</label>
+                            <select style="width: 155px;" class="brg-input">
+                                <option>
+                                    
+                                </option>
+                                <option value="T_IRAI.IRAI_ID"
+                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
+                                    ID</option>
+                                <option value="SETSAKI_NAME"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
+                                    設置者名</option>
+                                <option value="SETSAKI_ADDRESS"
+                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
+                                    設置先住所</option>
+                                <option value="M_KBN_WEB.KBNMSAI_NAME"
+                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
+                                    変更可否</option>
+                                <option value="COMMENT1"
+                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
+                                    コメント有</option>
+                                <option value="KOJIGYOSYA_NAME"
+                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
+                                    協力店様名</option>
+                            </select>
+                        </div>
+                   </div>
+
+                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+                        <div>
+                            <label>送り状№</label>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 241px;"/>
+                        </div>
+                   </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div>
+                        <label style="padding-left: 15px;">・ ドライバー名</label>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 190px;"/>
+                        </div>
+                   </div>
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div>
+                            <label>連絡先</label>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 190px;"/>
+                        </div>
+                   </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div>
+                        <label style="padding-left: 15px;" >・ <span style="border: 0;" class="brg-input"> □送り状なし。　当日お客様にお電話します。</span></label>
+                        </div>
+                   </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="padding-left: 45px;">
+                        <table class="table-no-border">
+                            <tbody>
+                                <tr>
+                                <tr>
+                                    <td><span class="title-cmt">その他</span>
+                                    </td>
+                                </tr>
+                                <td class="bordered">
+                                    <textarea  class="textarea-cmt-1 brg-input">
+                                    </textarea>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    
                 </div>
             </div>
         </form>
