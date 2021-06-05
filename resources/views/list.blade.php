@@ -11,6 +11,7 @@
 
     <title>依頼一覧画面</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
+    <link href="{{ asset('datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     <script>
@@ -22,10 +23,23 @@
     </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
+
+    .dropdown-menu{
+        padding: 0.5rem;
+    }
+
+    input.datepicker{
+        border-radius: unset;
+        padding: 3px 4px;
+        direction: unset;
+        border: 1px solid rgba(0,0,0,.5);
+        font-size: 14px;
+    }
         
     label{
-        font-size:13px;
+        font-size:12px;
     }
+
 
     #iy899 {
         padding-top: 10px;
@@ -44,7 +58,7 @@
         padding: 0 !important;
     }
     #iro63i{
-        margin-top: 25px;
+        margin-top: 10px;
     }
 
     #iro64i {
@@ -63,8 +77,7 @@
         margin-bottom: 0px;
         margin-left: 0px;
         float: right;
-        width: 90px;
-        padding: 15px;
+        width: 90px;        
     }
 
     #ix1v4u {
@@ -82,7 +95,7 @@
         padding-top: 5px;
         padding-right: 0px;
         padding-bottom: 30px;
-        padding-left: 10px;
+        padding-left: 0px;
     }
 
     .title-header{
@@ -109,7 +122,7 @@
         border-image-width: initial;
         border-image-outset: initial;
         border-image-repeat: initial;
-        width: 100%;
+        width: 1280px;
         margin-top: 20px;
         margin-right: auto;
         margin-bottom: 0px;
@@ -145,13 +158,20 @@
     .table-cover {
         width: 100%;
         display: block;
-        margin-left: 30px;
-        margin-right: 30px;
+        margin-left: 15px;
+        margin-right: 15px;
     }
 
     .table-cover table {
         margin-bottom: 50px;
         background-color: #ffffff;
+        padding: 0.75rem 0.25rem;
+        border: 2px solid black;
+        font-size: 13px;
+    }
+
+    .table-cover table th {
+      padding: 0.75rem 0.25rem !important;
     }
 
     .table-bordered,
@@ -254,7 +274,7 @@
 
 <body>
     <form action="{{  route('post_search_print')}}" method="POST" class="form_list">
-        <div class="container-fluid">
+        <div class="container-fluid sticky">
             <div class="container grey-bg">
                 <div class="header-box">
                 </div>
@@ -288,7 +308,7 @@
                 <div class="row">
                     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
                         <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2 error "
-                            style="margin-left: 15px;">CSV</button>
+                            style="margin-left: 0px;">CSV</button>
                         <button type="submit" name="submit" value="submit_print"
                             class="btn btn-primary mb-2 error">PDF</button>
                         <button type="submit" name="submit" value="submit_print"
@@ -310,7 +330,7 @@
                         <table class="search-panel">
                             <tr>
                                 <td class="search-panel-1">
-                                    <label style="padding-left: 10px;">
+                                    <label>
                                     1～5件(全5件)
                                     </label>
                                 </td>
@@ -332,7 +352,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" style="padding-left: 100px;">
                         <div>
                             <label>依頼内容</label>
-                            <select>
+                            <select style="width: 142px;">
                                 <option>
                                     
                                 </option>
@@ -361,7 +381,9 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-right: -70px;">
                         <div>
                             <label>依頼日</label>
-                            <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/><label style="padding:0px 15px">～</label><input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
+                            <input type="text" data-date-format="mm/dd/yyyy" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>
+                            <label style="padding:0px 15px">～</label>
+                            <input type="text" data-date-format="mm/dd/yyyy" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
                         </div>
                     </div>
 
@@ -375,7 +397,7 @@
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12">
                         <div>
                             <label>状況</label>
-                            <select>
+                            <select style="width: 142px;">
                                 <option>
                                     
                                 </option>
@@ -404,7 +426,7 @@
 
                 <div class="row">
                     <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12">
-                        <label style="padding-left: 10px;">
+                        <label>
                         納期催促：○件
                         </label>
                     </div>
@@ -412,7 +434,7 @@
 
                 <div class="row">
                     <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12">
-                        <label style="padding-left: 10px;">
+                        <label>
                         納期回答未・一部未回答：○件
                         </label>
                     </div>
@@ -434,7 +456,9 @@
                      <div class="col-xl-4 col-lg-9 col-md-9 col-sm-9 col-12" style="margin-right: -50px;">
                         <div>
                             <label>納品日</label>
-                            <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/><label style="padding:0px 15px">～</label><input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
+                            <input type="text" placeholder="" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>
+                            <label style="padding:0px 15px">～</label>
+                            <input type="text" placeholder="" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>        
                         </div>
                     </div>
 
@@ -448,7 +472,7 @@
 
                 <div class="row">
                     <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12">
-                        <label style="padding-left: 10px;">
+                        <label>
                         納期催促：○件
                         </label>
                     </div>
@@ -456,12 +480,12 @@
 
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <label style="padding-left: 10px;">
+                        <label>
                         ドライバー情報入力未：○件
                         </label>
                     </div>
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
                     <nav class="pag-nav" aria-label="...">
                         <ul class="pagination">
                          
@@ -478,6 +502,27 @@
                                     href="">1
                                 </a>
                             </li>
+                            <li class="page-item">
+                                <a class="page-link "
+                                    href="">2
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link "
+                                    href="">3
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link "
+                                    href="">4
+                                </a>
+                            </li>
+
+                            <li class="page-item">
+                                <a class="page-link "
+                                    href="">5
+                                </a>
+                            </li>
                      
                             <li class="page-item">
                                 <a class="page-link " href="">次へ</a>
@@ -492,7 +537,9 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro63i">
                             <label>表示</label>
                             <select>
-                                <option>50件</option>  
+                                <option value="10">10件</option>
+                                <option value="30">30件</option>
+                                <option value="50" selected="select">50件</option>
                             </select>
                             
                             </div>
@@ -501,200 +548,127 @@
                             </div>
                             
                         </div>    
-                    </div>
-                   
-                </div>
-               
-                <div class="row">
-                    <div class="table-cover">
-                    <label>仕入先様ログイン時の明細</label>
-                        <table class="table table-bordered table2"
-                            style="margin-bottom: 0px !important;border:2px solid black; font-size:12px">
-                            <thead>
-                                <tr class="blue-tr">
-                                    <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
-                                        width="97"><a>全てチェック</a></th>
-                                    <th scope="col" class="th2" width="100">依頼内容</th>
-                                    <th scope="col" class="th3" width="85">依頼日</th>
-                                    <th scope="col" class="th4" width="100">ID</th>
-                                    <th scope="col" class="th5" width="100">状況</th>
-                                    <th scope="col" class="th6" width="100">メーカー</th>
-                                    <th scope="col" class="th7" width="150">配送先情報</th>
-                                    <th scope="col" class="th8" width="63">備考有</th>
-                                    <th scope="col" class="th9" width="85">納品希望有</th>
-                                    <th scope="col" class="th10" width="250">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td>発注書</td>
-                                    <td>24/03/2021</td>
-                                    <td>0400123090</td>
-                                    <td></td>
-                                    <td>TOTO</td>
-                                    <td>群馬県伊勢崎市中町</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td>仮発注書</td>
-                                    <td>24/03/2021</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="tdDot"><span class="dot"></span></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>    
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td>納期確認書</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="tdDot"><span class="dot"></span></td>
-                                    <td></td>
-                                </tr>    
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>            
-                                    <td></td>
-                                </tr>        
-                            </tbody>
-                        </table>
-                    </div>
+                    </div>                   
                 </div>
 
-                <div class="row mt-5">
-                    <div class="table-cover">
-                    <label>ライフワン様ログイン時の明細</label>
-                        <table class="table table-bordered table2"
-                            style="margin-bottom: 0px !important;border:2px solid black; font-size:12px">
-                            <thead>
-                                <tr class="blue-tr">
-                                    <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
-                                        width="97"><a>全てチェック</a></th>
-                                    <th scope="col" class="th2" width="100">依頼内容</th>
-                                    <th scope="col" class="th3" width="62">依頼日</th>
-                                    <th scope="col" class="th3" width="62">発注種別</th>
-                                    <th scope="col" class="th4" width="62">ID</th>
-                                    <th scope="col" class="th5" width="100">状況</th>
-                                    <th scope="col" class="th6" width="100">メーカー</th>
-                                    <th scope="col" class="th7" width="150">配送先情報</th>
-                                    <th scope="col" class="th8" width="63">備考有</th>
-                                    <th scope="col" class="th9" width="85">担当者</th>
-                                    <th scope="col" class="th9" width="83">対応状況</th>
-                                    <th scope="col" class="th9" width="85">最終入荷予定日</th>
-                                    <th scope="col" class="th9" width="83">仕入先様名</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td>発注書</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>TOTO</td>
-                                    <td>群馬県伊勢崎市中町</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td>仮発注書</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="tdDot"><span class="dot"></span></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>    
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td>納期確認書</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>    
-                                <tr>
-                                    <td>
-                                        <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>        
-                            </tbody>
-                        </table>
+                <div class="row">
+                    <div class="table-cover">                    
+                    <table class="table table-bordered table2" style="margin-bottom: 0px !important;">
+                        <thead>
+                            <tr class="blue-tr">
+                                <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
+                                    width="90"><a>全てチェック</a></th>
+                                <th scope="col" class="th2" width="85">依頼内容</th>
+                                <th scope="col" class="th3" width="85">依頼日</th>
+                                <th scope="col" class="th4" width="100">ID</th>
+                                <th scope="col" class="th5" width="120">状況</th>
+                                <th scope="col" class="th6" width="120">メーカー</th>
+                                <th scope="col" class="th7" width="200">配送先情報</th>
+                                <th scope="col" class="th8" width="60">備考有</th>
+                                <th scope="col" class="th9" width="80">納品希望有</th>
+                                <th scope="col" class="th10" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                     </div>
-                </div>
+                </div> 
 
             </div>
         </div>
 
+        <div class="container-fluid">
+            <div class="container grey-bg">
+                <div class="row" style="margin-top:394px;"></div>
+                <div class="row">
+                    <div class="table-cover">                    
+                    <table class="table table-bordered table2">
+                        <thead>
+                            <tr class="blue-tr">
+                                <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
+                                    width="90"><a>全てチェック</a></th>
+                                <th scope="col" class="th2" width="85">依頼内容</th>
+                                <th scope="col" class="th3" width="85">依頼日</th>
+                                <th scope="col" class="th4" width="100">ID</th>
+                                <th scope="col" class="th5" width="120">状況</th>
+                                <th scope="col" class="th6" width="120">メーカー</th>
+                                <th scope="col" class="th7" width="200">配送先情報</th>
+                                <th scope="col" class="th8" width="60">備考有</th>
+                                <th scope="col" class="th9" width="80">納品希望有</th>
+                                <th scope="col" class="th10" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
+                                </td>
+                                <td>発注書</td>
+                                <td>24/03/2021</td>
+                                <td>0400123090</td>
+                                <td></td>
+                                <td>TOTO</td>
+                                <td>群馬県伊勢崎市中町</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
+                                </td>
+                                <td>仮発注書</td>
+                                <td>24/03/2021</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="tdDot"><span class="dot"></span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>    
+                            <tr>
+                                <td>
+                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
+                                </td>
+                                <td>納期確認書</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="tdDot"><span class="dot"></span></td>
+                                <td></td>
+                            </tr>    
+                            <tr>
+                                <td>
+                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>            
+                                <td></td>
+                            </tr>        
+                        </tbody>
+                    </table>
+                    </div>
+                </div> 
+            </div>               
+        </div>
+
     </form>
 
-    <!-- <script src="{{ URL::asset('js/jquery.min.js') }}"></script> -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
-    <!-- <script src="http://code.jquery.com/jquery-1.7.2.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>   
     <script src="{{ URL::asset('js/tether.min.js') }}"></script>
+    <script src="{{ URL::asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
-    
     <script src="{{ URL::asset('js/scripts.js') }}"></script>
 </body>
 
