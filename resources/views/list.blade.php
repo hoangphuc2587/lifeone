@@ -353,27 +353,10 @@
                         <div>
                             <label>依頼内容</label>
                             <select style="width: 142px;">
-                                <option>
-                                    
-                                </option>
-                                <option value="T_IRAI.IRAI_ID"
-                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
-                                    ID</option>
-                                <option value="SETSAKI_NAME"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
-                                    設置者名</option>
-                                <option value="SETSAKI_ADDRESS"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
-                                    設置先住所</option>
-                                <option value="M_KBN_WEB.KBNMSAI_NAME"
-                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
-                                    変更可否</option>
-                                <option value="COMMENT1"
-                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
-                                    コメント有</option>
-                                <option value="KOJIGYOSYA_NAME"
-                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
-                                    協力店様名</option>
+                                <option value=""></option>
+                                @foreach ($requestDetails as $request)
+                                <option value="{{ $request->KBNMSAI_CD }}">{{ $request->KBNMSAI_NAME }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -398,27 +381,10 @@
                         <div>
                             <label>状況</label>
                             <select style="width: 142px;">
-                                <option>
-                                    
-                                </option>
-                                <option value="T_IRAI.IRAI_ID"
-                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
-                                    ID</option>
-                                <option value="SETSAKI_NAME"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
-                                    設置者名</option>
-                                <option value="SETSAKI_ADDRESS"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
-                                    設置先住所</option>
-                                <option value="M_KBN_WEB.KBNMSAI_NAME"
-                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
-                                    変更可否</option>
-                                <option value="COMMENT1"
-                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
-                                    コメント有</option>
-                                <option value="KOJIGYOSYA_NAME"
-                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
-                                    協力店様名</option>
+                                <option value=""></option>
+                                @foreach ($statusList as $request)
+                                <option value="{{ $request->KBNMSAI_CD }}">{{ $request->KBNMSAI_NAME }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

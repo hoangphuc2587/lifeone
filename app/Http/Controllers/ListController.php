@@ -27,6 +27,20 @@ class ListController extends Controller
     }
     public function show(Request $request)
     {
+        //依頼内容
+        $query = DB::table('M_KBN_WEB')
+        ->where('KBN_CD','00')
+        ->where('DEL_FLG', 0);
+
+        $requestDetails = $query->get();
+
+        //状況
+        $query = DB::table('M_KBN_WEB')
+        ->where('KBN_CD','04')
+        ->where('DEL_FLG', 0);
+
+        $statusList = $query->get();
+
         $page_click = 1;
         $page_center = 1;
         if($request->session()->has('page_click') && $request->session()->has('page_center') && $request->session()->has('total_row_on_one_page') && $request->session()->has('field_sort') && $request->session()->has('query_sort') ){
@@ -41,7 +55,7 @@ class ListController extends Controller
         $page_total = 0;
         $total_datas = 0;
         
-        return view('list',compact('lists','page_click','page_total','page_center','total_datas'));
+        return view('list',compact('lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList'));
     }
     public function sort_commet($lists){
         $flag_sort1     = false;
