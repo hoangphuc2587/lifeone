@@ -31,18 +31,13 @@ class ListController extends Controller
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','00')
         ->where('DEL_FLG', 0);
-
         $requestDetails = $query->get();
 
         //状況
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','04')
         ->where('DEL_FLG', 0);
-
         $statusList = $query->get();
-
-        $page_click = 1;
-        $page_center = 1;
         if($request->session()->has('page_click') && $request->session()->has('page_center') && $request->session()->has('total_row_on_one_page') && $request->session()->has('field_sort') && $request->session()->has('query_sort') ){
             $page_click             =  $request->session()->get('page_click');
             $page_center            =  $request->session()->get('page_center');
@@ -52,9 +47,33 @@ class ListController extends Controller
         }
 
         $lists = array();
-        $page_total = 0;
-        $total_datas = 0;
-        
+
+        $query = DB::table('T_HACYU')
+        ->select(
+         'T_HACYU.IRAI_YMD',
+         'T_HACYU.HACYU_ID',
+         'T_HACYUMSAI.MAKER',
+         'T_HACYU.NONYUSAKI_ADDRESS',
+         'T_HACYU.COMMENT1',
+         'T_HACYU.NOHIN_KIBO_FLG',
+         'T_HACYU.FREE',
+         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD"),
+         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '04' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD"),
+        )
+        ->leftJoin('T_HACYUMSAI','T_HACYUMSAI.HACYU_ID','=','T_HACYU.HACYU_ID')
+        ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
+        ->GROUPBY('T_HACYU.HACYU_ID');
+
+
+        $total_datas = count($query->get());
+
+        $page_total = ceil($total_datas/$total_row_on_one_page);
+
+        $query = $query->skip(($page_click - 1) * $total_row_on_one_page)
+        ->take($total_row_on_one_page)
+        ->orderBy($field_sort,$query_sort);
+        $lists = $query->get();
+
         return view('list',compact('lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList'));
     }
     public function sort_commet($lists){

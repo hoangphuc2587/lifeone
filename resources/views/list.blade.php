@@ -451,61 +451,77 @@
                         </label>
                     </div>
 
-                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
-                    <nav class="pag-nav" aria-label="...">
-                        <ul class="pagination">
-                         
-                            <li class="page-item ">
-                                <a class="page-link" style="visibility: hidden;">0</a>
-                            </li>
-                  
-                            <li class="page-item ">
-                                <a class="page-link " href="" tabindex="-1">前へ</a>
-                            </li>
-                  
-                            <li class="page-item">
-                                <a class="page-link "
-                                    href="">1
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link "
-                                    href="">2
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link "
-                                    href="">3
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link "
-                                    href="">4
-                                </a>
-                            </li>
-
-                            <li class="page-item">
-                                <a class="page-link "
-                                    href="">5
-                                </a>
-                            </li>
-                     
-                            <li class="page-item">
-                                <a class="page-link " href="">次へ</a>
-                            </li>
-              
-                        </ul>
-                    </nav>
+                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">                 
+                        <nav class="pag-nav" aria-label="...">
+                            <ul class="pagination">
+                                <?php if($total_datas == 0) {?>
+                                <li class="page-item ">
+                                    <a class="page-link" style="visibility: hidden;">0</a>
+                                </li>
+                                <?php } ?>
+                                <?php
+                            $page_avg = floor($page_center / 2);
+                            if($total_datas != 0){
+                            if ($page_click != 1 && $total_datas > 0) { //Load prev
+                                ?>
+                                <li class="page-item ">
+                                    <a class="page-link " href="{{route('asc_page_current')}}" tabindex="-1">前へ</a>
+                                </li>
+                                <?php
+                            }
+                            $page_pre  = $page_click - $page_avg; //số page bên trái của page được click
+                            $page_next = $page_click + $page_avg; //số page bên phải của page được click
+                            if($page_pre<=0){ //Nếu page trái <=0 thì cộng dồn qua phải
+                                $page_next -= $page_pre;
+                                $page_next += 1;
+                                $page_pre   = 1;
+                            }
+                            if($page_next > $page_total){ //Nếu page phải > tổng trang thì cộng dồn về trái
+                                if($page_pre-($page_next-$page_total)>0){
+                                    $page_pre-=$page_next-$page_total;
+                                }
+                                if($page_click == $page_total && $page_click > 1){
+                                    $page_pre = $page_total - 4;
+                                    if($page_pre <= 0)
+                                        $page_pre = 1;
+                                }
+                                $page_next = $page_total;
+                            }
+                            for ($i = $page_pre; $i <= $page_next; $i++) {
+                                ?>
+                                <li class="page-item <?php if($i==$page_click){echo "active";}?>">
+                                    <a class="page-link "
+                                        href="{{route('page_click',['page_click'=> $i])}}"><?php echo $i; ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                            if ($page_click != $page_total && $total_datas > 0) {
+                                ?>
+                                <li class="page-item">
+                                    <a class="page-link " href="{{route('desc_page_current')}}">次へ</a>
+                                </li>
+                                <?php
+                                } }
+                            ?>
+                            </ul>
+                        </nav>
                     </div>
 
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro63i">
                             <label>表示</label>
-                            <select>
-                                <option value="10">10件</option>
-                                <option value="30">30件</option>
-                                <option value="50" selected="select">50件</option>
+                            <select id="icb8hk">
+                                <option value="10"
+                                    <?php if(session()->get('total_row_on_one_page') == 10) {echo "selected";}?>>
+                                    10件</option>
+                                <option value="30"
+                                    <?php if(session()->get('total_row_on_one_page') == 30) {echo "selected";}?>>
+                                    30件</option>
+                                <option value="50"
+                                    <?php if(session()->get('total_row_on_one_page') == 50) {echo "selected";}?>>
+                                    50件</option>
                             </select>
                             
                             </div>
@@ -566,62 +582,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($page_total > 0)
+                                @foreach($lists as $item)
                             <tr>
                                 <td>
-                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
+                                    <input name="" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}">
                                 </td>
-                                <td>発注書</td>
-                                <td>24/03/2021</td>
-                                <td>0400123090</td>
-                                <td></td>
-                                <td>TOTO</td>
-                                <td>群馬県伊勢崎市中町</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ $item->IRAI_CD }}</td>
+                                <td>{{ date('d/m/Y', strtotime($item->IRAI_YMD)) }}</td>
+                                <td>{{ $item->HACYU_ID }}</td>
+                                <td>{{ $item->STS_CD }}</td>
+                                <td>{{ $item->MAKER }}</td>
+                                <td>{{ $item->NONYUSAKI_ADDRESS }}</td>
+                                <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>
+                                <td class="tdDot">@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
+                                <td>{{ $item->FREE }}</td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                </td>
-                                <td>仮発注書</td>
-                                <td>24/03/2021</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="tdDot"><span class="dot"></span></td>
-                                <td></td>
-                                <td></td>
-                            </tr>    
-                            <tr>
-                                <td>
-                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                </td>
-                                <td>納期確認書</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="tdDot"><span class="dot"></span></td>
-                                <td></td>
-                            </tr>    
-                            <tr>
-                                <td>
-                                    <input name="" class="save_list_checkbox" type="checkbox" value="">
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>            
-                                <td></td>
-                            </tr>        
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                     </div>
