@@ -598,11 +598,15 @@
                                 @foreach($lists as $item)
                             <tr>
                                 <td>
-                                    <input name="" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}">
+                                    <input name="check_box_list[]" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}}-0">
                                 </td>
                                 <td>{{ $item->IRAI_CD }}</td>
                                 <td>{{ date('m/d/Y', strtotime($item->IRAI_YMD)) }}</td>
-                                <td>{{ $item->HACYU_ID }}</td>
+                                <td>
+                                    <a class="single_choose"
+                                        href="{{ route('search_print',['id'=>$item->HACYU_ID]) }}">{{$item->HACYU_ID}}
+                                    </a>
+                                </td>                                
                                 <td>{{ $item->STS_CD }}</td>
                                 <td>{{ $item->MAKER }}</td>
                                 <td>{{ $item->NONYUSAKI_ADDRESS }}</td>
@@ -620,6 +624,23 @@
         </div>
 
     </form>
+
+    <a id="jumplist1" class="btn btn-raised btn-primary" data-remote="false" data-toggle="modal" data-target="#canceler"
+        data-href="#canceler" href="#canceler" style="display:none;">保存</a>
+    <div class="modal fade show" id="canceler" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="canceler"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <p>メッセージ</p>
+                    <p>明細が選択されていません !</p>
+                </div>
+                <div class="modal-footer" style="justify-content: center;">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>    
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>   
     <script src="{{ URL::asset('js/tether.min.js') }}"></script>

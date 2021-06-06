@@ -303,7 +303,6 @@ $(function(){
         if(list_checkbox_sessionLocalStorage && list_checkbox_sessionLocalStorage.length != 0){
             data_list_checkbox = list_checkbox_sessionLocalStorage;
         }
-        console.log()    
         if($(this)[0].checked === true){
             data_list_checkbox.push($(this)[0].value);
             data_list_checkbox.sort();
