@@ -45,7 +45,7 @@
     route::get('/field-sort/{field_sort}','ListController@field_sort');
     route::get('/query-sort/{query_sort}','ListController@query_sort');
 
-    route::post('/search-list-by-id-and-name','ListController@search_list_by_id_and_name');
+    route::post('/search-list-by-item','ListController@search_list_by_item');
     route::post('/search-list-by-id','ListController@search_list_by_id');
     route::post('/search-list-by-kojigyoya_name','ListController@search_list_by_kojigyoya_name');
     route::post('/search-list-all','ListController@search_list_all');

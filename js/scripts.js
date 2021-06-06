@@ -115,11 +115,21 @@ $(function(){
             window.location = '/list';
         })   
     })
-    $(document).on('click','.search_id_and_name',function(){
+    $(document).on('click','.search_by_item',function(){
         var data = [];
         sessionStorage.setItem('data_list_checkbox',JSON.stringify(data));
-        var input_id    = $('#i0tgl7-2-2').val();
-        var name  = $('#if8qmi').val();
+        var input_id    = $('#search-id').val();
+        var name  = $('#search-name').val();
+        var request  = $('#search-request').val();
+        var irai_day_from  = $('#search-irai-day-from').val();
+        var irai_day_to  = $('#search-irai-day-to').val();
+        var status  = $('#search-status').val();
+        var maker  = $('#search-maker').val();
+        var address  = $('#search-address').val();
+        var nohin_day_from  = $('#search-nohin-day-from').val();
+        var nohin_day_to  = $('#search-nohin-day-to').val();
+        var hinban  = $('#search-hinban').val();
+
         var id = '';
         if(input_id.indexOf(',') != -1){
             for(let i=0 ; i < input_id.length ; i++){
@@ -131,55 +141,31 @@ $(function(){
         }
         else{
             id = input_id;
-        }
-        if(id !== '' && name !== ''){
-            $.ajax({
-                url     : '/search-list-by-id-and-name',
-                type    : 'POST',
-                data    : {id:id,name:name},
-                cache   : false,
-                success : function(data){
-                    console.log(data)
-                    window.location = '/list';
-                }
-            });
-            return;
-        }
-        if(id !== ''){
-            $.ajax({
-                url     : '/search-list-by-id',
-                type    : 'POST',
-                data    : {id:id},
-                cache   : false,
-                success : function(data){
-                    console.log(data)
-                    window.location = '/list';
-                }
-            });
-            return;
-        }
-        if(name !== ''){
-            $.ajax({
-                url     : '/search-list-by-kojigyoya_name',
-                type    : 'POST',
-                data    : {name : name},
-                cache   : false,
-                success : function(data){
-                    window.location = '/list';
-                }
-            });
-        }
-        if(id === '' && name === ''){
-            $.ajax({
-                url     : '/search-list-all',
-                type    : 'POST',
-                data    : {name:name},
-                cache   : false,
-                success : function(data){
-                    window.location = '/list';
-                }
-            });
-        } 
+        }        
+        $.ajax({
+            url     : '/search-list-by-item',
+            type    : 'POST',
+            data    : 
+            {
+                name:name,
+                request_id: request,
+                irai_day_from: irai_day_from,
+                irai_day_to: irai_day_to,
+                id:id,
+                status_id: status,
+                maker: maker,
+                address: address,
+                nohin_day_from: nohin_day_from,
+                nohin_day_to: nohin_day_to, 
+                hinban: hinban
+            },
+            cache   : false,
+            success : function(data){
+                console.log(data)
+                window.location = '/list';
+            }
+        });
+        return;
     })
     $(document).on('click','#home',function(){
         window.location = '/home';

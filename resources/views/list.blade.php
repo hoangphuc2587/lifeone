@@ -317,11 +317,12 @@
                             class="btn btn-primary mb-2 error">詳細</button>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                        @if ($isUserLifeOne)
                         <div class="search-panel-4">
                             <label>仕入先様名</label>
-                            <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
+                            <input type="text" placeholder="" value="{{ isset($paramSearch['name']) ? $paramSearch['name'] : '' }}" id="search-name" style="width: 120px; "/>        
                         </div>
-
+                        @endif
                     </div>
                 </div>
 
@@ -363,10 +364,10 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" style="padding-left: 100px;">
                         <div>
                             <label>依頼内容</label>
-                            <select style="width: 142px;">
+                            <select id="search-request" style="width: 142px;">
                                 <option value=""></option>
                                 @foreach ($requestDetails as $request)
-                                <option value="{{ $request->KBNMSAI_CD }}">{{ $request->KBNMSAI_NAME }}</option>
+                                <option value="{{ $request->KBNMSAI_CD }}" {{ isset($paramSearch['request_id']) && $paramSearch['request_id'] == $request->KBNMSAI_CD ? 'selected' : '' }}>{{ $request->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -375,26 +376,26 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-right: -70px;">
                         <div>
                             <label>依頼日</label>
-                            <input type="text" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>
+                            <input type="text" value="{{ isset($paramSearch['irai_day_from']) ? $paramSearch['irai_day_from'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="search-irai-day-from" style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
+                            <input type="text" value="{{ isset($paramSearch['irai_day_to']) ? $paramSearch['irai_day_to'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="search-irai-day-to" style="width: 120px; "/>        
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12" style="margin-right: -35px;">
                         <div>
                             <label>ID</label>
-                            <input type="text" autocomplete="off" placeholder="" id="i0tgl7-2-2" style="width: 120px;"/>    
+                            <input type="text" value="{{ isset($paramSearch['id']) ? $paramSearch['id'] : '' }}" autocomplete="off" placeholder="" id="search-id" style="width: 120px;"/>    
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12">
                         <div>
                             <label>状況</label>
-                            <select style="width: 142px;">
+                            <select id="search-status" style="width: 142px;">
                                 <option value=""></option>
                                 @foreach ($statusList as $request)
-                                <option value="{{ $request->KBNMSAI_CD }}">{{ $request->KBNMSAI_NAME }}</option>
+                                <option value="{{ $request->KBNMSAI_CD }}" {{ isset($paramSearch['status_id']) && $paramSearch['status_id'] == $request->KBNMSAI_CD ? 'selected' : '' }}>{{ $request->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -419,30 +420,30 @@
                     <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12">
                         <div>
                             <label>メーカー</label>
-                            <input type="text" autocomplete="off" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>
+                            <input type="text" value="{{ isset($paramSearch['maker']) ? $paramSearch['maker'] : '' }}" autocomplete="off" placeholder="" id="search-maker" style="width: 120px; "/>
                         </div>
                     </div>
                     
                     <div class="col-xl-3 col-lg-9 col-md-9 col-sm-9 col-12"     style="margin-right: -105px;">
                         <div>
                             <label>配送先情報</label>
-                            <input type="text" autocomplete="off" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>    
+                            <input type="text" value="{{ isset($paramSearch['address']) ? $paramSearch['address'] : '' }}" autocomplete="off" placeholder="" id="search-address" style="width: 120px; "/>    
                         </div>
                     </div>
 
                      <div class="col-xl-4 col-lg-9 col-md-9 col-sm-9 col-12" style="margin-right: -50px;">
                         <div>
                             <label>納品日</label>
-                            <input type="text" placeholder="" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>
+                            <input type="text" value="{{ isset($paramSearch['nohin_day_from']) ? $paramSearch['nohin_day_from'] : '' }}" placeholder="" id="search-nohin-day-from" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" placeholder="" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>        
+                            <input type="text" value="{{ isset($paramSearch['nohin_day_to']) ? $paramSearch['nohin_day_to'] : '' }}" placeholder="" id="search-nohin-day-to" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>        
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12">
                         <div>
                             <label>品番</label>
-                            <input type="text" placeholder="" autocomplete="off" id="i0tgl7-2-2" style="width: 120px; "/>    
+                            <input type="text" value="{{ isset($paramSearch['hinban']) ? $paramSearch['hinban'] : '' }}" placeholder="" autocomplete="off" id="search-hinban" style="width: 120px; "/>    
                         </div>
                     </div>
                 </div>
@@ -537,7 +538,7 @@
                             
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <a href="" id="iro65i" class="btn btn-primary">検索</a>
+                                <button type="button" class="btn btn-primary mb-2 search_by_item">検索</button>         
                             </div>
                             
                         </div>    
@@ -600,7 +601,7 @@
                                     <input name="" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}">
                                 </td>
                                 <td>{{ $item->IRAI_CD }}</td>
-                                <td>{{ date('d/m/Y', strtotime($item->IRAI_YMD)) }}</td>
+                                <td>{{ date('m/d/Y', strtotime($item->IRAI_YMD)) }}</td>
                                 <td>{{ $item->HACYU_ID }}</td>
                                 <td>{{ $item->STS_CD }}</td>
                                 <td>{{ $item->MAKER }}</td>

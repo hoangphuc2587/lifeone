@@ -27,6 +27,12 @@ class ListController extends Controller
     }
     public function show(Request $request)
     {
+        $isUserLifeOne = true;
+        if(Auth::user()->HACYUSAKI_CD != ''){
+            $isUserLifeOne = false;
+        }
+        
+
         //依頼内容
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','00')
@@ -36,6 +42,7 @@ class ListController extends Controller
         //状況
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','04')
+        ->where('KBNMSAI_CD', '<>' ,'10')
         ->where('DEL_FLG', 0);
         $statusList = $query->get();
         if($request->session()->has('page_click') && $request->session()->has('page_center') && $request->session()->has('total_row_on_one_page') && $request->session()->has('field_sort') && $request->session()->has('query_sort') ){
@@ -63,8 +70,9 @@ class ListController extends Controller
         ->leftJoin('T_HACYUMSAI','T_HACYUMSAI.HACYU_ID','=','T_HACYU.HACYU_ID')
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
         ->GROUPBY('T_HACYU.HACYU_ID');
-
-        $query = $this->__getCondition($query, $request);
+        
+        $paramSearch = array();
+        $query = $this->__getCondition($query, $request, $paramSearch);
 
 
         $arrTotal = array();
@@ -95,15 +103,81 @@ class ListController extends Controller
         ->orderBy($field_sort,$query_sort);
         $lists = $query->get();
 
-        return view('list',compact('lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList', 'arrTotal'));
+        return view('list',compact('isUserLifeOne','lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList', 'arrTotal', 'paramSearch'));
     }
-    private function __getCondition($query, Request $request){
+    private function __getCondition($query, Request $request, &$paramSearch){
         if($request->session()->has('search_reply')){
-           $query->where('T_HACYU.STS_CD' , '10');
+            $query->where('T_HACYU.STS_CD' , '10');
         }else{
-           $query->where('T_HACYU.STS_CD', '<>' , '10');
-        }
+            $query->where('T_HACYU.STS_CD', '<>' , '10');
 
+            if($request->session()->has('key_search_name') && Auth::user()->HACYUSAKI_CD == ''){
+                $name = $request->session()->get('key_search_name');
+                $paramSearch['name'] = $name;
+                $query->where('T_HACYU.HACYUSAKI_NAME', 'LIKE' , '%'.$name.'%'); 
+            }
+
+            if($request->session()->has('key_search_request')){
+                $request_id = $request->session()->get('key_search_request');
+                $paramSearch['request_id'] = $request_id;
+                $query->where('T_HACYU.IRAI_CD', $request_id); 
+            }
+
+            if($request->session()->has('key_search_irai_day_from')){
+                $irai_day_from = $request->session()->get('key_search_irai_day_from');
+
+                $paramSearch['irai_day_from'] = date('m/d/Y', strtotime($irai_day_from));
+                $query->where('T_HACYU.IRAI_YMD', '>=', $irai_day_from); 
+            }
+
+            if($request->session()->has('key_search_irai_day_to')){
+                $irai_day_to = $request->session()->get('key_search_irai_day_to');
+                $paramSearch['irai_day_to'] = date('m/d/Y', strtotime($irai_day_to));
+                $query->where('T_HACYU.IRAI_YMD', '<=', $irai_day_to); 
+            }         
+
+            if($request->session()->has('key_search_id')){
+                $ids = $request->session()->get('key_search_id');
+                $paramSearch['id'] = implode(',', $ids);
+                $query->whereIn('T_HACYU.HACYU_ID', $ids); 
+            }
+
+            if($request->session()->has('key_search_status')){
+                $status_id = $request->session()->get('key_search_status');
+                $paramSearch['status_id'] = $status_id;
+                $query->where('T_HACYU.STS_CD', $status_id);
+            }
+
+            if($request->session()->has('key_search_maker')){
+                $maker = $request->session()->get('key_search_maker');
+                $paramSearch['maker'] = $maker;
+                $query->where('T_HACYUMSAI.MAKER', 'LIKE' , '%'.$maker.'%'); 
+            }
+
+            if($request->session()->has('key_search_address')){
+                $address = $request->session()->get('key_search_address');
+                $paramSearch['address'] = $address;
+                $query->where('T_HACYU.NONYUSAKI_ADDRESS', 'LIKE' , '%'.$address.'%'); 
+            }
+
+            if($request->session()->has('key_search_nohin_day_from')){
+                $nohin_day_from = $request->session()->get('key_search_nohin_day_from');
+                $paramSearch['nohin_day_from'] = date('m/d/Y', strtotime($nohin_day_from));
+                $query->where('T_HACYUMSAI.NOHIN_YMD', '>=', $nohin_day_from); 
+            }
+
+            if($request->session()->has('key_search_nohin_day_to')){
+                $nohin_day_to = $request->session()->get('key_search_nohin_day_to');
+                $paramSearch['nohin_day_to'] = date('m/d/Y', strtotime($nohin_day_to));
+                $query->where('T_HACYUMSAI.NOHIN_YMD', '<=', $nohin_day_to); 
+            }         
+
+            if($request->session()->has('key_search_hinban')){
+                $hinban = $request->session()->get('key_search_hinban');
+                $paramSearch['hinban'] = $hinban;
+                $query->where('T_HACYUMSAI.HINBAN', 'LIKE' , '%'.$hinban.'%'); 
+            }            
+        }
         return $query;
 
     }
@@ -198,36 +272,113 @@ class ListController extends Controller
         $request->session()->put('query_sort',$query_sort);
         $request->session()->put('page_click',1);
     }
-    public function search_list_by_id_and_name(Request $request){
-        $key_search_id   = $request->id;
-        $request->session()->put('key_search_id',$request->id);
-        $request->session()->put('key_search_name',$request->name);
+    public function search_list_by_item(Request $request){
+
+        if ($request->name == ''){
+            $request->session()->forget('key_search_name');  
+        }else{
+            $request->session()->put('key_search_name', $request->name);
+        }
+
+        if ($request->request_id == ''){
+            $request->session()->forget('key_search_request');  
+        }else{
+            $request->session()->put('key_search_request', $request->request_id);
+        } 
+
+        if ($request->irai_day_from == ''){
+            $request->session()->forget('key_search_irai_day_from');  
+        }else{
+            $arr = explode('/', $request->irai_day_from);
+            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $request->session()->put('key_search_irai_day_from', $date);
+        }
+
+        if ($request->irai_day_to == ''){
+            $request->session()->forget('key_search_irai_day_to');  
+        }else{
+            $arr = explode('/', $request->irai_day_to);
+            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $request->session()->put('key_search_irai_day_to', $date);
+        }        
+
+        $key_search_id   = $request->id;        
         if(stripos($key_search_id,',', 0) > -1){
             $data = explode(',',$key_search_id);
         }
         else{
             $data = explode(' ',$key_search_id);
         }
-        $list = [];
-        foreach($data as $key => $value){
-            $str = '';
-            if(strlen($value) == 9){
-                continue;
-            }if(strlen($value) == 10){
-                $list[] = $value;
-                continue;
+        $list = array();
+        if (!empty($data)){
+            foreach($data as $key => $value){
+                // $str = '';
+                // if(strlen($value) == 9){
+                //     continue;
+                // }if(strlen($value) == 10){
+                //     $list[] = $value;
+                //     continue;
+                // }
+                // for($i = 0 ; $i < (10-strlen($value)) - 2 ; $i++){
+                //     $str .= "0";
+                // }
+                // $list[] = '03'.$str.$value;
+                // $list[] = '20'.$str.$value;
+                if ($value != ''){
+                    $list[] = $value;
+                }                
             }
-            for($i = 0 ; $i < (10-strlen($value)) - 2 ; $i++){
-                $str .= "0";
-            }
-            $list[] = '03'.$str.$value;
-            $list[] = '20'.$str.$value;
         }
-        $request->session()->put('search_list_by_id',$list);
-        $request->session()->put('search_by_kojigyoya_name',$request->name);
+
+        if (empty($list)){
+            $request->session()->forget('key_search_id');  
+        }else{
+            $request->session()->put('key_search_id',$list);
+        }
+
+        if ($request->status_id == ''){
+            $request->session()->forget('key_search_status');  
+        }else{
+            $request->session()->put('key_search_status', $request->status_id);
+        }
+
+        if ($request->maker == ''){
+            $request->session()->forget('key_search_maker');  
+        }else{
+            $request->session()->put('key_search_maker', $request->maker);
+        }
+
+        if ($request->address == ''){
+            $request->session()->forget('key_search_address');  
+        }else{
+            $request->session()->put('key_search_address', $request->address);
+        }
+
+
+        if ($request->nohin_day_from == ''){
+            $request->session()->forget('key_search_nohin_day_from');  
+        }else{
+            $arr = explode('/', $request->nohin_day_from);
+            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $request->session()->put('key_search_nohin_day_from', $date);
+        }
+
+        if ($request->nohin_day_to == ''){
+            $request->session()->forget('key_search_nohin_day_to');  
+        }else{
+            $arr = explode('/', $request->nohin_day_to);
+            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $request->session()->put('key_search_nohin_day_to', $date);
+        }        
+
+        if ($request->hinban == ''){
+            $request->session()->forget('key_search_hinban');  
+        }else{
+            $request->session()->put('key_search_hinban', $request->hinban);
+        }        
+
         $request->session()->put('page_click',1);
         $request->session()->forget('search_reply');
-        $request->session()->forget('search_no_reply');
         $request->session()->forget('data_list_checkbox');
     }
     public function search_list_all(Request $request){
