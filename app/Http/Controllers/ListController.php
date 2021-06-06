@@ -166,13 +166,13 @@ class ListController extends Controller
             if($request->session()->has('key_search_nohin_day_from')){
                 $nohin_day_from = $request->session()->get('key_search_nohin_day_from');
                 $paramSearch['nohin_day_from'] = date('m/d/Y', strtotime($nohin_day_from));
-                $query->where('T_HACYUMSAI.NOHIN_YMD', '>=', $nohin_day_from); 
+                $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END >= '".$nohin_day_from."'"); 
             }
 
             if($request->session()->has('key_search_nohin_day_to')){
                 $nohin_day_to = $request->session()->get('key_search_nohin_day_to');
                 $paramSearch['nohin_day_to'] = date('m/d/Y', strtotime($nohin_day_to));
-                $query->where('T_HACYUMSAI.NOHIN_YMD', '<=', $nohin_day_to); 
+               $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END <= '".$nohin_day_to."'");
             }         
 
             if($request->session()->has('key_search_hinban')){
