@@ -309,9 +309,9 @@
                     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
                         <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2 error "
                             style="margin-left: 0px;">CSV</button>
-                        <button type="submit" name="submit" value="submit_print"
+                        <button type="submit" name="submit" value="submit_print_pdf"
                             class="btn btn-primary mb-2 error">PDF</button>
-                        <button type="submit" name="submit" value="submit_print"
+                        <button type="submit" name="submit" value="submit_print_excel"
                             class="btn btn-primary mb-2 error">Excel</button>                        
                         <button type="submit" name="submit" value="submit_detail"
                             class="btn btn-primary mb-2 error">詳細</button>
@@ -636,12 +636,12 @@
                                 @foreach($lists as $item)
                             <tr>                                 
                                 <td>
-                                    <input name="check_box_list[]" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}}-0">
+                                    <input name="check_box_list[]" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}-0">
                                 </td>
                                 <td>{{ $item->IRAI_CD }}</td>
                                 <td>{{ date('m/d/Y', strtotime($item->IRAI_YMD)) }}</td>
                                 @if (!$isUserLifeOne)
-                                <td></td>
+                                <td>{{ $item->HACYU_SYBET_NAME }}</td>
                                 @endif                                
                                 <td>
                                     <a class="single_choose"
@@ -653,7 +653,7 @@
                                 <td>{{ $item->NONYUSAKI_ADDRESS }}</td>
                                 <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>                                                               
                                 @if (!$isUserLifeOne)
-                                <td></td>
+                                <td>{{ $item->NONYUSAKI_TANT_NAME }}</td>
                                 <td></td>
                                 <td></td>
                                 @else

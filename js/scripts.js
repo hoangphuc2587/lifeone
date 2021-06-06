@@ -103,6 +103,11 @@ $(function(){
             }
         }) 
     })
+
+    $(document).on('click','#btn-back',function(){
+        window.location = '/list';
+    })
+
     $(document).on('click','.search_reply',function(){
         var search_reply = $(this)[0];
         $.get('/search-reply/'+search_reply.checked,function(data){
@@ -192,7 +197,7 @@ $(function(){
         }
         return Browser;
      }
-    $('#i0tgl7-2-2').bind('paste',function(e){
+    $('#search-id').bind('paste',function(e){
         const Browser = browserName();
         var data = '';
         var flag_space = false;
@@ -242,7 +247,7 @@ $(function(){
                 }
             }
             setTimeout(function () { 
-                $('#i0tgl7-2-2').val(result); 
+                $('#search-id').val(result); 
             }, 230);
             return;
         }
@@ -270,7 +275,7 @@ $(function(){
             }
         }
         setTimeout(function () { 
-            $('#i0tgl7-2-2').val(data); 
+            $('#search-id').val(data); 
         }, 100);
     })
     $(document).on('click','.logout',function(){
@@ -287,7 +292,7 @@ $(function(){
             // })
         }
     })
-    $(document).on('keypress',"#i0tgl7-2-2",function(e){
+    $(document).on('keypress',"#search-id",function(e){
         if(e.which === 44 || e.which == 32) // nếu kí tự nhập vào là dấu phẩy hoặc khoảng cách thì xử lý
             return true;
         if(e.which < 48 || e.which > 57) // nếu kí tự nhập vào không phải là số : 0 -> 9 thì xử lý
@@ -336,6 +341,11 @@ $(function(){
     $(document).on('click','#adfkgj85',function(){
         $('#submit_detail_mobile').click();
     })
+
+    $(document).on('click','#adfkgj85',function(){
+        $('#submit_detail_mobile').click();
+    })
+
     $(document).on('click','#a2s1',function(){
         if($(this)[0].checked === true){
             var listCheckBox = document.getElementsByName('check_box_list[]');

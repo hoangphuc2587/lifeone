@@ -29,176 +29,128 @@ class ExportController extends Controller implements FromCollection, WithHeading
         }
         
         foreach($data as $key => $value){
-            $lists_checkboxID[] = substr($value,0,strpos($value,'-'));
-            $lists_HANSU[]      = substr(strstr($value,'-'), 1);
+            $lists_checkboxID[] = substr($value,0,strpos($value,'-'));            
         }
-        $lists = T_IRAI::join('M_KBN_WEB','M_KBN_WEB.KBNMSAI_CD','=','T_IRAI.JYOKYO_CD')
-        ->whereIn('T_IRAI.IRAI_ID',$lists_checkboxID)
-        ->where(['T_IRAI.DEL_FLG'=>0,'T_IRAI.VISIVLE_FLG'=>1])
-        ->where('M_KBN_WEB.KBN_CD',01)
-        ->orderBy('JYOKYO_CD','ASC')
-        ->orderBy($field_sort,$query_sort)
-        ->orderBy('T_IRAI.IRAI_ID','ASC')
-        ->orderBy('T_IRAI.HANSU','DESC');
+
+
+        $query = DB::table('T_HACYU')
+        ->select(
+         'T_HACYU.IRAI_YMD',
+         'T_HACYU.HACYU_ID',
+         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD_NAME"),
+         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '04' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),
+         'T_HACYU.NONYUSAKI_POSTNO',
+         'T_HACYU.NONYUSAKI_ADDRESS',
+         'T_HACYU.NONYUSAKI_NAME',
+         'T_HACYU.NONYUSAKI_TELNO',
+         'T_HACYU.NONYUSAKI_TANT_NAME',
+         'T_HACYU.KENMEI',
+         'T_HACYU.SYOKEI',
+         'T_HACYU.SORYO',
+         'T_HACYU.SYOHIZEI',
+         'T_HACYU.SUM',
+         'T_HACYU.NEBIKI_SUM',
+         'T_HACYU.COMMENT1',
+         'T_HACYU.IRAI_CD',
+        )
+        ->whereIn('T_HACYU.HACYU_ID',$lists_checkboxID)
+        ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
+        ->orderBy($field_sort,$query_sort);
+
         
-        if(Auth::user()->KOJIGYOSYA_CD != ''){
-            $lists->where('T_IRAI.KOJIGYOSYA_CD',Auth::user()->KOJIGYOSYA_CD);
-        }
-        $aray = [];
-        $lists = $lists->get();
+        $lists = $query->get();
+        $lists_csv = array();
         foreach($lists as $key => $value){
-            if(in_array($value->IRAI_ID."-".$value->HANSU, $data)){
-                $KIBO_YMD1 = '';
-                $KIBO_YMD2 = '';
-                $KIBO_YMD3 = '';
-                //YMD1
-                $date_now = date('Y-m-d');
-                if($value->MOKUTEKI == '下見'){
-                    if(strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                        $KIBO_YMD1 = '';
-                    else
-                        $KIBO_YMD1 = $value->KIBO_YMD1;
-                }else{
-                    if(date('H:i') < '14:00'){
-                        if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                            $KIBO_YMD1 = '';
-                        else{
-                            $KIBO_YMD1 = $value->KIBO_YMD1;
-                        }
-                    }
-                    else{
-                        if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                            $KIBO_YMD1 = '';
-                        else{
-                            $KIBO_YMD1 = $value->KIBO_YMD1;
-                        }
-                    } 
-                }
-                //END YMD1
-                //YMD2
-                $date_now = date('Y-m-d');
-                if($value->MOKUTEKI == '下見'){
-                    if(strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                        $KIBO_YMD2 = '';
-                    else
-                        $KIBO_YMD2 = $value->KIBO_YMD2;
-                }else{
-                    if(date('H:i') < '14:00'){
-                        if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                            $KIBO_YMD2 = '';
-                        else{
-                            $KIBO_YMD2 = $value->KIBO_YMD2;
-                        }
-                    }
-                    else{
-                        if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                            $KIBO_YMD2 = '';
-                        else{
-                            $KIBO_YMD2 = $value->KIBO_YMD2;
-                        }
-                    } 
-                }
-                //END YMD2
-                //YMD3
-                $date_now = date('Y-m-d');
-                if($value->MOKUTEKI == '下見'){
-                    if(strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                        $KIBO_YMD3 = '';
-                    else
-                        $KIBO_YMD3 = $value->KIBO_YMD3;
-                }else{
-                    if(date('H:i') < '14:00'){
-                        if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                            $KIBO_YMD3 = '';
-                        else{
-                            $KIBO_YMD3 = $value->KIBO_YMD3;
-                        }
-                    }
-                    else{
-                        if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                            $KIBO_YMD3 = '';
-                        else{
-                            $KIBO_YMD3 = $value->KIBO_YMD3;
-                        }
-                    } 
-                }
-                //END YMD3
-                $aray[] = $lists[$key];
-                $data_iraimsai = DB::table('T_IRAIMSAI')->where('IRAI_ID',$value->IRAI_ID)->where('HANSU',$value->HANSU)->get();
-                if(count($data_iraimsai) == 0){
-                    $lists_csv[] = array(
-                        '0'  => $value->MOKUTEKI,
-                        '1'  => $value->IRAI_ID,
-                        '2'  => $value->CYUMONSYA_NAME,
-                        '3'  => $value->SETSAKI_NAME,
-                        '4'  => $value->SETSAKI_KNAME,
-                        '5'  => $value->SETSAKI_ADDRESS,
-                        '6'  => $value->SETSAKI_TELNO,
-                        '7'  => $value->TENPO_NAME,
-                        '8'  => $value->KOJIGYOSYA_NAME,
-                        '9'  => $KIBO_YMD1,
-                        '10' => $KIBO_YMD2,
-                        '11' => $KIBO_YMD3,
-                        '12' => $value->KISETSU_TEL,
-                        '13' => $value->KOMOKU_SENTAKUSI,
-                        '14' => $value->KIJIRAN,
-                        '15' => '',//chua co
-                        '16' => '',//chua co
-                        '17' => '', // chua co
-                        '18' => '', // chua co
-                    );
-                }
-                else{
-                    foreach($data_iraimsai as $k => $v){
-                        $lists_csv[] = array(
-                            '0'  => $value->MOKUTEKI,
-                            '1'  => $value->IRAI_ID,
-                            '2'  => $value->CYUMONSYA_NAME,
-                            '3'  => $value->SETSAKI_NAME,
-                            '4'  => $value->SETSAKI_KNAME,
-                            '5'  => $value->SETSAKI_ADDRESS,
-                            '6'  => $value->SETSAKI_TELNO,
-                            '7'  => $value->TENPO_NAME,
-                            '8'  => $value->KOJIGYOSYA_NAME,
-                            '9'  => $KIBO_YMD1,
-                            '10' => $KIBO_YMD2,
-                            '11' => $KIBO_YMD3,
-                            '12' => $value->KISETSU_TEL,
-                            '13' => $value->KOMOKU_SENTAKUSI,
-                            '14' => $value->KIJIRAN,
-                            '15' => $v->CTGORY,
-                            '16' => $v->MAKER,
-                            '17' => $v->SYOHIN,
-                            '18' => $v->SURYO,
-                        );
-                    }
-                }
+            $subQuery = DB::table('T_HACYUMSAI')
+            ->select(
+             'T_HACYUMSAI.HACYUMSAI_ID',
+             'T_HACYUMSAI.CTGORY',            
+             'T_HACYUMSAI.MAKER',
+             'T_HACYUMSAI.HINBAN',
+             'T_HACYUMSAI.TANKA',
+             'T_HACYUMSAI.SURYO',
+             'T_HACYUMSAI.KINGAK',
+             'T_HACYUMSAI.SIKIRI_RATE',
+             'T_HACYUMSAI.NEBIKI_GAK',
+             'T_HACYUMSAI.NEBIKI_YM',
+             'T_HACYUMSAI.NOHIN_KIBO_YMD',
+             'T_HACYUMSAI.BIKO',
+             'T_HACYUMSAI.KAITO_NOKI',
+             'T_HACYUMSAI.NOHIN_YMD'  
+            )       
+            ->where(['T_HACYUMSAI.DEL_FLG'=> 0, 'T_HACYUMSAI.HACYU_ID'=> $value->HACYU_ID]);  
+
+            $data = $subQuery->get();
+
+            foreach($data as $k => $v){
+
+                $lists_csv[] = array(
+                '0'  => $value->IRAI_CD_NAME,
+                '1'  => $value->IRAI_YMD,
+                '2'  => $value->HACYU_ID,
+                '3'  => $value->STS_CD_NAME,            
+                '4'  => $value->NONYUSAKI_POSTNO,
+                '5'  => $value->NONYUSAKI_ADDRESS,
+                '6'  => $value->NONYUSAKI_NAME,
+                '7'  => $value->NONYUSAKI_TELNO,
+                '8'  => $value->NONYUSAKI_TANT_NAME,
+                '9'  => $value->KENMEI,
+                '10' => $v->HACYUMSAI_ID,
+                '11' => $v->CTGORY,
+                '12' => $v->MAKER,
+                '13' => $v->HINBAN,
+                '14' => $v->TANKA,
+                '15' => $v->SURYO,
+                '16' => $v->KINGAK,
+                '17' => $v->SIKIRI_RATE,
+                '18' => $v->NEBIKI_GAK,
+                '19' => $v->NEBIKI_YM,
+                '20' => $v->NOHIN_KIBO_YMD,
+                '21' => $v->BIKO,
+                '22' => $value->IRAI_CD == '03' ? $v->NOHIN_YMD : $v->KAITO_NOKI,
+                '23' => $value->SYOKEI,
+                '24' => $value->SORYO,
+                '25' => $value->SYOHIZEI,
+                '26' => $value->SUM,
+                '27' => $value->NEBIKI_SUM,
+                '28' => $value->COMMENT1,
+                ); 
             }   
         }
         return (collect($lists_csv));
     }
     public function headings(): array
     {
-        return [
-            "目的",
+        return [           
+            '依頼内容',
+            '依頼日',
             'ID',
-            '注文者名',
-            '設置者名',
-            '設置者名カナ',
-            '設置先住所',
-            '設置先電話番号',
-            '店舗',
-            '協力店様名',
-            '希望日１',
-            '希望日２',
-            '希望日３',
-            '既設品番・日中の連絡先',
-            '項目選択肢',
-            '記事欄',
+            '状況',
+            '納品先郵便番号',
+            '納品先住所',
+            '納品先名',
+            '納品先電話番号',
+            '納品先担当者様名',
+            '件名',
+            '明細№',
             'カテゴリ',
             'メーカー',
-            'コード',
-            '個数',
+            '品番',
+            '単価',
+            '数量',
+            '金額',
+            '掛率',
+            '値引額',
+            '値引予定月',
+            '納品希望日',
+            '備考',
+            '納品日',
+            '小計',
+            '送料',
+            '消費税',
+            '合計',
+            '値引額合計',
+            'ライフワンからのコメント'
         ];
     }
     public function export(Request $request){

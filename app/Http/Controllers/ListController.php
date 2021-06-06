@@ -27,12 +27,6 @@ class ListController extends Controller
     }
     public function show(Request $request)
     {
-        $isUserLifeOne = true;
-        if(Auth::user()->HACYUSAKI_CD != ''){
-            $isUserLifeOne = false;
-        }
-        
-
         //依頼内容
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','00')
@@ -66,10 +60,19 @@ class ListController extends Controller
          'T_HACYU.FREE',
          DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD"),
          DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '04' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD"),
+         'T_HACYU.HACYU_SYBET_NAME',
+         'T_HACYU.NONYUSAKI_TANT_NAME' 
+
         )
         ->leftJoin('T_HACYUMSAI','T_HACYUMSAI.HACYU_ID','=','T_HACYU.HACYU_ID')
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
         ->GROUPBY('T_HACYU.HACYU_ID');
+
+        $isUserLifeOne = true;
+        if(Auth::user()->HACYUSAKI_CD != ''){
+            $isUserLifeOne = false;
+            $query->where('T_HACYU.HACYUSAKI_CD', Auth::user()->HACYUSAKI_CD);
+        }
         
         $paramSearch = array();
         $query = $this->__getCondition($query, $request, $paramSearch);

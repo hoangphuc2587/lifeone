@@ -351,8 +351,8 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2 error "
                                     style="margin-left: 15px;">保存</button>
-                                <button type="submit" name="submit" value="submit_print"
-                                    class="btn btn-primary mb-2 error">閉じる</button>
+                                <button type="button" id="btn-back"
+                                    class="btn btn-primary mb-2">閉じる</button>
                             </div>
                         </div>
                     </div>
@@ -858,6 +858,58 @@
                     </div>    
                 </div>
             </div>
+
+
+            <!-- static modal-->
+            <div class="modal fade show" id="static" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>保存しますか？</p>
+                            @if(Auth::user()->HACYUSAKI_CD != '')
+                            <p>※保存後10分間は変更可能です。</p>
+                            @endif
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="submit" class="btn btn-primary">はい</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-default">いいえ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END modal-->
+            <!-- static1 modal-->
+            <div class="modal fade in" id="static1" tabindex="-1" role="dialog" aria-hidden="false">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>入力内容を保存しますか？</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="submit" class="btn btn-primary" id="submit">はい</button>
+                            <a id="cancelsub" class="btn btn-raised btn-primary" style="display: none">保存</a>
+                            <a href="{{ URL::to(route('list')) }}" class="btn btn-default"
+                                style="background: #ddd;color: #000 !important">いいえ</a>
+                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END modal-->
+            <!-- static1 modal-->
+            <div class="modal fade in" id="canceler" tabindex="-1" role="dialog" aria-hidden="false">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>「コメント欄に入力不備があります。」</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END modal-->            
         </form>
 
     <!-- <script src="{{ URL::asset('js/jquery.min.js') }}"></script> -->

@@ -13,6 +13,7 @@ use App\T_IRAI;
 use App\T_IRAIMSAI;
 use App\M_KBN_WEB;
 use DateTime;
+use ZipArchive;
 class PrintController extends Controller
 {
     public function __construct()
@@ -31,115 +32,12 @@ class PrintController extends Controller
         $request->session()->forget('data_search_list_print');
         return view('print',compact('datas'));
     }
-    public function search_print($id, $hansu)
+    public function search_print($id)
     {
         $cnn = 0;
-        $data = [];
-        $data1 = DB::table('T_IRAI')
-            ->join('M_KBN_WEB', 'M_KBN_WEB.KBNMSAI_CD', '=', 'T_IRAI.JYOKYO_CD')
-            ->where('T_IRAI.IRAI_ID', $id)
-            ->where('T_IRAI.HANSU', $hansu);
-        if (Auth::user()->KOJIGYOSYA_CD != '') {
-            $data1->where('T_IRAI.KOJIGYOSYA_CD', Auth::user()->KOJIGYOSYA_CD);
-        }
-        $value = $data1->first();
-        //set data
-        $data[$cnn]['IRAI_ID'] = $value->IRAI_ID;
-        $data[$cnn]['MOKUTEKI'] = $value->MOKUTEKI;
-        if ($value->ANSWER_CD == '') {
-            $value->ANSWER_CD = "00";
-        }
-        $data[$cnn]['ANSWER_CD'] = $value->ANSWER_CD;
-        $data[$cnn]['KBNMSAI_NAME'] = $value->KBNMSAI_NAME;
-        $data[$cnn]['GYOSYA_ANS_YMD'] = $value->GYOSYA_ANS_YMD;
-        $data[$cnn]['KINKYUTAIO_FLG'] = $value->KINKYUTAIO_FLG;                        
-        $data[$cnn]['HANSU'] = $value->HANSU;
-        $data[$cnn]['CYUMONSYA_NAME'] = $value->CYUMONSYA_NAME;
-        $data[$cnn]['SETSAKI_NAME'] = $value->SETSAKI_NAME;
-        $data[$cnn]['SETSAKI_KNAME'] = $value->SETSAKI_KNAME;
-        $data[$cnn]['KOJIGYOSYA_NAME'] = $value->KOJIGYOSYA_NAME;
-        $data[$cnn]['TENPO_NAME'] = $value->TENPO_NAME;
-        $data[$cnn]['SETSAKI_POSTNO'] = $value->SETSAKI_POSTNO;
-        $data[$cnn]['SETSAKI_ADDRESS'] = $value->SETSAKI_ADDRESS;
-        $data[$cnn]['SETSAKI_TELNO'] = $value->SETSAKI_TELNO;
-        $data[$cnn]['KISETSU_TEL'] = $value->KISETSU_TEL;
-        $data[$cnn]['KOMOKU_SENTAKUSI'] = $value->KOMOKU_SENTAKUSI;
-        $data[$cnn]['KIJIRAN_PATH'] = $value->KIJIRAN_PATH;
-        //YMD1
-        $date_now = date('Y-m-d');
-        if($value->MOKUTEKI == '下見'){
-            if(strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                $data[$cnn]['KIBO_YMD1'] = '';
-            else
-                $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-        }else{
-            if(date('H:i') < '14:00'){
-                if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                    $data[$cnn]['KIBO_YMD1'] = '';
-                else{
-                    $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                }
-            }
-            else{
-                if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                    $data[$cnn]['KIBO_YMD1'] = '';
-                else{
-                    $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                }
-            } 
-        }
-        //END YMD1
-        //YMD2
-        $date_now = date('Y-m-d');
-        if($value->MOKUTEKI == '下見'){
-            if(strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                $data[$cnn]['KIBO_YMD2'] = '';
-            else
-                $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-        }else{
-            if(date('H:i') < '14:00'){
-                if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                    $data[$cnn]['KIBO_YMD2'] = '';
-                else{
-                    $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                }
-            }
-            else{
-                if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                    $data[$cnn]['KIBO_YMD2'] = '';
-                else{
-                    $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                }
-            } 
-        }
-        //END YMD1   
-        //YMD1
-        $date_now = date('Y-m-d');
-        if($value->MOKUTEKI == '下見'){
-            if(strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                $data[$cnn]['KIBO_YMD3'] = '';
-            else
-                $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-        }else{
-            if(date('H:i') < '14:00'){
-                if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                    $data[$cnn]['KIBO_YMD3'] = '';
-                else{
-                    $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                }
-            }
-            else{
-                if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                    $data[$cnn]['KIBO_YMD3'] = '';
-                else{
-                    $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                }
-            } 
-        }
-        //END YMD1
-        $data[$cnn]['COMMENT1'] = $value->COMMENT1;
-        $data[$cnn]['COMMENT2'] = $value->COMMENT2;
-        return view('detail', compact('data','hansu'));
+        $data = array();
+      
+        return view('detail', compact('data'));
     }
     public function post_search_print(Request $request)
     {
@@ -161,256 +59,47 @@ class PrintController extends Controller
                 $request->session()->put('list_csv',$request->check_box_list);
                 return redirect()->route('export');
                 break;
-            case 'submit_print':    
-                $cnn = 0;             
-                $id = [];
-                $hansu = [];
-                foreach ($check_box as $val) {
-                    $list = explode('-', $val);
-                    $id[] =  $list[0];
-                    $hansu[] =  $list[1];                
-                }
-                $datas = DB::table('T_IRAI')
-                    ->join('M_KBN_WEB', 'M_KBN_WEB.KBNMSAI_CD', '=', 'T_IRAI.JYOKYO_CD')
-                    ->whereIn('T_IRAI.IRAI_ID', $id)
-                    ->where('M_KBN_WEB.DEL_FLG', 0)
-                    ->where('KBN_CD', 01);                 
-                    if(Auth::user()->KOJIGYOSYA_CD != '') {
-                        $datas->where('T_IRAI.KOJIGYOSYA_CD', Auth::user()->KOJIGYOSYA_CD);
-                    }
-                    $datas = $datas->orderBy('JYOKYO_CD','ASC')
-                                    ->orderBy($field_sort,$query_sort)
-                                    ->orderBy('IRAI_ID','ASC')
-                                    ->orderBy('HANSU','DESC')
-                                    ->get();
-                foreach ($datas as $key=>$value) {
-                    $chk = $value->IRAI_ID.'-'.$value->HANSU;
-                    if(in_array($chk, $check_box)){
-                        $data[$cnn]['IRAI_ID'] = $value->IRAI_ID;
-                        $data[$cnn]['MOKUTEKI'] = $value->MOKUTEKI;
-                        $data[$cnn]['ANSWER_CD'] = $value->ANSWER_CD;
-                        $data[$cnn]['KBNMSAI_NAME'] = $value->KBNMSAI_NAME;
-                        $data[$cnn]['GYOSYA_ANS_YMD'] = $value->GYOSYA_ANS_YMD;
-                        $data[$cnn]['KINKYUTAIO_FLG'] = $value->KINKYUTAIO_FLG;                        
-                        $data[$cnn]['HANSU'] = $value->HANSU;
-                        $data[$cnn]['CYUMONSYA_NAME'] = $value->CYUMONSYA_NAME;
-                        $data[$cnn]['SETSAKI_NAME'] = $value->SETSAKI_NAME;
-                        $data[$cnn]['SETSAKI_KNAME'] = $value->SETSAKI_KNAME;
-                        $data[$cnn]['KOJIGYOSYA_NAME'] = $value->KOJIGYOSYA_NAME;
-                        $data[$cnn]['TENPO_NAME'] = $value->TENPO_NAME;
-                        $data[$cnn]['SETSAKI_POSTNO'] = $value->SETSAKI_POSTNO;
-                        $data[$cnn]['SETSAKI_ADDRESS'] = $value->SETSAKI_ADDRESS;
-                        $data[$cnn]['SETSAKI_TELNO'] = $value->SETSAKI_TELNO;
-                        $data[$cnn]['KISETSU_TEL'] = $value->KISETSU_TEL;
-                        $data[$cnn]['KOMOKU_SENTAKUSI'] = $value->KOMOKU_SENTAKUSI;
-                        //YMD1
-                        $date_now = date('Y-m-d');
-                        if($value->MOKUTEKI == '下見'){
-                            if(strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                                $data[$cnn]['KIBO_YMD1'] = '';
-                            else
-                                $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                        }else{
-                            if(date('H:i') < '14:00'){
-                                if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                                    $data[$cnn]['KIBO_YMD1'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                                }
-                            }
-                            else{
-                                if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                                    $data[$cnn]['KIBO_YMD1'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                                }
-                            } 
-                        }
-                        //END YMD1
-                        //YMD2
-                        $date_now = date('Y-m-d');
-                        if($value->MOKUTEKI == '下見'){
-                            if(strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                                $data[$cnn]['KIBO_YMD2'] = '';
-                            else
-                                $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                        }else{
-                            if(date('H:i') < '14:00'){
-                                if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                                    $data[$cnn]['KIBO_YMD2'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                                }
-                            }
-                            else{
-                                if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                                    $data[$cnn]['KIBO_YMD2'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                                }
-                            } 
-                        }
-                        //END YMD1   
-                        //YMD1
-                        $date_now = date('Y-m-d');
-                        if($value->MOKUTEKI == '下見'){
-                            if(strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                                $data[$cnn]['KIBO_YMD3'] = '';
-                            else
-                                $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                        }else{
-                            if(date('H:i') < '14:00'){
-                                if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                                    $data[$cnn]['KIBO_YMD3'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                                }
-                            }
-                            else{
-                                if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                                    $data[$cnn]['KIBO_YMD3'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                                }
-                            } 
-                        }
-                        //END YMD1
-                        $data[$cnn]['KIJIRAN_PATH'] = $value->KIJIRAN_PATH;
-                        $data[$cnn]['COMMENT1'] = $value->COMMENT1;
-                        $data[$cnn]['COMMENT2'] = $value->COMMENT2;
-                        $cnn++;
-                    }
-                }
-                return view('print', compact('data'));
+            case 'submit_print_pdf':  
+                // Files to download
+                $urls = [
+                    'seminar.pdf',
+                    '210832.pdf'
+                ];
+
+                $this->__multiple_download($urls);  
+              
+                break;
+
+            case 'submit_print_excel':    
+              
+                break;
 
             case 'submit_detail': 
-                $cnn = 0;             
-                $id = [];
-                $hansu = [];
-                foreach ($check_box as $val) {
-                    $list = explode('-', $val);
-                    $id[] =  $list[0];
-                    $hansu[] =  $list[1];                
-                }
-                $datas = DB::table('T_IRAI')
-                    ->join('M_KBN_WEB', 'M_KBN_WEB.KBNMSAI_CD', '=', 'T_IRAI.JYOKYO_CD')
-                    ->whereIn('T_IRAI.IRAI_ID', $id)
-                    ->where('M_KBN_WEB.DEL_FLG', 0)
-                    ->where('KBN_CD', 01);                 
-                    if(Auth::user()->KOJIGYOSYA_CD != '') {
-                        $datas->where('T_IRAI.KOJIGYOSYA_CD', Auth::user()->KOJIGYOSYA_CD);
-                    }
-                    $datas = $datas->orderBy('JYOKYO_CD','ASC')
-                                    ->orderBy($field_sort,$query_sort)
-                                    ->orderBy('IRAI_ID','ASC')
-                                    ->orderBy('HANSU','DESC')
-                                    ->get();
-                foreach ($datas as $key=>$value) {
-                    $chk = $value->IRAI_ID.'-'.$value->HANSU;
-                    if(in_array($chk, $check_box)){
-                        $data[$cnn]['IRAI_ID'] = $value->IRAI_ID;
-                        $data[$cnn]['MOKUTEKI'] = $value->MOKUTEKI;
-                        if ($value->ANSWER_CD == '') {
-                            $value->ANSWER_CD = "00";
-                        }
-                        $data[$cnn]['ANSWER_CD'] = $value->ANSWER_CD;
-                        $data[$cnn]['KBNMSAI_NAME'] = $value->KBNMSAI_NAME;
-                        $data[$cnn]['GYOSYA_ANS_YMD'] = $value->GYOSYA_ANS_YMD;
-                        $data[$cnn]['KINKYUTAIO_FLG'] = $value->KINKYUTAIO_FLG;                        
-                        $data[$cnn]['HANSU'] = $value->HANSU;
-                        $data[$cnn]['CYUMONSYA_NAME'] = $value->CYUMONSYA_NAME;
-                        $data[$cnn]['SETSAKI_NAME'] = $value->SETSAKI_NAME;
-                        $data[$cnn]['SETSAKI_KNAME'] = $value->SETSAKI_KNAME;
-                        $data[$cnn]['KOJIGYOSYA_NAME'] = $value->KOJIGYOSYA_NAME;
-                        $data[$cnn]['TENPO_NAME'] = $value->TENPO_NAME;
-                        $data[$cnn]['SETSAKI_POSTNO'] = $value->SETSAKI_POSTNO;
-                        $data[$cnn]['SETSAKI_ADDRESS'] = $value->SETSAKI_ADDRESS;
-                        $data[$cnn]['SETSAKI_TELNO'] = $value->SETSAKI_TELNO;
-                        $data[$cnn]['KISETSU_TEL'] = $value->KISETSU_TEL;
-                        $data[$cnn]['KOMOKU_SENTAKUSI'] = $value->KOMOKU_SENTAKUSI;
-                        $data[$cnn]['KIJIRAN_PATH'] = $value->KIJIRAN_PATH;
-                        //YMD1
-                        $date_now = date('Y-m-d');
-                        if($value->MOKUTEKI == '下見'){
-                            if(strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                                $data[$cnn]['KIBO_YMD1'] = '';
-                            else
-                                $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                        }else{
-                            if(date('H:i') < '14:00'){
-                                if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                                    $data[$cnn]['KIBO_YMD1'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                                }
-                            }
-                            else{
-                                if( (strtotime($value->KIBO_YMD1) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                                    $data[$cnn]['KIBO_YMD1'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD1'] = $value->KIBO_YMD1;
-                                }
-                            } 
-                        }
-                        //END YMD1
-                        //YMD2
-                        $date_now = date('Y-m-d');
-                        if($value->MOKUTEKI == '下見'){
-                            if(strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                                $data[$cnn]['KIBO_YMD2'] = '';
-                            else
-                                $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                        }else{
-                            if(date('H:i') < '14:00'){
-                                if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                                    $data[$cnn]['KIBO_YMD2'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                                }
-                            }
-                            else{
-                                if( (strtotime($value->KIBO_YMD2) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                                    $data[$cnn]['KIBO_YMD2'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD2'] = $value->KIBO_YMD2;
-                                }
-                            } 
-                        }
-                        //END YMD1   
-                        //YMD1
-                        $date_now = date('Y-m-d');
-                        if($value->MOKUTEKI == '下見'){
-                            if(strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days'))))
-                                $data[$cnn]['KIBO_YMD3'] = '';
-                            else
-                                $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                        }else{
-                            if(date('H:i') < '14:00'){
-                                if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 1 days')))))
-                                    $data[$cnn]['KIBO_YMD3'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                                }
-                            }
-                            else{
-                                if( (strtotime($value->KIBO_YMD3) <= strtotime(date('Y-m-d', strtotime($date_now. ' + 2 days')))))
-                                    $data[$cnn]['KIBO_YMD3'] = '';
-                                else{
-                                    $data[$cnn]['KIBO_YMD3'] = $value->KIBO_YMD3;
-                                }
-                            } 
-                        }
-                        //END YMD1
-                        $data[$cnn]['COMMENT1'] = $value->COMMENT1;
-                        $data[$cnn]['COMMENT2'] = $value->COMMENT2;
-                        $cnn++;
-                    }
-                }
+
                 return view('detail', compact('data'));
             default:
                 break;
         }
     }
+
+    private function __multiple_download(array $urls, $save_path = 'tmp')
+    {
+
+        $files = $urls;
+        $zipname = 'file.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipname, ZipArchive::CREATE);
+        foreach ($files as $file) {
+          $zip->addFile($file);
+        }
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename='.$zipname);
+        header('Content-Length: ' . filesize($zipname));
+        readfile($zipname);
+    }
+
     public function postUpdate(Request $rq){  
         $date = New \DateTime();  
         $date = $date->format('Y-m-d H:i:s');        
