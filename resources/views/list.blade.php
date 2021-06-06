@@ -170,7 +170,7 @@
         font-size: 13px;
     }
 
-    .table-cover table th {
+    .table-cover table th , .table-cover table td {
       padding: 0.75rem 0.25rem !important;
     }
 
@@ -550,10 +550,11 @@
                     <table class="table table-bordered table2" style="margin-bottom: 0px !important;">
                         <thead>
                             <tr class="blue-tr">
+                                @if ($isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th scope="col" class="th2" width="85">依頼内容</th>
-                                <th scope="col" class="th3" width="85">依頼日</th>
+                                <th scope="col" class="th2" width="90">依頼内容</th>
+                                <th scope="col" class="th3" width="100">依頼日</th>
                                 <th scope="col" class="th4" width="100">ID</th>
                                 <th scope="col" class="th5" width="120">状況</th>
                                 <th scope="col" class="th6" width="120">メーカー</th>
@@ -561,6 +562,24 @@
                                 <th scope="col" class="th8" width="60">備考有</th>
                                 <th scope="col" class="th9" width="80">納品希望有</th>
                                 <th scope="col" class="th10" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
+
+                                @else
+                                <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
+                                    width="90"><a>全てチェック</a></th>
+                                <th scope="col" class="th2" width="85">依頼内容</th>
+                                <th scope="col" class="th3" width="85">依頼日</th>
+                                <th scope="col" class="th3" width="65">発注種別</th>
+                                <th scope="col" class="th4" width="95">ID</th>
+                                <th scope="col" class="th5" width="115">状況</th>
+                                <th scope="col" class="th6" width="115">メーカー</th>
+                                <th scope="col" class="th7" width="195">配送先情報</th>
+                                <th scope="col" class="th8" width="60">備考有</th>
+                                <th scope="col" class="th9" width="80">担当者</th>
+                                <th scope="col" class="th9" width="83">対応状況</th>
+                                <th scope="col" class="th9" width="100">最終入荷予定日</th>
+                                <th scope="col" class="th9" width="auto">仕入先様名</th>                                
+                                @endif
+                             
                             </tr>
                         </thead>
                         <tbody>
@@ -580,10 +599,11 @@
                     <table class="table table-bordered table2">
                         <thead>
                             <tr class="blue-tr">
+                                @if ($isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th scope="col" class="th2" width="85">依頼内容</th>
-                                <th scope="col" class="th3" width="85">依頼日</th>
+                                <th scope="col" class="th2" width="90">依頼内容</th>
+                                <th scope="col" class="th3" width="100">依頼日</th>
                                 <th scope="col" class="th4" width="100">ID</th>
                                 <th scope="col" class="th5" width="120">状況</th>
                                 <th scope="col" class="th6" width="120">メーカー</th>
@@ -591,28 +611,56 @@
                                 <th scope="col" class="th8" width="60">備考有</th>
                                 <th scope="col" class="th9" width="80">納品希望有</th>
                                 <th scope="col" class="th10" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
+
+                                @else
+                                <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
+                                    width="90"><a>全てチェック</a></th>
+                                <th scope="col" class="th2" width="85">依頼内容</th>
+                                <th scope="col" class="th3" width="85">依頼日</th>
+                                <th scope="col" class="th3" width="65">発注種別</th>
+                                <th scope="col" class="th4" width="95">ID</th>
+                                <th scope="col" class="th5" width="115">状況</th>
+                                <th scope="col" class="th6" width="115">メーカー</th>
+                                <th scope="col" class="th7" width="195">配送先情報</th>
+                                <th scope="col" class="th8" width="60">備考有</th>
+                                <th scope="col" class="th9" width="80">担当者</th>
+                                <th scope="col" class="th9" width="83">対応状況</th>
+                                <th scope="col" class="th9" width="100">最終入荷予定日</th>
+                                <th scope="col" class="th9" width="auto">仕入先様名</th>
+                                @endif
                             </tr>
+
                         </thead>
                         <tbody>
                             @if ($page_total > 0)
                                 @foreach($lists as $item)
-                            <tr>
+                            <tr>                                 
                                 <td>
                                     <input name="check_box_list[]" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}}-0">
                                 </td>
                                 <td>{{ $item->IRAI_CD }}</td>
                                 <td>{{ date('m/d/Y', strtotime($item->IRAI_YMD)) }}</td>
+                                @if (!$isUserLifeOne)
+                                <td></td>
+                                @endif                                
                                 <td>
                                     <a class="single_choose"
                                         href="{{ route('search_print',['id'=>$item->HACYU_ID]) }}">{{$item->HACYU_ID}}
                                     </a>
-                                </td>                                
+                                </td>
                                 <td>{{ $item->STS_CD }}</td>
                                 <td>{{ $item->MAKER }}</td>
                                 <td>{{ $item->NONYUSAKI_ADDRESS }}</td>
-                                <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>
-                                <td class="tdDot">@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
-                                <td>{{ $item->FREE }}</td>
+                                <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>                                                               
+                                @if (!$isUserLifeOne)
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                @else
+                                <td>@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
+                                @endif                                
+                                <td>{{ $item->FREE }}</td>                                
+                                
                             </tr>
                                 @endforeach
                             @endif
