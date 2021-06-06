@@ -64,9 +64,30 @@ class ListController extends Controller
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
         ->GROUPBY('T_HACYU.HACYU_ID');
 
+        $query = $this->__getCondition($query, $request);
 
+
+        $arrTotal = array();
+        //未発注件
+        $queryTotal = clone $query;
+        $queryTotal =  $queryTotal->where('T_HACYU.STS_CD' , '01');
+        $arrTotal[0] = count($queryTotal->get());
+        //納期回答未・一部未回答
+        $queryTotal = clone $query;
+        $queryTotal=  $queryTotal->whereIn('T_HACYU.STS_CD' , ['02', '03']);
+        $arrTotal[1] = count($queryTotal->get());
+        //納期催促
+        $queryTotal = clone $query;
+        $queryTotal=  $queryTotal->where('T_HACYU.STS_CD' , '04');
+        $arrTotal[2] = count($queryTotal->get());
+        //ドライバー情報入力未
+        $queryTotal = clone $query;
+        $queryTotal=  $queryTotal->where('T_HACYU.STS_CD' , '06');
+        $arrTotal[3] = count($queryTotal->get());
+
+        // total all record before paging
         $total_datas = count($query->get());
-
+       
         $page_total = ceil($total_datas/$total_row_on_one_page);
 
         $query = $query->skip(($page_click - 1) * $total_row_on_one_page)
@@ -74,7 +95,17 @@ class ListController extends Controller
         ->orderBy($field_sort,$query_sort);
         $lists = $query->get();
 
-        return view('list',compact('lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList'));
+        return view('list',compact('lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList', 'arrTotal'));
+    }
+    private function __getCondition($query, Request $request){
+        if($request->session()->has('search_reply')){
+           $query->where('T_HACYU.STS_CD' , '10');
+        }else{
+           $query->where('T_HACYU.STS_CD', '<>' , '10');
+        }
+
+        return $query;
+
     }
     public function sort_commet($lists){
         $flag_sort1     = false;

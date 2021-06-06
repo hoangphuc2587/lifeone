@@ -266,7 +266,7 @@
     #home:hover {
         cursor: pointer;
     }
-    .table2 th {
+    .table2 th, .tdDot {
         vertical-align: middle !important;
     }
     </style>
@@ -331,12 +331,23 @@
                             <tr>
                                 <td class="search-panel-1">
                                     <label>
-                                    1～5件(全5件)
+                                    @if($total_datas != 0)
+                                        {{ ($page_click - 1)  * session()->get('total_row_on_one_page') + 1 }}
+                                    @else
+                                        {{ 0 }}
+                                    @endif
+                                    ～
+                                    @if( ($page_click) * session()->get('total_row_on_one_page') >= $total_datas)
+                                        {{ $total_datas }} 件(全{{ $total_datas }}件)
+                                    @else
+                                        {{ ($page_click) * session()->get('total_row_on_one_page') }}
+                                    件(全{{ $total_datas }}件)
+                                    @endif
                                     </label>
                                 </td>
                                 <td class="search-panel-2">
                                     <input type="checkbox"
-                                        class="search_reply" value="未回答" style="position: relative; top: 4px;" />
+                                        class="search_reply" <?php if(Session::has('search_reply')){ echo 'checked';} ?> value="未回答" style="position: relative; top: 4px;" />
                                     <label>完了</label> 
                                 </td>
                             </tr>
@@ -364,16 +375,16 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-right: -70px;">
                         <div>
                             <label>依頼日</label>
-                            <input type="text" data-date-format="mm/dd/yyyy" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>
+                            <input type="text" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" data-date-format="mm/dd/yyyy" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
+                            <input type="text" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>        
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12" style="margin-right: -35px;">
                         <div>
                             <label>ID</label>
-                            <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px;"/>    
+                            <input type="text" autocomplete="off" placeholder="" id="i0tgl7-2-2" style="width: 120px;"/>    
                         </div>
                     </div>
 
@@ -393,7 +404,7 @@
                 <div class="row">
                     <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12">
                         <label>
-                        納期催促：○件
+                        未発注件：{{ $arrTotal[0] }}件
                         </label>
                     </div>
                 </div>
@@ -401,37 +412,37 @@
                 <div class="row">
                     <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12">
                         <label>
-                        納期回答未・一部未回答：○件
+                        納期回答未・一部未回答：{{ $arrTotal[1] }}件
                         </label>
                     </div>
 
                     <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12">
                         <div>
                             <label>メーカー</label>
-                            <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>
+                            <input type="text" autocomplete="off" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>
                         </div>
                     </div>
                     
                     <div class="col-xl-3 col-lg-9 col-md-9 col-sm-9 col-12"     style="margin-right: -105px;">
                         <div>
                             <label>配送先情報</label>
-                            <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>    
+                            <input type="text" autocomplete="off" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>    
                         </div>
                     </div>
 
                      <div class="col-xl-4 col-lg-9 col-md-9 col-sm-9 col-12" style="margin-right: -50px;">
                         <div>
                             <label>納品日</label>
-                            <input type="text" placeholder="" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>
+                            <input type="text" placeholder="" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" placeholder="" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>        
+                            <input type="text" placeholder="" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>        
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-9 col-md-9 col-sm-9 col-12">
                         <div>
                             <label>品番</label>
-                            <input type="text" placeholder="" id="i0tgl7-2-2" style="width: 120px; "/>    
+                            <input type="text" placeholder="" autocomplete="off" id="i0tgl7-2-2" style="width: 120px; "/>    
                         </div>
                     </div>
                 </div>
@@ -439,7 +450,7 @@
                 <div class="row">
                     <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12">
                         <label>
-                        納期催促：○件
+                        納期催促：{{ $arrTotal[2] }}件
                         </label>
                     </div>
                 </div>
@@ -447,7 +458,7 @@
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <label>
-                        ドライバー情報入力未：○件
+                        ドライバー情報入力未：{{ $arrTotal[3] }}件
                         </label>
                     </div>
 
