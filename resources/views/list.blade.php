@@ -655,7 +655,7 @@
                                 @if (!$isUserLifeOne)
                                 <td>{{ $item->NONYUSAKI_TANT_NAME }}</td>
                                 <td></td>
-                                <td></td>
+                                <td>{{ $item->HACYUSAKI_NAME }}</td>
                                 @else
                                 <td>@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
                                 @endif                                
