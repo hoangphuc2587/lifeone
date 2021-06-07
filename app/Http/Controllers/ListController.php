@@ -36,7 +36,7 @@ class ListController extends Controller
         //状況
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','04')
-        ->where('KBNMSAI_CD', '<>' ,'10')
+        //->where('KBNMSAI_CD', '<>' ,'10')
         ->where('DEL_FLG', 0);
         $statusList = $query->get();
         if($request->session()->has('page_click') && $request->session()->has('page_center') && $request->session()->has('total_row_on_one_page') && $request->session()->has('field_sort') && $request->session()->has('query_sort') ){
@@ -113,74 +113,74 @@ class ListController extends Controller
         if($request->session()->has('search_reply')){
             $query->where('T_HACYU.STS_CD' , '10');
         }else{
-            $query->where('T_HACYU.STS_CD', '<>' , '10');
+            $query->where('T_HACYU.STS_CD', '<>' , '10');           
+        }
 
-            if($request->session()->has('key_search_name') && Auth::user()->HACYUSAKI_CD == ''){
-                $name = $request->session()->get('key_search_name');
-                $paramSearch['name'] = $name;
-                $query->where('T_HACYU.HACYUSAKI_NAME', 'LIKE' , '%'.$name.'%'); 
-            }
+        if($request->session()->has('key_search_name') && Auth::user()->HACYUSAKI_CD == ''){
+            $name = $request->session()->get('key_search_name');
+            $paramSearch['name'] = $name;
+            $query->where('T_HACYU.HACYUSAKI_NAME', 'LIKE' , '%'.$name.'%'); 
+        }
 
-            if($request->session()->has('key_search_request')){
-                $request_id = $request->session()->get('key_search_request');
-                $paramSearch['request_id'] = $request_id;
-                $query->where('T_HACYU.IRAI_CD', $request_id); 
-            }
+        if($request->session()->has('key_search_request')){
+            $request_id = $request->session()->get('key_search_request');
+            $paramSearch['request_id'] = $request_id;
+            $query->where('T_HACYU.IRAI_CD', $request_id); 
+        }
 
-            if($request->session()->has('key_search_irai_day_from')){
-                $irai_day_from = $request->session()->get('key_search_irai_day_from');
+        if($request->session()->has('key_search_irai_day_from')){
+            $irai_day_from = $request->session()->get('key_search_irai_day_from');
 
-                $paramSearch['irai_day_from'] = date('m/d/Y', strtotime($irai_day_from));
-                $query->where('T_HACYU.IRAI_YMD', '>=', $irai_day_from); 
-            }
+            $paramSearch['irai_day_from'] = date('m/d/Y', strtotime($irai_day_from));
+            $query->where('T_HACYU.IRAI_YMD', '>=', $irai_day_from); 
+        }
 
-            if($request->session()->has('key_search_irai_day_to')){
-                $irai_day_to = $request->session()->get('key_search_irai_day_to');
-                $paramSearch['irai_day_to'] = date('m/d/Y', strtotime($irai_day_to));
-                $query->where('T_HACYU.IRAI_YMD', '<=', $irai_day_to); 
-            }         
+        if($request->session()->has('key_search_irai_day_to')){
+            $irai_day_to = $request->session()->get('key_search_irai_day_to');
+            $paramSearch['irai_day_to'] = date('m/d/Y', strtotime($irai_day_to));
+            $query->where('T_HACYU.IRAI_YMD', '<=', $irai_day_to); 
+        }         
 
-            if($request->session()->has('key_search_id')){
-                $ids = $request->session()->get('key_search_id');
-                $paramSearch['id'] = implode(',', $ids);
-                $query->whereIn('T_HACYU.HACYU_ID', $ids); 
-            }
+        if($request->session()->has('key_search_id')){
+            $ids = $request->session()->get('key_search_id');
+            $paramSearch['id'] = implode(',', $ids);
+            $query->whereIn('T_HACYU.HACYU_ID', $ids); 
+        }
 
-            if($request->session()->has('key_search_status')){
-                $status_id = $request->session()->get('key_search_status');
-                $paramSearch['status_id'] = $status_id;
-                $query->where('T_HACYU.STS_CD', $status_id);
-            }
+        if($request->session()->has('key_search_status')){
+            $status_id = $request->session()->get('key_search_status');
+            $paramSearch['status_id'] = $status_id;
+            $query->where('T_HACYU.STS_CD', $status_id);
+        }
 
-            if($request->session()->has('key_search_maker')){
-                $maker = $request->session()->get('key_search_maker');
-                $paramSearch['maker'] = $maker;
-                $query->where('T_HACYUMSAI.MAKER', 'LIKE' , '%'.$maker.'%'); 
-            }
+        if($request->session()->has('key_search_maker')){
+            $maker = $request->session()->get('key_search_maker');
+            $paramSearch['maker'] = $maker;
+            $query->where('T_HACYUMSAI.MAKER', 'LIKE' , '%'.$maker.'%'); 
+        }
 
-            if($request->session()->has('key_search_address')){
-                $address = $request->session()->get('key_search_address');
-                $paramSearch['address'] = $address;
-                $query->where('T_HACYU.NONYUSAKI_ADDRESS', 'LIKE' , '%'.$address.'%'); 
-            }
+        if($request->session()->has('key_search_address')){
+            $address = $request->session()->get('key_search_address');
+            $paramSearch['address'] = $address;
+            $query->where('T_HACYU.NONYUSAKI_ADDRESS', 'LIKE' , '%'.$address.'%'); 
+        }
 
-            if($request->session()->has('key_search_nohin_day_from')){
-                $nohin_day_from = $request->session()->get('key_search_nohin_day_from');
-                $paramSearch['nohin_day_from'] = date('m/d/Y', strtotime($nohin_day_from));
-                $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END >= '".$nohin_day_from."'"); 
-            }
+        if($request->session()->has('key_search_nohin_day_from')){
+            $nohin_day_from = $request->session()->get('key_search_nohin_day_from');
+            $paramSearch['nohin_day_from'] = date('m/d/Y', strtotime($nohin_day_from));
+            $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END >= '".$nohin_day_from."'"); 
+        }
 
-            if($request->session()->has('key_search_nohin_day_to')){
-                $nohin_day_to = $request->session()->get('key_search_nohin_day_to');
-                $paramSearch['nohin_day_to'] = date('m/d/Y', strtotime($nohin_day_to));
-               $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END <= '".$nohin_day_to."'");
-            }         
+        if($request->session()->has('key_search_nohin_day_to')){
+            $nohin_day_to = $request->session()->get('key_search_nohin_day_to');
+            $paramSearch['nohin_day_to'] = date('m/d/Y', strtotime($nohin_day_to));
+           $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END <= '".$nohin_day_to."'");
+        }         
 
-            if($request->session()->has('key_search_hinban')){
-                $hinban = $request->session()->get('key_search_hinban');
-                $paramSearch['hinban'] = $hinban;
-                $query->where('T_HACYUMSAI.HINBAN', 'LIKE' , '%'.$hinban.'%'); 
-            }            
+        if($request->session()->has('key_search_hinban')){
+            $hinban = $request->session()->get('key_search_hinban');
+            $paramSearch['hinban'] = $hinban;
+            $query->where('T_HACYUMSAI.HINBAN', 'LIKE' , '%'.$hinban.'%'); 
         }
         return $query;
 
