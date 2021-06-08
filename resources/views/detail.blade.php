@@ -31,7 +31,6 @@
     }
     .title-table{
         font-weight: bold;
-        padding-left: 235px;
     }
     .brg-input{
         background-color: #FFF2CC;
@@ -60,7 +59,7 @@
     }
     .textarea-cmt{
         resize: none;
-        width: 950px;
+        width: 100%;
         height: 100px;
     }
 
@@ -153,24 +152,7 @@
     }
 
     .container {
-        border-top-width: 1px;
-        border-right-width: 1px;
-        border-bottom-width: 1px;
-        border-left-width: 1px;
-        border-top-style: solid;
-        border-right-style: solid;
-        border-bottom-style: solid;
-        border-left-style: solid;
-        border-top-color: rgb(33, 37, 41);
-        border-right-color: rgb(33, 37, 41);
-        border-bottom-color: rgb(33, 37, 41);
-        border-left-color: rgb(33, 37, 41);
-        border-image-source: initial;
-        border-image-slice: initial;
-        border-image-width: initial;
-        border-image-outset: initial;
-        border-image-repeat: initial;
-        width: 100%;
+        width: 1280px;
         margin-top: 20px;
         margin-right: auto;
         margin-bottom: 0px;
@@ -320,26 +302,20 @@
     .table2 th {
         vertical-align: middle !important;
     }
+
+
+    .sticky {
+        border-bottom: 1px solid black;
+    }
+
     </style>
 </head>
 
 <body>
     <form action="{{  route('post_search_print')}}" method="POST" class="form_list">
-        <div class="container-fluid">
-            <div class="container grey-bg">
+        <div class="container-fluid sticky">
+            <div class="container">
                 <div class="header-box">
-                </div>
-                <div class="row">
-                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <p data-type="paragraph" id="iy899">
-                            @if(Auth::guard('m_tant_web')->check())
-                            {{Auth::user()->TANT_NAME}}
-                            @endif
-                            様
-                        </p>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -368,6 +344,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>        
+        <div class="container-fluid" style="margin-top: 100px">
+            <div class="container">               
 
                 <div class="row mt-5">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -451,10 +431,9 @@
                             </table>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" style="margin-top: 10px;">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 text-right" style="margin-top: 10px;">
                         <span class="title-table">翌営業日正午までにご回答よろしくお願い致します。</span>
-                    </div>
-                    
+                    </div>                    
                 </div>
 
                 <div class="row">
@@ -592,8 +571,8 @@
 
 
                 <div class="row mt-3">
-                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12" style="padding-left: 30px;">
-                        <table class="table-no-border">
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12" style="padding-left: 30px;">
+                        <table class="table-no-border" style="width: 100%;">
                             <tbody>
                                 <tr>
                                 <tr>
@@ -619,7 +598,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div>
@@ -653,7 +632,7 @@
                                         </table>
                                 </div>
                             </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
                                 <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-3 error ">
                                 <span class="text-btn-tb">追加</span></button>
                                 <button type="submit" name="submit" value="submit_print"
@@ -778,13 +757,13 @@
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 235px;"/>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
 
-                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" style="margin-right: -70px;">
+                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
-                            <label style="padding-left: 15px;">配送業者</label>
+                            <label style="padding-left: 40px;">配送業者</label>
                             <select style="width: 155px;" class="brg-input">
                                 <option>
                                     
@@ -814,18 +793,18 @@
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 241px;"/>
+                            <input class="brg-input"  type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
                 </div>
-                <div class="row">
+                <div class="row mt-1">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                         <label style="padding-left: 15px;">・ ドライバー名</label>
                             <input class="brg-input"  type="text" placeholder=""  style="width: 190px;"/>
                         </div>
                    </div>
-                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-left:-52px;">
                         <div>
                             <label>連絡先</label>
                             <input class="brg-input"  type="text" placeholder=""  style="width: 190px;"/>
@@ -857,8 +836,13 @@
                         </table>
                     </div>    
                 </div>
+            
             </div>
 
+            <hr style="border: 2px solid black; margin: 0; padding: 0;">
+
+
+        </div>
 
             <!-- static modal-->
             <div class="modal fade show" id="static" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
