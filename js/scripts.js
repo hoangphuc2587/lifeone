@@ -287,9 +287,19 @@ $(function(){
         if( data === null || data.length == 0 ){
             e.preventDefault();
             $('#jumplist1').trigger('click');
-            // swal({title : 'メッセージ',text :'明細が選択されていません !'})
-            // .then((value) => {
-            // })
+        }else{
+            var urls = [];
+            var v  = $(this).val();
+            for(let i = 0 ; i < data.length ; i++){
+                if (v == 'submit_print_pdf'){
+                    urls.push($("#chk"+data[i]).data('pdf'));
+                }else if (v == 'submit_print_excel'){
+                    urls.push($("#chk"+data[i]).data('excel'));
+                }
+            }        
+            if (urls.length > 0){
+                download(urls); 
+            }
         }
     })
     $(document).on('keypress',"#search-id",function(e){
@@ -414,3 +424,18 @@ $(function(){
     
     
 })
+
+function download(files) {
+    $.each(files, function(key, value) {
+        $('<iframe></iframe>')
+            .hide()
+            .attr('src', value)
+            .appendTo($('body'))
+            .load(function() {
+                var that = this;
+                setTimeout(function() {
+                    $(that).remove();
+                }, 100);
+            });
+    });
+}

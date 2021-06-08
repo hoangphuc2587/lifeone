@@ -550,7 +550,7 @@
                     <table class="table table-bordered table2" style="margin-bottom: 0px !important;">
                         <thead>
                             <tr class="blue-tr">
-                                @if ($isUserLifeOne)
+                                @if (!$isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
                                 <th scope="col" class="th2" width="90">依頼内容</th>
@@ -599,7 +599,7 @@
                     <table class="table table-bordered table2">
                         <thead>
                             <tr class="blue-tr">
-                                @if ($isUserLifeOne)
+                                @if (!$isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
                                 <th scope="col" class="th2" width="90">依頼内容</th>
@@ -636,11 +636,11 @@
                                 @foreach($lists as $item)
                             <tr>                                 
                                 <td>
-                                    <input name="check_box_list[]" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}-0">
+                                    <input id="chk{{ $item->HACYU_ID }}-0" name="check_box_list[]" data-pdf="{{ $item->PDF_PATH }}" data-excel="{{ $item->EXCEL_PATH }}" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}-0">
                                 </td>
                                 <td>{{ $item->IRAI_CD }}</td>
-                                <td>{{ date('m/d/Y', strtotime($item->IRAI_YMD)) }}</td>
-                                @if (!$isUserLifeOne)
+                                <td>{{ !empty($item->IRAI_YMD) ? date('m/d/Y', strtotime($item->IRAI_YMD)) : '' }}</td>
+                                @if ($isUserLifeOne)
                                 <td>{{ $item->HACYU_SYBET_NAME }}</td>
                                 @endif                                
                                 <td>
@@ -652,14 +652,16 @@
                                 <td>{{ $item->MAKER }}</td>
                                 <td>{{ $item->NONYUSAKI_ADDRESS }}</td>
                                 <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>                                                               
-                                @if (!$isUserLifeOne)
+                                @if ($isUserLifeOne)
                                 <td>{{ $item->NONYUSAKI_TANT_NAME }}</td>
-                                <td></td>
-                                <td>{{ $item->HACYUSAKI_NAME }}</td>
+                                <td>{{ $item->TAIO_CD }}</td>
+                                <td>{{ !empty($item->LAST_NKAYOTEI_YMD) ? date('m/d/Y', strtotime($item->LAST_NKAYOTEI_YMD)) : '' }}</td>
+                                <td>{{ $item->HACYUSAKI_NAME }}</td> 
                                 @else
                                 <td>@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
-                                @endif                                
-                                <td>{{ $item->FREE }}</td>                                
+                                <td>{{ $item->FREE }}</td> 
+                                @endif
+
                                 
                             </tr>
                                 @endforeach

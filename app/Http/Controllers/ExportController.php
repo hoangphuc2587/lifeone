@@ -29,7 +29,7 @@ class ExportController extends Controller implements FromCollection, WithHeading
         }
         
         foreach($data as $key => $value){
-            $lists_checkboxID[] = substr($value,0,strpos($value,'-'));            
+            $lists_checkboxID[] = substr($value,0,strpos($value,'-'));
         }
 
 

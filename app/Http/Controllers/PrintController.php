@@ -9,11 +9,7 @@ use Cookie;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Session;
-use App\T_IRAI;
-use App\T_IRAIMSAI;
-use App\M_KBN_WEB;
 use DateTime;
-use ZipArchive;
 class PrintController extends Controller
 {
     public function __construct()
@@ -54,26 +50,22 @@ class PrintController extends Controller
         if(session()->has('data_list_checkbox')){
             $check_box = session()->get('data_list_checkbox');
         } 
+        $lists_checkboxID = array();
+        $data = $request->check_box_list;
+        foreach($data as $key => $value){
+            $lists_checkboxID[] = substr($value,0,strpos($value,'-'));
+        }
         switch ($request->submit) {
             case 'submit_export':
                 $request->session()->put('list_csv',$request->check_box_list);
+                $this->__updateStatus($lists_checkboxID);
                 return redirect()->route('export');
                 break;
-            case 'submit_print_pdf':  
-                // Files to download
-                $urls = [
-                    'seminar.pdf',
-                    '210832.pdf'
-                ];
-
-                $this->__multiple_download($urls);  
-              
+            case 'submit_print_pdf':
+            case 'submit_print_excel':
+                $this->__updateStatus($lists_checkboxID);
+                return redirect()->route('list');
                 break;
-
-            case 'submit_print_excel':    
-              
-                break;
-
             case 'submit_detail': 
 
                 return view('detail', compact('data'));
@@ -82,22 +74,11 @@ class PrintController extends Controller
         }
     }
 
-    private function __multiple_download(array $urls, $save_path = 'tmp')
-    {
-
-        $files = $urls;
-        $zipname = 'file.zip';
-        $zip = new ZipArchive;
-        $zip->open($zipname, ZipArchive::CREATE);
-        foreach ($files as $file) {
-          $zip->addFile($file);
-        }
-        $zip->close();
-
-        header('Content-Type: application/zip');
-        header('Content-disposition: attachment; filename='.$zipname);
-        header('Content-Length: ' . filesize($zipname));
-        readfile($zipname);
+    private function __updateStatus($listID){
+        DB::table('T_HACYU')
+           ->whereIn('HACYU_ID',$listID)
+           ->where('STS_CD', '01')
+           ->update(['STS_CD' => '02']);
     }
 
     public function postUpdate(Request $rq){  
