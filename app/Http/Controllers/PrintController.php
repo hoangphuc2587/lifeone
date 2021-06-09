@@ -28,40 +28,116 @@ class PrintController extends Controller
         $request->session()->forget('data_search_list_print');
         return view('print',compact('datas'));
     }
-    private function getSQL($lists_id){
+    private function getSQLHACYU($lists_id){
         $query = DB::table('T_HACYU')
         ->select(
-        'T_HACYU.IRAI_YMD',
-        'T_HACYU.IRAI_DAY',
         'T_HACYU.HACYU_ID',
-        'T_HACYU.NONYUSAKI_ADDRESS',
-        'T_HACYU.COMMENT1',
-        'T_HACYU.NOHIN_KIBO_FLG',
-        'T_HACYU.FREE',
+        'T_HACYU.IRAI_DAY',
         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD_NAME"),
         DB::raw("(SELECT KBNMSAI_BIKO FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_COLOR"),      
-        DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '03' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),
-        'T_HACYU.HACYU_SYBET_NAME',
-        'T_HACYU.NONYUSAKI_TANT_NAME',
-        'T_HACYU.LAST_NKAYOTEI_YMD',
+        DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '03' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),       
         'T_HACYU.HACYUSAKI_NAME',
-        'T_HACYU.TAIO_CD',
+        'T_HACYU.TAIO_CD',       
+        DB::raw("(SELECT TANT_NAME FROM M_TANT_WEB WHERE M_TANT_WEB.TANT_CD = T_HACYU.TAIO_TANT_CD AND M_TANT_WEB.DEL_FLG = 0 LIMIT 1) AS TAIO_TANT_NAME"),
+        'T_HACYU.CO_NAME',
+        'T_HACYU.CO_POSTNO',
+        'T_HACYU.CO_ADDRESS',
+        'T_HACYU.CO_TELNO',
+        'T_HACYU.CO_FAX',
+        'T_HACYU.CO_TANT_NAME',
+        'T_HACYU.NONYUSAKI_POSTNO',
+        'T_HACYU.NONYUSAKI_NAME',
+        'T_HACYU.NONYUSAKI_ADDRESS',
+        'T_HACYU.NONYUSAKI_TELNO',
+        'T_HACYU.NONYUSAKI_TANT_NAME',
+        'T_HACYU.KENMEI',
+        'T_HACYU.IRAI_YMD_NAME',
+        'T_HACYU.IRAI_YMD',
+        'T_HACYU.MESSAGE',
+        'T_HACYU.COMMENT1',
+        'T_HACYU.COMMENT2',
+        'T_HACYU.HAISO_SYBET_CD',
+        'T_HACYU.IRAI_CD',
+        'T_HACYU.HAISOGYOSYA1',
+        'T_HACYU.DENPYONO1',
+        'T_HACYU.HAISOGYOSYA2',
+        'T_HACYU.DENPYONO2',        
+        'T_HACYU.RENRAKUSAKI2',
+        'T_HACYU.HAISOGYOSYA_MULTI_FLG',
+        'T_HACYU.HAISOGYOSYA3_1_LABEL',
+        'T_HACYU.HAISOGYOSYA3_2_LABEL',
+        'T_HACYU.HAISOGYOSYA3_1',
+        'T_HACYU.DENPYONO3_1',
+        'T_HACYU.HAISOGYOSYA3_2',
+        'T_HACYU.DENPYONO3_2',
+        'T_HACYU..DRIVER_NAME',
+        'T_HACYU..RENRAKUSAKI4',
+        'T_HACYU.NO_DENPYO_FLG',
+        'T_HACYU.BIKO', 
+        'T_HACYU.SYOKEI',
+        'T_HACYU.SORYO',
+        'T_HACYU.SYOHIZEI',
+        'T_HACYU.SUM',
+        'T_HACYU.NEBIKI_SUM',
         'T_HACYU.PDF_PATH',
-        'T_HACYU.EXCEL_PATH',
-        DB::raw("(SELECT TANT_NAME FROM M_TANT_WEB WHERE M_TANT_WEB.TANT_CD = T_HACYU.TAIO_TANT_CD AND M_TANT_WEB.DEL_FLG = 0 LIMIT 1) AS TAIO_TANT_NAME"),          
+        'T_HACYU.EXCEL_PATH',        
           
         )
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
         ->whereIn('T_HACYU.HACYU_ID', $lists_id);
         return $query;
     }
+
+
+     private function getDataHACYUMSAI($id){
+        $query = DB::table('T_HACYUMSAI')
+        ->select(
+        'T_HACYUMSAI.HACYUMSAI_ID',
+        'T_HACYUMSAI.SPLIT_NO',
+        'T_HACYUMSAI.CTGORY',
+        'T_HACYUMSAI.MAKER',
+        'T_HACYUMSAI.HINBAN',
+        'T_HACYUMSAI.TANKA',
+        'T_HACYUMSAI.SURYO',
+        'T_HACYUMSAI.KINGAK',
+        'T_HACYUMSAI.SIKIRI_RATE',
+        'T_HACYUMSAI.NEBIKI_TANKA',
+        'T_HACYUMSAI.NEBIKI_GAK',
+        'T_HACYUMSAI.NEBIKI_YM',
+        'T_HACYUMSAI.NOHIN_KIBO_YMD',
+        'T_HACYUMSAI.BIKO',
+        'T_HACYUMSAI.KAITO_NOKI',
+        'T_HACYUMSAI.NOHIN_YMD',
+        'T_HACYUMSAI.NYUKA_ID'          
+        )
+        ->where(['T_HACYUMSAI.DEL_FLG'=> 0])
+        ->where('T_HACYUMSAI.HACYU_ID', $id);
+        return $query->get();
+    }
+
+
+    private function initData(){
+        // 配送業者
+        $query = DB::table('M_KBN_WEB')
+        ->where('KBN_CD','05')
+        ->where('DEL_FLG', 0);
+
+        $delivery_company = $query->get(); 
+        $data['delivery_company'] = $delivery_company;
+        return $data;
+    }
+
     public function search_print($id)
     {
-        $cnn = 0;
+        $initData = $this->initData();
         $data = array();
-        $query = $this->getSQL(array($id));
-        $data = $query->get();
-        return view('detail', compact('data'));
+        $query = $this->getSQLHACYU(array($id));
+        $data = $query->get();               
+        foreach($data as &$item){
+            $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
+            $item->HACYUMSAI = $detail;
+        } 
+        return view('detail', compact('initData', 'data'));
     }
     public function post_search_print(Request $request)
     {
@@ -95,10 +171,15 @@ class PrintController extends Controller
                 return redirect()->route('list');
                 break;
             case 'submit_detail': 
+                $initData = $this->initData();
                 $data = array();
-                $query = $this->getSQL($lists_checkboxID);
-                $data = $query->get(); 
-                return view('detail', compact('data'));
+                $query = $this->getSQLHACYU($lists_checkboxID);
+                $data = $query->get();
+                foreach($data as &$item){
+                    $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
+                    $item->HACYUMSAI = $detail;
+                }                 
+                return view('detail', compact('initData','data'));
             default:
                 break;
         }

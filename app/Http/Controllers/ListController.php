@@ -36,7 +36,6 @@ class ListController extends Controller
         //状況
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','04')
-        //->where('KBNMSAI_CD', '<>' ,'10')
         ->where('DEL_FLG', 0);
         $statusList = $query->get();
         if($request->session()->has('page_click') && $request->session()->has('page_center') && $request->session()->has('total_row_on_one_page') && $request->session()->has('field_sort') && $request->session()->has('query_sort') ){

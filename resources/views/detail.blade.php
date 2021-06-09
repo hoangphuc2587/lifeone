@@ -11,6 +11,7 @@
 
     <title>依頼一覧画面</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
+    <link href="{{ asset('datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"/>    
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     <script>
@@ -22,6 +23,19 @@
     </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
+
+    .dropdown-menu{
+        padding: 0.5rem;
+    }
+
+    input.datepicker{
+        border-radius: unset;
+        padding: 3px 4px;
+        direction: unset;
+        border: 1px solid rgba(0,0,0,.5);
+        font-size: 14px;
+        background: #FFF2CC;
+    }    
         
     label{
         font-size:13px;
@@ -60,7 +74,7 @@
     .textarea-cmt{
         resize: none;
         width: 100%;
-        height: 100px;
+        height: 105px;
     }
 
     .textarea-cmt-1{
@@ -400,9 +414,9 @@
                                {{ $item->TAIO_TANT_NAME }}
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <input type="checkbox" <?php if(Session::has('search_reply')){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <input type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
                                 <label style="margin-right: 10px;">対応中</label>
-                                <input class="ml-1" type="checkbox" <?php if(Session::has('search_reply')){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <input class="ml-1" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
                                 <label>対応完了</label> 
                             </div>
                         </div>                           
@@ -411,17 +425,17 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" style="float:left;">
-                                <span>(株)ライフワン<br>〒651-0084</span>
+                                <span>{{ $item->CO_NAME }}<br>〒{{ $item->CO_POSTNO }}</span>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" style="float:right;">
-                                <span>担当：○○　○○</span>
+                                <span>担当：{{ $item->CO_TANT_NAME }}</span>
                             </div>
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix">
                             <p style="padding-left: 20px; padding-top: 5px; font-size: 11px;">
-                                兵庫県神戸市中央区磯辺通3丁目1-2　大和地所三宮ビル 10階<br >
-                                TEL：050-3533-1288　FAX：050-3737-8958
+                                {{ $item->CO_ADDRESS }}<br >
+                                TEL：{{ $item->CO_TELNO }}　FAX：{{ $item->CO_FAX }}
                             </p>
                         </div>
                     </div>
@@ -434,7 +448,7 @@
                                 <tr>
                                     <td width="80" style="vertical-align: middle;">納品場所</td>
                                     <td style="text-align: left; padding-left:5px;"><span>
-                                    〒○○○-○○○○<br>納品先名<br>TEL：納品先電話番号<br>納品先担当者様名</span></td> 
+                                    〒{{ $item->NONYUSAKI_POSTNO }}<br>{{ $item->NONYUSAKI_NAME }}<br>TEL：{{ $item->NONYUSAKI_TELNO }}<br>{{ $item->NONYUSAKI_TANT_NAME }}</span></td> 
                                 </tr> 
                             </tbody>
                         </table>
@@ -448,27 +462,27 @@
                                 <tbody>
                                     <tr>
                                         <td width="80" height="50" style="vertical-align: middle;">件名</td>
-                                        <td></td> 
+                                        <td style="vertical-align: middle;">{{ $item->KENMEI }}</td> 
                                     </tr> 
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 text-right" style="margin-top: 10px;">
-                        <span class="title-table">翌営業日正午までにご回答よろしくお願い致します。</span>
+                        <span class="title-table">{{ $item->MESSAGE }}</span>
                     </div>                    
                 </div>
 
                 <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                        <span style="padding-left:75px; font-size: 12px;">発注日：2021/03/23</span>
+                        <span style="padding-left:75px; font-size: 12px;">{{ $item->IRAI_YMD_NAME }}：{{ !empty($item->IRAI_YMD) ? date('Y/m/d', strtotime($item->IRAI_YMD)) : '' }}</span>
     
-                        <span style="padding-left:55px; font-size: 12px;">発注ID：0000000000</span>   
+                        <span style="padding-left:55px; font-size: 12px;">発注ID：{{ $item->HACYU_ID }}</span>   
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
                             <label>納品日：</label>
-                            <input type="text" placeholder="" class="brg-input"  style="width: 120px;"/>        
+                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" type="text" placeholder="" value="{{ $item->IRAI_CD == '03' ? date('Y/m/d', strtotime($item->HACYUMSAI[0]->NOHIN_YMD)) : date('Y/m/d', strtotime($item->HACYUMSAI[0]->KAITO_NOKI)) }}" class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
                 </div>
@@ -551,33 +565,25 @@
                             <span>
                             小計
                             </span>
-                            <span class="total-num">
-                            0
-                            </span>
+                            <span class="total-num">{{ number_format($item->SYOKEI) }}</span>
                         </div>
                         <div>
                             <span>
                             送料
                             </span>
-                            <span class="total-num">
-                            0
-                            </span>
+                            <span class="total-num">{{ number_format($item->SORYO) }}</span>
                         </div>
                         <div style="border-bottom: 1px solid;">
                             <span>
                             消費税
                             </span>
-                            <span class="total-num-98">
-                            0
-                            </span>
+                            <span class="total-num-98">{{ number_format($item->SYOHIZEI) }}</span>
                         </div>
                         <div>
                             <span>
                             合計
                             </span>
-                            <span class="total-num">
-                            0
-                            </span>
+                            <span class="total-num">{{ number_format($item->SUM) }}</span>
                         </div>
                     </div>
                     <div class="ml-1">
@@ -585,9 +591,7 @@
                             <span>
                             値引額合計
                             </span>
-                            <span class="total-num-90">
-                            0
-                            </span>
+                            <span class="total-num-90">{{ number_format($item->NEBIKI_SUM) }}</span>
                         </div>
                     </div>
                 </div>
@@ -603,8 +607,7 @@
                                     </td>
                                 </tr>
                                 <td class="bordered">
-                                    <textarea  class="textarea-cmt">
-                                    </textarea>
+                                    <textarea  class="textarea-cmt" readonly="true">{{ $item->COMMENT1 }}</textarea>
                                 </td>
                                 </tr>
                                
@@ -614,8 +617,7 @@
                                 </tr>
                                 <tr>
                                     <td class="bordered">
-                                        <textarea class="textarea-cmt brg-input">
-                                        </textarea>
+                                        <textarea class="textarea-cmt brg-input">{{ $item->COMMENT2 }}</textarea>
                                     </td>
                                 </tr>
                             </tbody>
@@ -666,6 +668,7 @@
                         </div>
                     </div>
                 </div>
+                @if ($item->HAISO_SYBET_CD == '04' && $item->IRAI_CD == '03' )
                 <div class="row mt-4">
                     <label style="padding-left: 25px;">【ドライバー情報】</label>
                 </div>
@@ -674,34 +677,17 @@
                         <div>
                             <label style="padding-left: 15px;">・ 配送業者</label>
                             <select style="width: 155px;" class="brg-input">
-                                <option>
-                                    
-                                </option>
-                                <option value="T_IRAI.IRAI_ID"
-                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
-                                    ID</option>
-                                <option value="SETSAKI_NAME"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
-                                    設置者名</option>
-                                <option value="SETSAKI_ADDRESS"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
-                                    設置先住所</option>
-                                <option value="M_KBN_WEB.KBNMSAI_NAME"
-                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
-                                    変更可否</option>
-                                <option value="COMMENT1"
-                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
-                                    コメント有</option>
-                                <option value="KOJIGYOSYA_NAME"
-                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
-                                    協力店様名</option>
+                                <option></option>
+                                @foreach ($initData['delivery_company'] as $option)
+                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                @endforeach
                             </select>
                         </div>
                    </div>
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 330px;"/>
+                            <input class="brg-input"  value="{{ $item->DENPYONO1 }}" type="text" placeholder=""  style="width: 330px;"/>
                         </div>
                    </div>
                 </div>
@@ -710,105 +696,59 @@
                         <div>
                             <label style="padding-left: 15px;">・ 配送業者</label>
                             <select style="width: 155px;" class="brg-input">
-                                <option>
-                                    
-                                </option>
-                                <option value="T_IRAI.IRAI_ID"
-                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
-                                    ID</option>
-                                <option value="SETSAKI_NAME"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
-                                    設置者名</option>
-                                <option value="SETSAKI_ADDRESS"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
-                                    設置先住所</option>
-                                <option value="M_KBN_WEB.KBNMSAI_NAME"
-                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
-                                    変更可否</option>
-                                <option value="COMMENT1"
-                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
-                                    コメント有</option>
-                                <option value="KOJIGYOSYA_NAME"
-                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
-                                    協力店様名</option>
+                                <option></option>
+                                @foreach ($initData['delivery_company'] as $option)
+                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                @endforeach
                             </select>
                         </div>
                    </div>
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 330px;"/>
+                            <input class="brg-input" value="{{ $item->DENPYONO2 }}" type="text" placeholder=""  style="width: 330px;"/>
                         </div>
                    </div>
 
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>連絡先</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 195px;"/>
+                            <input class="brg-input" value="{{ $item->RENRAKUSAKI2 }}"  type="text" placeholder=""  style="width: 195px;"/>
                         </div>
                    </div>
                 </div>
+
+                <!-- ------------- -->
+                
+
+                @if($item->HAISOGYOSYA_MULTI_FLG == 1){
                 <div class="row mt-1">
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
-                            <label style="padding-left: 15px;">・ 配送業者</label>
+                            <label style="padding-left: 15px;">・ {{ $item->HAISOGYOSYA3_1_LABEL }}</label>
                             <select style="width: 155px;" class="brg-input">
-                                <option>
-                                    
-                                </option>
-                                <option value="T_IRAI.IRAI_ID"
-                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
-                                    ID</option>
-                                <option value="SETSAKI_NAME"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
-                                    設置者名</option>
-                                <option value="SETSAKI_ADDRESS"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
-                                    設置先住所</option>
-                                <option value="M_KBN_WEB.KBNMSAI_NAME"
-                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
-                                    変更可否</option>
-                                <option value="COMMENT1"
-                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
-                                    コメント有</option>
-                                <option value="KOJIGYOSYA_NAME"
-                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
-                                    協力店様名</option>
+                                <option></option>
+                                @foreach ($initData['delivery_company'] as $option)
+                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                @endforeach
                             </select>
                         </div>
                    </div>
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 230px;"/>
+                            <input class="brg-input" value="{{ $item->DENPYONO3_1 }}"  type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
 
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
-                            <label style="padding-left: 40px;">配送業者</label>
+                            <label style="padding-left: 40px;">{{ $item->HAISOGYOSYA3_2_LABEL }}</label>
                             <select style="width: 155px;" class="brg-input">
-                                <option>
-                                    
-                                </option>
-                                <option value="T_IRAI.IRAI_ID"
-                                    <?php if(session()->get('field_sort') == 'T_IRAI.IRAI_ID') {echo "selected";}?>>
-                                    ID</option>
-                                <option value="SETSAKI_NAME"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_NAME') {echo "selected";}?>>
-                                    設置者名</option>
-                                <option value="SETSAKI_ADDRESS"
-                                    <?php if(session()->get('field_sort') == 'SETSAKI_ADDRESS') {echo "selected";}?>>
-                                    設置先住所</option>
-                                <option value="M_KBN_WEB.KBNMSAI_NAME"
-                                    <?php if(session()->get('field_sort') == 'M_KBN_WEB.KBNMSAI_NAME') {echo "selected";}?>>
-                                    変更可否</option>
-                                <option value="COMMENT1"
-                                    <?php if(session()->get('field_sort') == 'COMMENT1') {echo "selected";}?>>
-                                    コメント有</option>
-                                <option value="KOJIGYOSYA_NAME"
-                                    <?php if(session()->get('field_sort') == 'KOJIGYOSYA_NAME') {echo "selected";}?>>
-                                    協力店様名</option>
+                                <option></option>
+                                @foreach ($initData['delivery_company'] as $option)
+                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                @endforeach
                             </select>
                         </div>
                    </div>
@@ -816,10 +756,15 @@
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 230px;"/>
+                            <input class="brg-input" value="{{ $item->DENPYONO3_2 }}" type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
                 </div>
+                @endif
+
+                <!-- ------------- -->
+
+
                 <div class="row mt-1">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
@@ -836,8 +781,9 @@
                 </div>
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <div>
-                        <label style="padding-left: 15px;" >・ <span style="border: 0;" class="brg-input"> □送り状なし。　当日お客様にお電話します。</span></label>
+                        <div style="padding-left: 30px;">                            
+                            <input type="checkbox" <?php if($item->NO_DENPYO_FLG == 1){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                            <label style="margin-left: 10px;background: #FFF2CC;">送り状なし。　当日お客様にお電話します。</label>
                         </div>
                    </div>
                 </div>
@@ -851,14 +797,15 @@
                                     </td>
                                 </tr>
                                 <td class="bordered">
-                                    <textarea  class="textarea-cmt-1 brg-input">
-                                    </textarea>
+                                    <textarea  class="textarea-cmt-1 brg-input">{{ $item->BIKO }}</textarea>
                                 </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>    
                 </div>
+
+                @endif
             
             </div>
                 @if (count($data) > 1)
@@ -924,6 +871,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
     <!-- <script src="http://code.jquery.com/jquery-1.7.2.js"></script> -->
     <script src="{{ URL::asset('js/tether.min.js') }}"></script>
+    <script src="{{ URL::asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script>    
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
     
     <script src="{{ URL::asset('js/scripts.js') }}"></script>
