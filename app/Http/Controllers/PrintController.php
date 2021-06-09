@@ -28,11 +28,39 @@ class PrintController extends Controller
         $request->session()->forget('data_search_list_print');
         return view('print',compact('datas'));
     }
+    private function getSQL($lists_id){
+        $query = DB::table('T_HACYU')
+        ->select(
+        'T_HACYU.IRAI_YMD',
+        'T_HACYU.IRAI_DAY',
+        'T_HACYU.HACYU_ID',
+        'T_HACYU.NONYUSAKI_ADDRESS',
+        'T_HACYU.COMMENT1',
+        'T_HACYU.NOHIN_KIBO_FLG',
+        'T_HACYU.FREE',
+        DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD_NAME"),
+        DB::raw("(SELECT KBNMSAI_BIKO FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_COLOR"),      
+        DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '03' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),
+        'T_HACYU.HACYU_SYBET_NAME',
+        'T_HACYU.NONYUSAKI_TANT_NAME',
+        'T_HACYU.LAST_NKAYOTEI_YMD',
+        'T_HACYU.HACYUSAKI_NAME',
+        'T_HACYU.TAIO_CD',
+        'T_HACYU.PDF_PATH',
+        'T_HACYU.EXCEL_PATH',
+        DB::raw("(SELECT TANT_NAME FROM M_TANT_WEB WHERE M_TANT_WEB.TANT_CD = T_HACYU.TAIO_TANT_CD AND M_TANT_WEB.DEL_FLG = 0 LIMIT 1) AS TAIO_TANT_NAME"),          
+          
+        )
+        ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
+        ->whereIn('T_HACYU.HACYU_ID', $lists_id);
+        return $query;
+    }
     public function search_print($id)
     {
         $cnn = 0;
         $data = array();
-      
+        $query = $this->getSQL(array($id));
+        $data = $query->get();
         return view('detail', compact('data'));
     }
     public function post_search_print(Request $request)
@@ -51,8 +79,8 @@ class PrintController extends Controller
             $check_box = session()->get('data_list_checkbox');
         } 
         $lists_checkboxID = array();
-        $data = $request->check_box_list;
-        foreach($data as $key => $value){
+        $check_box_list = $request->check_box_list;
+        foreach($check_box_list as $key => $value){
             $lists_checkboxID[] = substr($value,0,strpos($value,'-'));
         }
         switch ($request->submit) {
@@ -67,7 +95,9 @@ class PrintController extends Controller
                 return redirect()->route('list');
                 break;
             case 'submit_detail': 
-
+                $data = array();
+                $query = $this->getSQL($lists_checkboxID);
+                $data = $query->get(); 
                 return view('detail', compact('data'));
             default:
                 break;

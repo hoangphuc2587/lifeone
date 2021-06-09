@@ -308,6 +308,18 @@
         border-bottom: 1px solid black;
     }
 
+    hr.separate-page {
+      border: 2px solid black; 
+      margin: 0 -15px;
+      padding: 0;
+    }    
+
+    hr.separate-page:last-child {
+      display: none;
+    }
+
+    style=""
+
     </style>
 </head>
 
@@ -345,22 +357,23 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>   
+        @if (!empty($data)) 
         <div class="container-fluid" style="margin-top: 100px">
-            <div class="container">               
-
+            @foreach ($data as $item)
+            <div class="container">
                 <div class="row mt-5">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <span data-type="header" style="padding-left: 10px;" ><span id="home">状況：未発注</span>
+                        <span data-type="header" style="padding-left: 10px;" ><span id="home">状況：{{ $item->STS_CD_NAME }}</span>
                         </span>
                         
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <h1 data-type="header" class="title-header"><span>依頼内容</span>
+                        <h1 data-type="header" class="title-header"><span>{{ $item->IRAI_CD_NAME }}</span>
                         </h1>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                       <span style="float: right;">2021/3/23  16:45:49</span>
+                       <span style="float: right;">{{ !empty($item->IRAI_DAY) ? date('Y/m/d H:i:s', strtotime($item->IRAI_DAY)) : '' }}</span>
                     </div>
                 </div>
 
@@ -369,7 +382,7 @@
                         <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <span style="padding-left: 65px;">
-                                仕入先様名　御中												
+                                {{ $item->HACYUSAKI_NAME }}　御中												
                                 </span>
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-4">
@@ -381,8 +394,18 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <h5 style="padding: 30px; ">○○　○○ □対応中 □対応完了</h5>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">                      
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                               {{ $item->TAIO_TANT_NAME }}
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <input type="checkbox" <?php if(Session::has('search_reply')){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <label style="margin-right: 10px;">対応中</label>
+                                <input class="ml-1" type="checkbox" <?php if(Session::has('search_reply')){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <label>対応完了</label> 
+                            </div>
+                        </div>                           
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -838,11 +861,12 @@
                 </div>
             
             </div>
-
-            <hr style="border: 2px solid black; margin: 0; padding: 0;">
-
-
+                @if (count($data) > 1)
+            <hr class="separate-page">
+                @endif
+            @endforeach            
         </div>
+        @endif
 
             <!-- static modal-->
             <div class="modal fade show" id="static" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">

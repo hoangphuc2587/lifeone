@@ -52,14 +52,16 @@ class ListController extends Controller
         $query = DB::table('T_HACYU')
         ->select(
          'T_HACYU.IRAI_YMD',
+         'T_HACYU.IRAI_DAY',
          'T_HACYU.HACYU_ID',
          'T_HACYUMSAI.MAKER',
          'T_HACYU.NONYUSAKI_ADDRESS',
          'T_HACYU.COMMENT1',
          'T_HACYU.NOHIN_KIBO_FLG',
          'T_HACYU.FREE',
-         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD"),
-         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '04' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD"),
+         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD_NAME"),
+         DB::raw("(SELECT KBNMSAI_BIKO FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_COLOR"),
+         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '03' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),
          'T_HACYU.HACYU_SYBET_NAME',
          'T_HACYU.NONYUSAKI_TANT_NAME',
          'T_HACYU.LAST_NKAYOTEI_YMD',
@@ -116,8 +118,6 @@ class ListController extends Controller
     private function __getCondition($query, Request $request, &$paramSearch){
         if($request->session()->has('search_reply')){
             $query->where('T_HACYU.STS_CD' , '10');
-        }else{
-            $query->where('T_HACYU.STS_CD', '<>' , '10');           
         }
 
         if($request->session()->has('key_search_name') && Auth::user()->HACYUSAKI_CD == ''){
@@ -154,7 +154,7 @@ class ListController extends Controller
         if($request->session()->has('key_search_status')){
             $status_id = $request->session()->get('key_search_status');
             $paramSearch['status_id'] = $status_id;
-            $query->where('T_HACYU.STS_CD', $status_id);
+            $query->where('T_HACYU.TAIO_CD', $status_id);
         }
 
         if($request->session()->has('key_search_maker')){
@@ -385,8 +385,7 @@ class ListController extends Controller
             $request->session()->put('key_search_hinban', $request->hinban);
         }        
 
-        $request->session()->put('page_click',1);
-        $request->session()->forget('search_reply');
+        $request->session()->put('page_click',1);        
         $request->session()->forget('data_list_checkbox');
     }
     public function search_list_all(Request $request){

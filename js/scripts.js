@@ -416,11 +416,14 @@ $(function(){
         $('#cvnwefj43').slideToggle();
     })
 
-    $('.datepicker').datepicker({
-        autoclose: true,
-        todayHighlight: true,
-    });
-    //$('.datepicker').datepicker("setDate", new Date());
+    if($('.datepicker').length) {
+        $('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+        });
+        //$('.datepicker').datepicker("setDate", new Date());
+    }
+    
     
     
 })

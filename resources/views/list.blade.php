@@ -638,7 +638,7 @@
                                 <td>
                                     <input id="chk{{ $item->HACYU_ID }}-0" name="check_box_list[]" data-pdf="{{ $item->PDF_PATH }}" data-excel="{{ $item->EXCEL_PATH }}" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}-0">
                                 </td>
-                                <td>{{ $item->IRAI_CD }}</td>
+                                <td style="background: {{ empty($item->IRAI_COLOR) ? 'none' : $item->IRAI_COLOR }}">{{ $item->IRAI_CD_NAME }}</td>
                                 <td>{{ !empty($item->IRAI_YMD) ? date('m/d/Y', strtotime($item->IRAI_YMD)) : '' }}</td>
                                 @if ($isUserLifeOne)
                                 <td>{{ $item->HACYU_SYBET_NAME }}</td>
@@ -648,7 +648,7 @@
                                         href="{{ route('search_print',['id'=>$item->HACYU_ID]) }}">{{$item->HACYU_ID}}
                                     </a>
                                 </td>
-                                <td>{{ $item->STS_CD }}</td>
+                                <td>{{ $item->STS_CD_NAME }}</td>
                                 <td>{{ $item->MAKER }}</td>
                                 <td>{{ $item->NONYUSAKI_ADDRESS }}</td>
                                 <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>                                                               
