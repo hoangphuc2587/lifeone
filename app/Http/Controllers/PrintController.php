@@ -116,20 +116,19 @@ class PrintController extends Controller
     }
 
 
-    private function initData(){
+    private function deliveryCompany(){
         // 配送業者
         $query = DB::table('M_KBN_WEB')
         ->where('KBN_CD','05')
         ->where('DEL_FLG', 0);
 
         $delivery_company = $query->get(); 
-        $data['delivery_company'] = $delivery_company;
-        return $data;
+        return $delivery_company;
     }
 
     public function search_print($id)
     {
-        $initData = $this->initData();
+        $deliveryCompany = $this->deliveryCompany();
         $data = array();
         $query = $this->getSQLHACYU(array($id));
         $data = $query->get();               
@@ -137,7 +136,7 @@ class PrintController extends Controller
             $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
             $item->HACYUMSAI = $detail;
         } 
-        return view('detail', compact('initData', 'data'));
+        return view('detail', compact('deliveryCompany', 'data'));
     }
     public function post_search_print(Request $request)
     {
@@ -171,7 +170,7 @@ class PrintController extends Controller
                 return redirect()->route('list');
                 break;
             case 'submit_detail': 
-                $initData = $this->initData();
+                $deliveryCompany = $this->deliveryCompany();
                 $data = array();
                 $query = $this->getSQLHACYU($lists_checkboxID);
                 $data = $query->get();
@@ -179,7 +178,7 @@ class PrintController extends Controller
                     $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
                     $item->HACYUMSAI = $detail;
                 }                 
-                return view('detail', compact('initData','data'));
+                return view('detail', compact('deliveryCompany','data'));
             default:
                 break;
         }

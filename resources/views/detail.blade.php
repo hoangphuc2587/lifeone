@@ -11,7 +11,7 @@
 
     <title>依頼一覧画面</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
-    <link href="{{ asset('datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"/>    
+    <link href="{{ asset('datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     <script>
@@ -55,17 +55,17 @@
         height: 10px !important;
     }
     .total{
-        margin-left: 480px;
+        margin-left: 400px;
         font-size: 12px;
     }
     .total-num{
-        margin-left: 110px;
+        margin-left: 80px;
     }
     .total-num-98{
-        margin-left: 98px;
+        margin-left: 73px;
     }
     .total-num-90{
-        margin-left: 90px;
+        margin-left: 52px;
     }
 
     .title-cmt{
@@ -208,17 +208,20 @@
     .table-cover {
         width: 100%;
         display: block;
-        margin-left: 30px;
-        margin-right: 30px;
-    }
-
-    .table-2 {
-        background-color: #ffffff;
         margin-left: 15px;
+        margin-right: 15px;
     }
 
     .table-cover table {
+        margin-bottom: 50px;
         background-color: #ffffff;
+        padding: 0.75rem 0.25rem;
+        border: 2px solid black;
+        font-size: 13px;
+    }
+
+    .table-cover table th , .table-cover table td {
+      padding: 0.75rem 0.25rem !important;
     }
 
     .table-bordered,
@@ -332,8 +335,6 @@
       display: none;
     }
 
-    style=""
-
     </style>
 </head>
 
@@ -414,9 +415,9 @@
                                {{ $item->TAIO_TANT_NAME }}
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <input type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <input onclick="return false;" type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
                                 <label style="margin-right: 10px;">対応中</label>
-                                <input class="ml-1" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <input onclick="return false;" class="ml-1" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
                                 <label>対応完了</label> 
                             </div>
                         </div>                           
@@ -482,7 +483,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
                             <label>納品日：</label>
-                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" type="text" placeholder="" value="{{ $item->IRAI_CD == '03' ? date('Y/m/d', strtotime($item->HACYUMSAI[0]->NOHIN_YMD)) : date('Y/m/d', strtotime($item->HACYUMSAI[0]->KAITO_NOKI)) }}" class="brg-input"  style="width: 120px;"/>        
+                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" type="text" placeholder=""  class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
                 </div>
@@ -490,70 +491,46 @@
                 <div class="row mt-3">
                     <div class="table-cover">
                         <table class="table table-bordered table2"
-                            style="margin-bottom: 0px !important; border:2px solid black; font-size:12px; line-height: 3.5;">
+                            style="margin-bottom: 0px !important; border:2px solid black; font-size:12px;">
                             <thead>
                                 <tr class="blue-tr">
-                                    <th scope="col" class="th2" width="25">№</th>
-                                    <th scope="col" class="th3" width="63">カテゴリ</th>
-                                    <th scope="col" class="th4" width="63">メーカー</th>
-                                    <th scope="col" class="th5" width="100">品番</th>
-                                    <th scope="col" class="th6" width="63">単価</th>
-                                    <th class="brg-input" scope="col" class="th7" width="35">数量</th>
-                                    <th scope="col" class="th8" width="63">金額</th>
-                                    <th scope="col" class="th9" width="45">掛率</th>
-                                    <th scope="col" class="th9" width="63">値引額</th>
-                                    <th scope="col" class="th9" width="63">値引予定月</th>
-                                    <th scope="col" class="th9" width="63">納品希望日</th>
-                                    <th scope="col" class="th9" width="100">備考</th>
-                                    <th class="brg-input" scope="col" class="th9" width="100">納品日</th>
+                                    <th scope="col" class="th2" width="40">№</th>
+                                    <th class="th3" width="75">カテゴリ</th>
+                                    <th class="th4" width="85">メーカー</th>
+                                    <th class="th5" width="140">品番</th>
+                                    <th class="th6" width="63">単価</th>
+                                    <th class="brg-input" scope="col" class="th7" width="80">数量</th>
+                                    <th class="th8" width="63">金額</th>
+                                    <th class="th9" width="45">掛率</th>
+                                    <th class="th9" width="80">値引額</th>
+                                    <th class="th9" width="80">値引予定月</th>
+                                    <th class="th9" width="80">納品希望日</th>
+                                    <th class="th9" width="180">備考</th>
+                                    <th class="brg-input" class="th9" width="auto">納品日<br/>※分納の場合は数量を変更して下さい。</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($item->HACYUMSAI as $detail)
                                 <tr>
-                                    <td>1</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="brg-input"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="brg-input"></td>
+                                    <td>{{ $detail->HACYUMSAI_ID }}</td>
+                                    <td>{{ $detail->CTGORY }}</td>
+                                    <td>{{ $detail->MAKER }}</td>
+                                    <td>{{ $detail->HINBAN }}</td>
+                                    <td class="text-right">{{ number_format($detail->TANKA) }}</td>
+                                    <td class="brg-input">
+                                        <input type="text" name="" style="width: 100%;text-align: right;" value="{{ $detail->SURYO }}">
+                                    </td>
+                                    <td class="text-right">{{ number_format($detail->KINGAK) }}</td>
+                                    <td class="text-right">{{ $detail->SIKIRI_RATE }}%</td>
+                                    <td class="text-right">{{ number_format($detail->NEBIKI_GAK) }}</td>
+                                    <td>{{ $detail->NEBIKI_YM }}</td>
+                                    <td>{{ date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
+                                    <td>{{ $detail->BIKO }}</td>
+                                    <td class="brg-input">
+                                        <input type="text" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" style="width: 95px;" name="" value="{{ $item->IRAI_CD == '03' ? date('Y/m/d', strtotime($detail->NOHIN_YMD))  :  date('Y/m/d', strtotime($detail->KAITO_NOKI)) }}">
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="brg-input"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="brg-input"></td>
-                                </tr>  
-                                <tr>
-                                    <td>3</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="brg-input"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="brg-input"></td>
-                                </tr>    
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -678,7 +655,7 @@
                             <label style="padding-left: 15px;">・ 配送業者</label>
                             <select style="width: 155px;" class="brg-input">
                                 <option></option>
-                                @foreach ($initData['delivery_company'] as $option)
+                                @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
@@ -697,7 +674,7 @@
                             <label style="padding-left: 15px;">・ 配送業者</label>
                             <select style="width: 155px;" class="brg-input">
                                 <option></option>
-                                @foreach ($initData['delivery_company'] as $option)
+                                @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
@@ -728,7 +705,7 @@
                             <label style="padding-left: 15px;">・ {{ $item->HAISOGYOSYA3_1_LABEL }}</label>
                             <select style="width: 155px;" class="brg-input">
                                 <option></option>
-                                @foreach ($initData['delivery_company'] as $option)
+                                @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
@@ -746,7 +723,7 @@
                             <label style="padding-left: 40px;">{{ $item->HAISOGYOSYA3_2_LABEL }}</label>
                             <select style="width: 155px;" class="brg-input">
                                 <option></option>
-                                @foreach ($initData['delivery_company'] as $option)
+                                @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
