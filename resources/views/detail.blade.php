@@ -339,7 +339,8 @@
 </head>
 
 <body>
-    <form action="{{  route('post_search_print')}}" method="POST" class="form_list">
+    <form action="{{  route('postUpdate')}}" method="POST" id="form_detail">
+        @csrf
         <div class="container-fluid sticky">
             <div class="container">
                 <div class="header-box">
@@ -352,7 +353,7 @@
                                 </h1>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2 error "
+                                <button type="submit" name="submit" value="submit_data" class="btn btn-primary mb-2 "
                                     style="margin-left: 15px;">保存</button>
                                 <button type="button" id="btn-back"
                                     class="btn btn-primary mb-2">閉じる</button>
@@ -364,9 +365,9 @@
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
                             <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2 error "
                                 style="margin-left: 15px;">CSV</button>
-                            <button type="submit" name="submit" value="submit_print"
+                            <button type="submit" name="submit" value="submit_print_pdf"
                                 class="btn btn-primary mb-2 error">PDF</button>
-                            <button type="submit" name="submit" value="submit_print"
+                            <button type="submit" name="submit" value="submit_print_excel"
                                 class="btn btn-primary mb-2 error">Excel</button>                        
                         </div>
                     </div>
@@ -510,6 +511,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <input type="hidden" name="data[{{ $item->HACYU_ID }}][IRAI_CD]" value="{{ $item->IRAI_CD }}">
                                 @foreach ($item->HACYUMSAI as $detail)
                                 <tr>
                                     <td>{{ $detail->HACYUMSAI_ID }}</td>
@@ -518,7 +520,7 @@
                                     <td>{{ $detail->HINBAN }}</td>
                                     <td class="text-right">{{ number_format($detail->TANKA) }}</td>
                                     <td class="brg-input">
-                                        <input type="text" name="" style="width: 100%;text-align: right;" value="{{ $detail->SURYO }}">
+                                        <input type="text" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][SURYO]" style="width: 100%;text-align: right;" value="{{ $detail->SURYO }}">
                                     </td>
                                     <td class="text-right">{{ number_format($detail->KINGAK) }}</td>
                                     <td class="text-right">{{ $detail->SIKIRI_RATE }}%</td>
@@ -527,7 +529,7 @@
                                     <td>{{ date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
                                     <td>{{ $detail->BIKO }}</td>
                                     <td class="brg-input">
-                                        <input type="text" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" style="width: 95px;" name="" value="{{ $item->IRAI_CD == '03' ? date('Y/m/d', strtotime($detail->NOHIN_YMD))  :  date('Y/m/d', strtotime($detail->KAITO_NOKI)) }}">
+                                        <input type="text" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" style="width: 95px;" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
                                     </td>
                                 </tr>
                                 @endforeach
@@ -594,7 +596,7 @@
                                 </tr>
                                 <tr>
                                     <td class="bordered">
-                                        <textarea class="textarea-cmt brg-input">{{ $item->COMMENT2 }}</textarea>
+                                        <textarea name="data[{{ $item->HACYU_ID }}][COMMENT2]" class="textarea-cmt brg-input">{{ $item->COMMENT2 }}</textarea>
                                     </td>
                                 </tr>
                             </tbody>
@@ -653,7 +655,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ 配送業者</label>
-                            <select style="width: 155px;" class="brg-input">
+                            <select name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA1]" style="width: 155px;" class="brg-input">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
@@ -664,7 +666,7 @@
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input"  value="{{ $item->DENPYONO1 }}" type="text" placeholder=""  style="width: 330px;"/>
+                            <input class="brg-input" name="data[{{ $item->HACYU_ID }}][DENPYONO1]"  value="{{ $item->DENPYONO1 }}" type="text" placeholder=""  style="width: 330px;"/>
                         </div>
                    </div>
                 </div>
@@ -672,7 +674,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ 配送業者</label>
-                            <select style="width: 155px;" class="brg-input">
+                            <select name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA2]" style="width: 155px;" class="brg-input">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
@@ -683,14 +685,14 @@
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input" value="{{ $item->DENPYONO2 }}" type="text" placeholder=""  style="width: 330px;"/>
+                            <input name="data[{{ $item->HACYU_ID }}][DENPYONO2]" class="brg-input" value="{{ $item->DENPYONO2 }}" type="text" placeholder=""  style="width: 330px;"/>
                         </div>
                    </div>
 
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>連絡先</label>
-                            <input class="brg-input" value="{{ $item->RENRAKUSAKI2 }}"  type="text" placeholder=""  style="width: 195px;"/>
+                            <input class="brg-input" name="data[{{ $item->HACYU_ID }}][RENRAKUSAKI2]"  value="{{ $item->RENRAKUSAKI2 }}"  type="text" placeholder=""  style="width: 195px;"/>
                         </div>
                    </div>
                 </div>
@@ -703,7 +705,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ {{ $item->HAISOGYOSYA3_1_LABEL }}</label>
-                            <select style="width: 155px;" class="brg-input">
+                            <select name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_1]" style="width: 155px;" class="brg-input">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
@@ -714,14 +716,14 @@
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input" value="{{ $item->DENPYONO3_1 }}"  type="text" placeholder=""  style="width: 230px;"/>
+                            <input name="data[{{ $item->HACYU_ID }}][DENPYONO3_1]" class="brg-input" value="{{ $item->DENPYONO3_1 }}"  type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
 
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 40px;">{{ $item->HAISOGYOSYA3_2_LABEL }}</label>
-                            <select style="width: 155px;" class="brg-input">
+                            <select name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_2]" style="width: 155px;" class="brg-input">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
@@ -733,7 +735,7 @@
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="brg-input" value="{{ $item->DENPYONO3_2 }}" type="text" placeholder=""  style="width: 230px;"/>
+                            <input name="data[{{ $item->HACYU_ID }}][DENPYONO3_2]" class="brg-input" value="{{ $item->DENPYONO3_2 }}" type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
                 </div>
@@ -746,20 +748,20 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                         <label style="padding-left: 15px;">・ ドライバー名</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 190px;"/>
+                            <input class="brg-input" name="data[{{ $item->HACYU_ID }}][DRIVER_NAME]"  type="text" value="{{ $item->DRIVER_NAME }}" placeholder=""  style="width: 190px;"/>
                         </div>
                    </div>
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-left:-52px;">
                         <div>
                             <label>連絡先</label>
-                            <input class="brg-input"  type="text" placeholder=""  style="width: 190px;"/>
+                            <input class="brg-input"  name="data[{{ $item->HACYU_ID }}][RENRAKUSAKI4]"  type="text" value="{{ $item->RENRAKUSAKI4 }}" placeholder=""  style="width: 190px;"/>
                         </div>
                    </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div style="padding-left: 30px;">                            
-                            <input type="checkbox" <?php if($item->NO_DENPYO_FLG == 1){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                            <input name="data[{{ $item->HACYU_ID }}][NO_DENPYO_FLG]" type="checkbox" <?php if($item->NO_DENPYO_FLG == 1){ echo 'checked';} ?> style="position: relative; top: 4px;" />
                             <label style="margin-left: 10px;background: #FFF2CC;">送り状なし。　当日お客様にお電話します。</label>
                         </div>
                    </div>
@@ -774,7 +776,7 @@
                                     </td>
                                 </tr>
                                 <td class="bordered">
-                                    <textarea  class="textarea-cmt-1 brg-input">{{ $item->BIKO }}</textarea>
+                                    <textarea name="data[{{ $item->HACYU_ID }}][BIKO]" class="textarea-cmt-1 brg-input">{{ $item->BIKO }}</textarea>
                                 </td>
                                 </tr>
                             </tbody>

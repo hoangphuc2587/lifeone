@@ -70,8 +70,8 @@ class PrintController extends Controller
         'T_HACYU.DENPYONO3_1',
         'T_HACYU.HAISOGYOSYA3_2',
         'T_HACYU.DENPYONO3_2',
-        'T_HACYU..DRIVER_NAME',
-        'T_HACYU..RENRAKUSAKI4',
+        'T_HACYU.DRIVER_NAME',
+        'T_HACYU.RENRAKUSAKI4',
         'T_HACYU.NO_DENPYO_FLG',
         'T_HACYU.BIKO', 
         'T_HACYU.SYOKEI',
@@ -191,56 +191,51 @@ class PrintController extends Controller
            ->update(['STS_CD' => '02']);
     }
 
-    public function postUpdate(Request $rq){  
+    public function postUpdate(Request $request){  
         $date = New \DateTime();  
-        $date = $date->format('Y-m-d H:i:s');        
-        $count = 0;
-        $T_IRAI_ID = $rq->IRAI_ID;
-            
-        if (Auth::user()->KOJIGYOSYA_CD == '') {
-        # code...
-            foreach ($T_IRAI_ID as $row) {
-                # code...
-                $T_IRAI_old = T_IRAI::where('IRAI_ID',$row)->where('HANSU',$rq->hansu[$count])->first();
-                if ( $T_IRAI_old->COMMENT2 !=  $rq->COMMENT1[$count]) {
-                    $T_IRAI = T_IRAI::where('IRAI_ID',$row)->where('HANSU',$rq->hansu[$count])
-                                        ->update([
-                                            'COMMENT1' => $rq->COMMENT1[$count],
-                                            'UPD_YMD' => $date,
-                                            'UPD_TANTCD' => Auth::user()->TANT_CD,
-                                        ]); 
-                }
-                $count++;
+        $date = $date->format('Y-m-d H:i:s');
+        $data = $request->data;
+        $user = Auth::user();
+        foreach($data as $key => $value){
+            $HACYU_ID = $key;
+            $HACYU = $value;
+            $details = $value['DETAIL'];
+            unset($HACYU['DETAIL']);
+            if (isset($HACYU['NO_DENPYO_FLG']) && $HACYU['NO_DENPYO_FLG'] == 'on'){
+                $HACYU['NO_DENPYO_FLG'] = 1;
+            }else{
+                $HACYU['NO_DENPYO_FLG'] = 0;
             }
-        }else{            
-            foreach ($T_IRAI_ID as $row) {
-                # code... 
-                $JYOKYO_CD = '';  
-                if (!isset($rq->radiox[$count])){
-                    $JYOKYO_CD = "";
-                }elseif ($rq->radiox[$count] == "08") {
-                    $JYOKYO_CD = "01";
+            $HACYU['UPD_TANTCD'] = $user->TANT_CD;
+            $HACYU['UPD_YMD'] = $date;
+            DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($HACYU);
+
+            foreach($details as $k => $v){
+                $HACYUMSAI = $v;
+                $HACYUMSAI_ID = $k;
+                if (isset($HACYUMSAI['SURYO']) && $HACYUMSAI['SURYO'] == ''){
+                    $HACYUMSAI['SURYO'] = 0;
                 }
-                else{
-                    $JYOKYO_CD = "02";
+                if (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] == ''){
+                    unset($HACYUMSAI['KAITO_NOKI']);
+                }elseif (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
+                    $HACYUMSAI['KAITO_NOKI'] = str_replace('/', '-', $HACYUMSAI['KAITO_NOKI']);
                 }
-                $ANSWER_CD = isset($rq->radiox[$count]) ? $rq->radiox[$count] : '';
-                $T_IRAI_old = T_IRAI::where('IRAI_ID',$row)->where('HANSU',$rq->hansu[$count])->first();
-                if ( $T_IRAI_old->COMMENT2 !=  $rq->COMMENT2[$count] || $T_IRAI_old->ANSWER_CD != $ANSWER_CD) {
-                    # code...
-                    $T_IRAI = T_IRAI::where('IRAI_ID',$row)->where('HANSU',$rq->hansu[$count])
-                                    ->update([
-                                        'COMMENT2' => $rq->COMMENT2[$count],
-                                        'GYOSYA_ANS_YMD' => $date,
-                                        'JYOKYO_CD' => $JYOKYO_CD,
-                                        'ANSWER_CD' => $ANSWER_CD,
-                                        'UPD_YMD' => $date,
-                                        'UPD_TANTCD' => Auth::user()->TANT_CD,
-                                    ]);                
-                }    
-                $count++;            
+                if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] == ''){
+                    unset($HACYUMSAI['NOHIN_YMD']);
+                }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
+                    $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
+                }   
+                $HACYUMSAI['UPD_TANTCD'] = $user->TANT_CD;
+                $HACYUMSAI['UPD_YMD'] = $date;             
+
+                DB::table('T_HACYUMSAI')
+                ->where('HACYU_ID',$HACYU_ID)
+                ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
+                ->update($HACYUMSAI);
             }
-        }            
+        }
+
         return redirect()->route('list');
     }
 }

@@ -274,6 +274,7 @@
 
 <body>
     <form action="{{  route('post_search_print')}}" method="POST" class="form_list">
+        @csrf
         <div class="container-fluid sticky">
             <div class="container grey-bg">
                 <div class="header-box">
