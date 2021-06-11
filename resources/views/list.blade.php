@@ -37,7 +37,7 @@
     }
 
     .datepicker{
-        transform: translate(0, 1.1em);
+        transform: translate(0, 1.3em);
     }     
         
     label{
@@ -641,7 +641,7 @@
                                 @foreach($lists as $item)
                             <tr>                                 
                                 <td>
-                                    <input id="chk{{ $item->HACYU_ID }}-0" name="check_box_list[]" data-pdf="{{ $item->PDF_PATH }}" data-excel="{{ $item->EXCEL_PATH }}" class="save_list_checkbox" type="checkbox" value="{{ $item->HACYU_ID }}-0">
+                                    <input id="chk{{ $item->HACYU_ID }}-0" name="check_box_list[]" data-pdf="{{ $item->PDF_PATH }}" data-excel="{{ $item->EXCEL_PATH }}" class="save_list_checkbox" {{ $item->STS_CD == '01' ? 'checked' : '' }} type="checkbox" value="{{ $item->HACYU_ID }}-0">
                                 </td>
                                 <td style="background: {{ empty($item->IRAI_COLOR) ? 'none' : $item->IRAI_COLOR }}">{{ $item->IRAI_CD_NAME }}</td>
                                 <td>{{ !empty($item->IRAI_YMD) ? date('m/d/Y', strtotime($item->IRAI_YMD)) : '' }}</td>
@@ -655,10 +655,10 @@
                                 </td>
                                 <td>{{ $item->STS_CD_NAME }}</td>
                                 <td>{{ $item->MAKER }}</td>
-                                <td>{{ $item->NONYUSAKI_ADDRESS }}</td>
-                                <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>                                                               
+                                <td>{{ $item->HAISO_INF }}</td>
+                                <td class="tdDot">@if (!empty($item->COMMENT2)) <span class="dot"></span> @endif</td>                                                               
                                 @if ($isUserLifeOne)
-                                <td>{{ $item->NONYUSAKI_TANT_NAME }}</td>
+                                <td>{{ $item->TAIO_TANT_NAME }}</td>
                                 <td>{{ $item->TAIO_CD }}</td>
                                 <td>{{ !empty($item->LAST_NKAYOTEI_YMD) ? date('m/d/Y', strtotime($item->LAST_NKAYOTEI_YMD)) : '' }}</td>
                                 <td>{{ $item->HACYUSAKI_NAME }}</td> 

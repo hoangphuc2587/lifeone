@@ -309,7 +309,7 @@ $(function(){
             return false;
         return true;
     })
-    $(document).on("keypress", ".form_list", function(event) { 
+    $(document).on("keypress", ".form_list", function(event) {
         return event.keyCode != 13;
     });
     $(document).on('click','.save_list_checkbox',function(){
@@ -416,16 +416,61 @@ $(function(){
         $('#cvnwefj43').slideToggle();
     })
 
+
+    $(document).on('click','.btn-add-file',function(){       
+        var id = $(this).data('id');
+        var index = $("#hdIndex").val();        
+        var item = '.btn-' + id + '-' + index;
+        var input =  '<input type="file" class="btn-file-upload btn-'+id+'-'+index+'" name="data['+id+'][FILE][]">';
+
+        var html =  '<tr class="line-'+ id + '-' + index+'">';
+            html += '<td>ライフワン担当</td>'
+            html += '<td>'+input+'</td>';
+            html += '<td><input data-id="'+id + '-' + index+'" class="chk-'+id+' tb_list_checkbox" type="checkbox" value=""></td>';
+            html += '</tr>';
+
+        // $( input ).appendTo( '.upload-file-'+id );
+        $( html ).appendTo( '.tbody-upload-'+id );
+        index = parseInt(index)  + 1;
+        $("#hdIndex").val(index);
+        $(item).click();
+    })
+
+    $(document).on('click','.btn-delete-file',function(){ 
+        var id = $(this).data('id');
+        $( ".chk-" + id ).each(function( index ) {
+            var line = $(this).data('id');
+            if ($(this).is(':checked')){
+                $(".line-"+line).remove();
+            }
+        });
+
+    })
+
+    // $("input[type=file]").on('change',function(){
+    //    alert(1);
+    // })
+
     if($('.datepicker-input').length) {
         $('.datepicker-input').datepicker({
             autoclose: true,
-            todayHighlight: true,
+            todayHighlight: true
         });
         //$('.datepicker').datepicker("setDate", new Date());
     }
-    
-    
-    
+
+    if($('.datepicker-change').length) {
+        $('.datepicker-change').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        $('.datepicker-change').datepicker()
+        .on('changeDate', function(e) {
+            var id = $(this).data('id');
+            $('.date-'+id).val(this.value);
+        });
+    }
 })
 
 function download(files) {

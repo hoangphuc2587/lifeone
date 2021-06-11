@@ -28,14 +28,14 @@
         padding: 0.5rem;
     }
 
-    input.datepicker-input{
+    input.datepicker-input, input.datepicker-change{
         border-radius: unset;
         padding: 3px 4px;
         direction: unset;
         border: 1px solid rgba(0,0,0,.5);
         font-size: 14px;
         background: #FFF2CC;
-    }  
+    }
 
     .datepicker{
         transform: translate(0, 6.5em);
@@ -87,7 +87,7 @@
         height: 60px;
     }
     .text-btn-tb{
-        font-size:10px;
+        font-size:13px;
         text-align: center;
     }
     .clearfix{
@@ -206,7 +206,7 @@
     .btn-primary.mb-3 {
         margin-top: 17px;
         margin-left: 20px;
-        width: 76px;
+        width: 90px;
     }
 
     .table-cover {
@@ -343,7 +343,7 @@
 </head>
 
 <body>
-    <form action="{{  route('postUpdate')}}" method="POST" id="form_detail">
+    <form action="{{  route('postUpdate')}}" method="POST" id="form_detail" enctype="multipart/form-data">
         @csrf
         <div class="container-fluid sticky">
             <div class="container">
@@ -488,7 +488,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
                             <label>納品日：</label>
-                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-input" type="text" placeholder=""  class="brg-input"  style="width: 120px;"/>        
+                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-change" type="text" data-id="{{ $item->HACYU_ID }}"  class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
                 </div>
@@ -533,7 +533,10 @@
                                     <td>{{ date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
                                     <td>{{ $detail->BIKO }}</td>
                                     <td class="brg-input">
-                                        <input type="text" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-input" style="width: 95px;" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
+                                        <input type="text"
+                                        data-date-format="yyyy/mm/dd"
+                                        autocomplete="off" class="datepicker-input date-{{ $item->HACYU_ID }}" style="width: 95px;" 
+                                        name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
                                     </td>
                                 </tr>
                                 @endforeach
@@ -620,33 +623,30 @@
                                                     <th scope="col" class="th9" width="50">対象</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="tbody-upload-{{ $item->HACYU_ID }}">
+                                                @if(!empty($item->FILE))
+                                                @foreach ($item->FILE as $fileData)
                                                 <tr>
-                                                    <td>仕入先様名</td>
-                                                    <td></td>
+                                                    <td>{{ empty($fileData->HACYUSAKI_CD) ? 'ライフワン担当' : '仕入先様名' }}</td>
+                                                    <td>{{ $fileData->FILE_NAME }}</td>
                                                     <td><input name="" class="tb_list_checkbox" type="checkbox" value=""></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>ライフワン担当</td>
-                                                    <td></td>
-                                                    <td><input name="" class="tb_list_checkbox" type="checkbox" value=""></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>仕入先様名</td>
-                                                    <td></td>
-                                                    <td><input name="" class="tb_list_checkbox" type="checkbox" value=""></td>
-                                                </tr>      
+                                                @endforeach
+                                                @endif                                                
                                             </tbody>
                                         </table>
                                 </div>
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
-                                <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-3 error ">
+                                <div style="display: none;" class="upload-file-{{ $item->HACYU_ID }}">
+                                    
+                                </div>
+                                <button type="button" data-id="{{ $item->HACYU_ID }}" class="btn btn-primary mb-3 btn-add-file">
                                 <span class="text-btn-tb">追加</span></button>
-                                <button type="submit" name="submit" value="submit_print"
-                                    class="btn btn-primary mb-3 error"><span class="text-btn-tb">ダウンロード</span></button>
-                                <button type="submit" name="submit" value="submit_print"
-                                    class="btn btn-primary mb-3 error"><span class="text-btn-tb">削除</span></button>                        
+                                <button type="button" data-id="{{ $item->HACYU_ID }}"
+                                    class="btn btn-primary mb-3 btn-download-file"><span class="text-btn-tb">ダウンロード</span></button>
+                                <button type="button" data-id="{{ $item->HACYU_ID }}"
+                                    class="btn btn-primary mb-3 btn-delete-file"><span class="text-btn-tb">削除</span></button>                        
                             </div>
                         </div>
                     </div>
@@ -796,59 +796,61 @@
                 @endif
             @endforeach            
         </div>
-        @endif
-
-            <!-- static modal-->
-            <div class="modal fade show" id="static" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <p>保存しますか？</p>
-                            @if(Auth::user()->HACYUSAKI_CD != '')
-                            <p>※保存後10分間は変更可能です。</p>
-                            @endif
-                        </div>
-                        <div class="modal-footer" style="justify-content: center;">
-                            <button type="submit" class="btn btn-primary">はい</button>
-                            <button type="button" data-dismiss="modal" class="btn btn-default">いいえ</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END modal-->
-            <!-- static1 modal-->
-            <div class="modal fade in" id="static1" tabindex="-1" role="dialog" aria-hidden="false">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <p>入力内容を保存しますか？</p>
-                        </div>
-                        <div class="modal-footer" style="justify-content: center;">
-                            <button type="submit" class="btn btn-primary" id="submit">はい</button>
-                            <a id="cancelsub" class="btn btn-raised btn-primary" style="display: none">保存</a>
-                            <a href="{{ URL::to(route('list')) }}" class="btn btn-default"
-                                style="background: #ddd;color: #000 !important">いいえ</a>
-                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END modal-->
-            <!-- static1 modal-->
-            <div class="modal fade in" id="canceler" tabindex="-1" role="dialog" aria-hidden="false">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <p>「コメント欄に入力不備があります。」</p>
-                        </div>
-                        <div class="modal-footer" style="justify-content: center;">
-                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END modal-->            
+        @endif    
+            <input type="hidden" id="hdSourceName" value="{{ $sourceName }}">
+            <input type="hidden" id="hdIndex" value="0">
         </form>
+
+        <!-- static modal-->
+        <div class="modal fade show" id="static" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>保存しますか？</p>
+                        @if(Auth::user()->HACYUSAKI_CD != '')
+                        <p>※保存後10分間は変更可能です。</p>
+                        @endif
+                    </div>
+                    <div class="modal-footer" style="justify-content: center;">
+                        <button type="submit" class="btn btn-primary">はい</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-default">いいえ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END modal-->
+        <!-- static1 modal-->
+        <div class="modal fade in" id="static1" tabindex="-1" role="dialog" aria-hidden="false">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>入力内容を保存しますか？</p>
+                    </div>
+                    <div class="modal-footer" style="justify-content: center;">
+                        <button type="submit" class="btn btn-primary" id="submit">はい</button>
+                        <a id="cancelsub" class="btn btn-raised btn-primary" style="display: none">保存</a>
+                        <a href="{{ URL::to(route('list')) }}" class="btn btn-default"
+                            style="background: #ddd;color: #000 !important">いいえ</a>
+                        <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END modal-->
+        <!-- static1 modal-->
+        <div class="modal fade in" id="canceler" tabindex="-1" role="dialog" aria-hidden="false">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>「コメント欄に入力不備があります。」</p>
+                    </div>
+                    <div class="modal-footer" style="justify-content: center;">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END modal-->
 
     <!-- <script src="{{ URL::asset('js/jquery.min.js') }}"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>

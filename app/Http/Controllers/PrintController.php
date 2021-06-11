@@ -38,7 +38,7 @@ class PrintController extends Controller
         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '03' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),       
         'T_HACYU.HACYUSAKI_NAME',
         'T_HACYU.TAIO_CD',       
-        DB::raw("(SELECT TANT_NAME FROM M_TANT_WEB WHERE M_TANT_WEB.TANT_CD = T_HACYU.TAIO_TANT_CD AND M_TANT_WEB.DEL_FLG = 0 LIMIT 1) AS TAIO_TANT_NAME"),
+        DB::raw("(SELECT TANT_NAME FROM M_TANT_WEB WHERE M_TANT_WEB.TANT_CD = '90001' AND M_TANT_WEB.DEL_FLG = 0 LIMIT 1) AS TAIO_TANT_NAME"),
         'T_HACYU.CO_NAME',
         'T_HACYU.CO_POSTNO',
         'T_HACYU.CO_ADDRESS',
@@ -89,7 +89,7 @@ class PrintController extends Controller
     }
 
 
-     private function getDataHACYUMSAI($id){
+    private function getDataHACYUMSAI($id){
         $query = DB::table('T_HACYUMSAI')
         ->select(
         'T_HACYUMSAI.HACYUMSAI_ID',
@@ -115,6 +115,19 @@ class PrintController extends Controller
         return $query->get();
     }
 
+    private function getDataFILE($id){
+        $query = DB::table('T_FILE')
+        ->select(
+        'T_FILE.FILE_NAME',
+        'T_FILE.FILE_PATH',
+        'M_TANT_WEB.HACYUSAKI_CD'
+        )
+        ->join('M_TANT_WEB', 'M_TANT_WEB.TANT_CD', '=', 'T_FILE.TANT_CD' )
+        ->where(['T_FILE.DEL_FLG'=> 0])
+        ->where('T_FILE.HACYU_ID', $id);
+        return $query->get();
+    }    
+
 
     private function deliveryCompany(){
         // 配送業者
@@ -128,6 +141,10 @@ class PrintController extends Controller
 
     public function search_print($id)
     {
+        $sourceName = 'ライフワン担当';
+        if(Auth::user()->HACYUSAKI_CD != ''){
+            $sourceName = '仕入先様名';
+        }
         $deliveryCompany = $this->deliveryCompany();
         $data = array();
         $query = $this->getSQLHACYU(array($id));
@@ -135,8 +152,9 @@ class PrintController extends Controller
         foreach($data as &$item){
             $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
             $item->HACYUMSAI = $detail;
+            $item->FILE = $this->getDataFILE($item->HACYU_ID);
         } 
-        return view('detail', compact('deliveryCompany', 'data'));
+        return view('detail', compact('deliveryCompany', 'data', 'sourceName'));
     }
     public function post_search_print(Request $request)
     {
@@ -170,6 +188,10 @@ class PrintController extends Controller
                 return redirect()->route('list');
                 break;
             case 'submit_detail': 
+                $sourceName = 'ライフワン担当';
+                if(Auth::user()->HACYUSAKI_CD != ''){
+                    $sourceName = '仕入先様名';
+                }
                 $deliveryCompany = $this->deliveryCompany();
                 $data = array();
                 $query = $this->getSQLHACYU($lists_checkboxID);
@@ -177,8 +199,9 @@ class PrintController extends Controller
                 foreach($data as &$item){
                     $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
                     $item->HACYUMSAI = $detail;
+                    $item->FILE = $this->getDataFILE($item->HACYU_ID);
                 }                 
-                return view('detail', compact('deliveryCompany','data'));
+                return view('detail', compact('deliveryCompany','data', 'sourceName'));
             default:
                 break;
         }
@@ -195,12 +218,19 @@ class PrintController extends Controller
         $date = New \DateTime();  
         $date = $date->format('Y-m-d H:i:s');
         $data = $request->data;
+
         $user = Auth::user();
         foreach($data as $key => $value){
             $HACYU_ID = $key;
             $HACYU = $value;
             $details = $value['DETAIL'];
             unset($HACYU['DETAIL']);
+            $files = array();
+            if (isset($value['FILE'])){
+                $files = $value['FILE'];
+                unset($HACYU['FILE']);
+            }
+            
             if (isset($HACYU['NO_DENPYO_FLG']) && $HACYU['NO_DENPYO_FLG'] == 'on'){
                 $HACYU['NO_DENPYO_FLG'] = 1;
             }else{
@@ -234,8 +264,27 @@ class PrintController extends Controller
                 ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
                 ->update($HACYUMSAI);
             }
+            if (isset($value['FILE'])){
+                $a = 1;
+                foreach($files as $key => $item){               
+                    //Start of Upload Files
+                    $fileName = time(). rand(1111,
+                                9999) . '.' . $item->getClientOriginalExtension();
+                    $path = './uploads';
+                    $item->move($path, $fileName);
+                    DB::table('T_FILE')->insert([
+                        'HACYU_ID' => $HACYU_ID,
+                        'JYUNJO' => $a,
+                        'FILE_NAME' => $fileName,
+                        'FILE_PATH' => $path.'/'.$fileName,
+                        'TANT_CD' => $user->TANT_CD,
+                        'UPD_TANTCD' => $user->TANT_CD,
+                        'UPD_YMD' => $date
+                    ]);                
+                    $a++;
+                }  
+            }
         }
-
         return redirect()->route('list');
     }
 }
