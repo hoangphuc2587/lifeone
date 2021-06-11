@@ -28,13 +28,17 @@
         padding: 0.5rem;
     }
 
-    input.datepicker{
+    input.datepicker-input{
         border-radius: unset;
         padding: 3px 4px;
         direction: unset;
         border: 1px solid rgba(0,0,0,.5);
         font-size: 14px;
     }
+
+    .datepicker{
+        transform: translate(0, 1.1em);
+    }     
         
     label{
         font-size:12px;
@@ -377,9 +381,9 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-right: -70px;">
                         <div>
                             <label>依頼日</label>
-                            <input type="text" value="{{ isset($paramSearch['irai_day_from']) ? $paramSearch['irai_day_from'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="search-irai-day-from" style="width: 120px; "/>
+                            <input type="text" value="{{ isset($paramSearch['irai_day_from']) ? $paramSearch['irai_day_from'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker-input" placeholder="" id="search-irai-day-from" style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" value="{{ isset($paramSearch['irai_day_to']) ? $paramSearch['irai_day_to'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker" placeholder="" id="search-irai-day-to" style="width: 120px; "/>        
+                            <input type="text" value="{{ isset($paramSearch['irai_day_to']) ? $paramSearch['irai_day_to'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker-input" placeholder="" id="search-irai-day-to" style="width: 120px; "/>        
                         </div>
                     </div>
 
@@ -435,9 +439,9 @@
                      <div class="col-xl-4 col-lg-9 col-md-9 col-sm-9 col-12" style="margin-right: -50px;">
                         <div>
                             <label>納品日</label>
-                            <input type="text" value="{{ isset($paramSearch['nohin_day_from']) ? $paramSearch['nohin_day_from'] : '' }}" placeholder="" id="search-nohin-day-from" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>
+                            <input type="text" value="{{ isset($paramSearch['nohin_day_from']) ? $paramSearch['nohin_day_from'] : '' }}" placeholder="" id="search-nohin-day-from" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker-input"  style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" value="{{ isset($paramSearch['nohin_day_to']) ? $paramSearch['nohin_day_to'] : '' }}" placeholder="" id="search-nohin-day-to" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker"  style="width: 120px; "/>        
+                            <input type="text" value="{{ isset($paramSearch['nohin_day_to']) ? $paramSearch['nohin_day_to'] : '' }}" placeholder="" id="search-nohin-day-to" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker-input"  style="width: 120px; "/>        
                         </div>
                     </div>
 

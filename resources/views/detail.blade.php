@@ -28,15 +28,19 @@
         padding: 0.5rem;
     }
 
-    input.datepicker{
+    input.datepicker-input{
         border-radius: unset;
         padding: 3px 4px;
         direction: unset;
         border: 1px solid rgba(0,0,0,.5);
         font-size: 14px;
         background: #FFF2CC;
-    }    
-        
+    }  
+
+    .datepicker{
+        transform: translate(0, 6.5em);
+    }  
+
     label{
         font-size:13px;
     }
@@ -484,7 +488,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
                             <label>納品日：</label>
-                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" type="text" placeholder=""  class="brg-input"  style="width: 120px;"/>        
+                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-input" type="text" placeholder=""  class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
                 </div>
@@ -529,7 +533,7 @@
                                     <td>{{ date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
                                     <td>{{ $detail->BIKO }}</td>
                                     <td class="brg-input">
-                                        <input type="text" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker" style="width: 95px;" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
+                                        <input type="text" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-input" style="width: 95px;" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
                                     </td>
                                 </tr>
                                 @endforeach

@@ -118,6 +118,9 @@ class ListController extends Controller
         if($request->session()->has('search_reply')){
             $query->where('T_HACYU.STS_CD' , '10');
         }
+        else{
+            $query->where('T_HACYU.STS_CD', '<>' ,'10');
+        }
 
         if($request->session()->has('key_search_name') && Auth::user()->HACYUSAKI_CD == ''){
             $name = $request->session()->get('key_search_name');

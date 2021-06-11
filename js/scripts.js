@@ -416,8 +416,8 @@ $(function(){
         $('#cvnwefj43').slideToggle();
     })
 
-    if($('.datepicker').length) {
-        $('.datepicker').datepicker({
+    if($('.datepicker-input').length) {
+        $('.datepicker-input').datepicker({
             autoclose: true,
             todayHighlight: true,
         });
