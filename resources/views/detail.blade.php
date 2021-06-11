@@ -533,7 +533,7 @@
                                     <td class="text-right">{{ $detail->SIKIRI_RATE }}%</td>
                                     <td class="text-right">{{ number_format($detail->NEBIKI_GAK) }}</td>
                                     <td>{{ $detail->NEBIKI_YM }}</td>
-                                    <td>{{ date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
+                                    <td>{{ empty($detail->NOHIN_KIBO_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
                                     <td>{{ $detail->BIKO }}</td>
                                     <td class="brg-input">
                                         <input type="text"
@@ -803,7 +803,7 @@
         @endif    
             <input type="hidden" id="hdSourceName" value="{{ $sourceName }}">
             <input type="hidden" id="hdIndex" value="{{ $index_file }}">
-        </form>
+
 
         <!-- static modal-->
         <div class="modal fade show" id="static" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
@@ -822,54 +822,57 @@
                 </div>
             </div>
         </div>
-        <!-- END modal-->
-        <!-- static1 modal-->
-        <div class="modal fade in" id="static1" tabindex="-1" role="dialog" aria-hidden="false">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <p>入力内容を保存しますか？</p>
-                    </div>
-                    <div class="modal-footer" style="justify-content: center;">
-                        <button type="submit" class="btn btn-primary" id="submit">はい</button>
-                        <a id="cancelsub" class="btn btn-raised btn-primary" style="display: none">保存</a>
-                        <a href="{{ URL::to(route('list')) }}" class="btn btn-default"
-                            style="background: #ddd;color: #000 !important">いいえ</a>
-                        <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END modal-->
-        <!-- static1 modal-->
-        <div class="modal fade in" id="canceler" tabindex="-1" role="dialog" aria-hidden="false">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <p>「コメント欄に入力不備があります。」</p>
-                    </div>
-                    <div class="modal-footer" style="justify-content: center;">
-                        <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+            <!-- END modal-->
+            <!-- static1 modal-->
+            <div class="modal fade in" id="static1" tabindex="-1" role="dialog" aria-hidden="false">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>入力内容を保存しますか？</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="submit" class="btn btn-primary" id="submit">はい</button>
+                            <a id="cancelsub" class="btn btn-raised btn-primary" style="display: none">保存</a>
+                            <a href="{{ URL::to(route('list')) }}" class="btn btn-default"
+                                style="background: #ddd;color: #000 !important">いいえ</a>
+                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- END modal-->
+            <!-- END modal-->
+            <!-- static1 modal-->
+            <div class="modal fade in" id="canceler" tabindex="-1" role="dialog" aria-hidden="false">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>「コメント欄に入力不備があります。」</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END modal-->            
+        </form>
+
+
 
         <div class="modal fade show" id="canceler1" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="canceler"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <p>メッセージ</p>
-                    <p>明細が選択されていません !</p>
-                </div>
-                <div class="modal-footer" style="justify-content: center;">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">OK</button>
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <p>メッセージ</p>
+                        <p>明細が選択されていません !</p>
+                    </div>
+                    <div class="modal-footer" style="justify-content: center;">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">OK</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
     <!-- <script src="{{ URL::asset('js/jquery.min.js') }}"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
