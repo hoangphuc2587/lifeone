@@ -81,9 +81,41 @@ class ExportController extends Controller implements FromCollection, WithHeading
             ->where(['T_HACYUMSAI.DEL_FLG'=> 0, 'T_HACYUMSAI.HACYU_ID'=> $value->HACYU_ID]);  
 
             $data = $subQuery->get();
-
-            foreach($data as $k => $v){
-
+            if (count($data) > 0){
+                foreach($data as $k => $v){
+                    $lists_csv[] = array(
+                    '0'  => $value->IRAI_CD_NAME,
+                    '1'  => $value->IRAI_YMD,
+                    '2'  => $value->HACYU_ID,
+                    '3'  => $value->STS_CD_NAME,
+                    '4'  => $value->NONYUSAKI_POSTNO,
+                    '5'  => $value->NONYUSAKI_ADDRESS,
+                    '6'  => $value->NONYUSAKI_NAME,
+                    '7'  => $value->NONYUSAKI_TELNO,
+                    '8'  => $value->NONYUSAKI_TANT_NAME,
+                    '9'  => $value->KENMEI,
+                    '10' => $v->HACYUMSAI_ID,
+                    '11' => $v->CTGORY,
+                    '12' => $v->MAKER,
+                    '13' => $v->HINBAN,
+                    '14' => $v->TANKA,
+                    '15' => $v->SURYO,
+                    '16' => $v->KINGAK,
+                    '17' => $v->SIKIRI_RATE,
+                    '18' => $v->NEBIKI_GAK,
+                    '19' => $v->NEBIKI_YM,
+                    '20' => $v->NOHIN_KIBO_YMD,
+                    '21' => $v->BIKO,
+                    '22' => $value->IRAI_CD == '03' ? $v->NOHIN_YMD : $v->KAITO_NOKI,
+                    '23' => $value->SYOKEI,
+                    '24' => $value->SORYO,
+                    '25' => $value->SYOHIZEI,
+                    '26' => $value->SUM,
+                    '27' => $value->NEBIKI_SUM,
+                    '28' => $value->COMMENT1,
+                    ); 
+                } 
+            }else{
                 $lists_csv[] = array(
                 '0'  => $value->IRAI_CD_NAME,
                 '1'  => $value->IRAI_YMD,
@@ -95,19 +127,19 @@ class ExportController extends Controller implements FromCollection, WithHeading
                 '7'  => $value->NONYUSAKI_TELNO,
                 '8'  => $value->NONYUSAKI_TANT_NAME,
                 '9'  => $value->KENMEI,
-                '10' => $v->HACYUMSAI_ID,
-                '11' => $v->CTGORY,
-                '12' => $v->MAKER,
-                '13' => $v->HINBAN,
-                '14' => $v->TANKA,
-                '15' => $v->SURYO,
-                '16' => $v->KINGAK,
-                '17' => $v->SIKIRI_RATE,
-                '18' => $v->NEBIKI_GAK,
-                '19' => $v->NEBIKI_YM,
-                '20' => $v->NOHIN_KIBO_YMD,
-                '21' => $v->BIKO,
-                '22' => $value->IRAI_CD == '03' ? $v->NOHIN_YMD : $v->KAITO_NOKI,
+                '10' => '',
+                '11' => '',
+                '12' => '',
+                '13' => '',
+                '14' => '',
+                '15' => '',
+                '16' => '',
+                '17' => '',
+                '18' => '',
+                '19' => '',
+                '20' => '',
+                '21' => '',
+                '22' => '',
                 '23' => $value->SYOKEI,
                 '24' => $value->SORYO,
                 '25' => $value->SYOHIZEI,
@@ -115,7 +147,8 @@ class ExportController extends Controller implements FromCollection, WithHeading
                 '27' => $value->NEBIKI_SUM,
                 '28' => $value->COMMENT1,
                 ); 
-            }   
+            }  
+  
         }
         return (collect($lists_csv));
     }

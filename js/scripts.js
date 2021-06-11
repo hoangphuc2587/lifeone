@@ -348,6 +348,33 @@ $(function(){
             }
         }
     }
+    if($('.save_list_checkbox').length) {
+        var list_checkbox_sessionLocalStorage = JSON.parse(sessionStorage.getItem('data_list_checkbox'));
+        var data_list_checkbox = [];
+        if(list_checkbox_sessionLocalStorage && list_checkbox_sessionLocalStorage.length != 0){
+            data_list_checkbox = list_checkbox_sessionLocalStorage;
+        }
+        $( ".save_list_checkbox").each(function( index ) {
+            if ($(this).is(':checked')){ 
+                data_list_checkbox.push($(this)[0].value);
+                data_list_checkbox.sort();
+                sessionStorage.setItem('data_list_checkbox',JSON.stringify(data_list_checkbox));
+            }
+        });        
+        if (data_list_checkbox.length > 0){
+            $.ajax({
+                cache : false,
+                url  : '/get-list-checkbox',
+                type : 'POST',
+                data : {data_list_checkbox:data_list_checkbox} ,
+                success:function(data){
+                    isFirst = false;
+                }
+            })
+        }
+    }
+ 
+
     $(document).on('click','#adfkgj85',function(){
         $('#submit_detail_mobile').click();
     })
