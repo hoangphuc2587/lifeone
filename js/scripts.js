@@ -424,9 +424,9 @@ $(function(){
         var input =  '<input type="file" class="btn-file-upload btn-'+id+'-'+index+'" name="data['+id+'][FILE][]">';
 
         var html =  '<tr class="line-'+ id + '-' + index+'">';
-            html += '<td>ライフワン担当</td>'
+            html += '<td>'+$("#hdSourceName").val()+'</td>'
             html += '<td>'+input+'</td>';
-            html += '<td><input data-id="'+id + '-' + index+'" class="chk-'+id+' tb_list_checkbox" type="checkbox" value=""></td>';
+            html += '<td><input data-link="" data-tfile="" data-id="'+id + '-' + index+'" class="chk-'+id+' tb_list_checkbox" type="checkbox" value=""></td>';
             html += '</tr>';
 
         // $( input ).appendTo( '.upload-file-'+id );
@@ -438,18 +438,53 @@ $(function(){
 
     $(document).on('click','.btn-delete-file',function(){ 
         var id = $(this).data('id');
+        var arrID = new Array();
+        var hasData = false;
         $( ".chk-" + id ).each(function( index ) {
-            var line = $(this).data('id');
             if ($(this).is(':checked')){
-                $(".line-"+line).remove();
+                hasData = true
             }
         });
-
+        if (hasData){
+            $( ".chk-" + id ).each(function( index ) {
+                var line = $(this).data('id');
+                var id_db = $(this).data('tfile');
+                if ($(this).is(':checked')){
+                    $(".line-"+line).remove();
+                    if (id_db != ''){
+                      arrID.push(id_db);    
+                    }                
+                }
+            });
+            $(".hdFileDelete"+id).val(arrID.join());
+        }else{
+            $("#canceler1").modal('show');
+        }
     })
 
-    // $("input[type=file]").on('change',function(){
-    //    alert(1);
-    // })
+    $(document).on('click','.btn-download-file',function(){ 
+        var id = $(this).data('id');
+        var hasData = false;
+        $( ".chk-" + id ).each(function( index ) {
+            if ($(this).is(':checked')){
+                hasData = true
+            }
+        });
+        if (hasData){
+            var urls = [];
+            $( ".chk-" + id ).each(function( index ) {
+                if ($(this).is(':checked')){
+                    urls.push($(this).data('link'));
+                }
+            });
+            if (urls.length > 0){
+                download(urls); 
+            } 
+        }else{
+            $("#canceler1").modal('show');
+        }       
+    })    
+
 
     if($('.datepicker-input').length) {
         $('.datepicker-input').datepicker({

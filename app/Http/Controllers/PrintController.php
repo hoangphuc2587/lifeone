@@ -118,6 +118,7 @@ class PrintController extends Controller
     private function getDataFILE($id){
         $query = DB::table('T_FILE')
         ->select(
+        'T_FILE.ID',
         'T_FILE.FILE_NAME',
         'T_FILE.FILE_PATH',
         'M_TANT_WEB.HACYUSAKI_CD'
@@ -218,24 +219,35 @@ class PrintController extends Controller
         $date = New \DateTime();  
         $date = $date->format('Y-m-d H:i:s');
         $data = $request->data;
-
         $user = Auth::user();
         foreach($data as $key => $value){
             $HACYU_ID = $key;
             $HACYU = $value;
-            $details = $value['DETAIL'];
-            unset($HACYU['DETAIL']);
+            $details = array();
+            if (isset($value['DETAIL'])){
+               $details = $value['DETAIL'];
+               unset($HACYU['DETAIL']);
+            }            
+            
             $files = array();
             if (isset($value['FILE'])){
                 $files = $value['FILE'];
                 unset($HACYU['FILE']);
             }
-            
+
+            $delete_files = '';
+            if (!empty($value['FILE_DELETE'])){
+                $delete_files = $value['FILE_DELETE'];                
+            }
+            unset($HACYU['FILE_DELETE']);
+
             if (isset($HACYU['NO_DENPYO_FLG']) && $HACYU['NO_DENPYO_FLG'] == 'on'){
                 $HACYU['NO_DENPYO_FLG'] = 1;
             }else{
                 $HACYU['NO_DENPYO_FLG'] = 0;
             }
+
+
             $HACYU['UPD_TANTCD'] = $user->TANT_CD;
             $HACYU['UPD_YMD'] = $date;
             DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($HACYU);
@@ -265,8 +277,8 @@ class PrintController extends Controller
                 ->update($HACYUMSAI);
             }
             if (isset($value['FILE'])){
-                $a = 1;
-                foreach($files as $key => $item){               
+                $a = count($this->getDataFILE($HACYU_ID)) + 1;
+                foreach($files as $key => $item){
                     //Start of Upload Files
                     $fileName = time(). rand(1111,
                                 9999) . '.' . $item->getClientOriginalExtension();
@@ -276,13 +288,23 @@ class PrintController extends Controller
                         'HACYU_ID' => $HACYU_ID,
                         'JYUNJO' => $a,
                         'FILE_NAME' => $fileName,
-                        'FILE_PATH' => $path.'/'.$fileName,
+                        'FILE_PATH' => '/uploads/'.$fileName,
                         'TANT_CD' => $user->TANT_CD,
                         'UPD_TANTCD' => $user->TANT_CD,
                         'UPD_YMD' => $date
-                    ]);                
+                    ]);
                     $a++;
                 }  
+            }
+            if ($delete_files !== ''){
+                $arrFiles = explode(',', $delete_files);
+                $TFILE = array();
+                $TFILE['DEL_FLG'] = 1;
+                $TFILE['UPD_TANTCD'] = $user->TANT_CD;
+                $TFILE['UPD_YMD'] = $date;
+                DB::table('T_FILE')
+                ->whereIn('ID',$arrFiles)               
+                ->update($TFILE);
             }
         }
         return redirect()->route('list');

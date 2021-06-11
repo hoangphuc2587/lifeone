@@ -378,6 +378,9 @@
                 </div>
             </div>
         </div>   
+        @php
+            $index_file = 0;
+        @endphp
         @if (!empty($data)) 
         <div class="container-fluid" style="margin-top: 100px">
             @foreach ($data as $item)
@@ -626,11 +629,14 @@
                                             <tbody class="tbody-upload-{{ $item->HACYU_ID }}">
                                                 @if(!empty($item->FILE))
                                                 @foreach ($item->FILE as $fileData)
-                                                <tr>
+                                                <tr class="line-{{ $item->HACYU_ID }}-{{ $index_file }}">
                                                     <td>{{ empty($fileData->HACYUSAKI_CD) ? 'ライフワン担当' : '仕入先様名' }}</td>
                                                     <td>{{ $fileData->FILE_NAME }}</td>
-                                                    <td><input name="" class="tb_list_checkbox" type="checkbox" value=""></td>
+                                                    <td><input data-link="{{ url($fileData->FILE_PATH) }}" data-tfile="{{ $fileData->ID }}" data-id="{{ $item->HACYU_ID }}-{{ $index_file }}" class="chk-{{ $item->HACYU_ID }} tb_list_checkbox" type="checkbox" value=""></td>
                                                 </tr>
+                                                @php
+                                                    $index_file++;
+                                                @endphp
                                                 @endforeach
                                                 @endif                                                
                                             </tbody>
@@ -638,9 +644,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
-                                <div style="display: none;" class="upload-file-{{ $item->HACYU_ID }}">
-                                    
-                                </div>
+                                <input type="hidden" class="hdFileDelete{{ $item->HACYU_ID }}" name="data[{{ $item->HACYU_ID }}][FILE_DELETE]" value="">
                                 <button type="button" data-id="{{ $item->HACYU_ID }}" class="btn btn-primary mb-3 btn-add-file">
                                 <span class="text-btn-tb">追加</span></button>
                                 <button type="button" data-id="{{ $item->HACYU_ID }}"
@@ -798,7 +802,7 @@
         </div>
         @endif    
             <input type="hidden" id="hdSourceName" value="{{ $sourceName }}">
-            <input type="hidden" id="hdIndex" value="0">
+            <input type="hidden" id="hdIndex" value="{{ $index_file }}">
         </form>
 
         <!-- static modal-->
@@ -851,6 +855,21 @@
             </div>
         </div>
         <!-- END modal-->
+
+        <div class="modal fade show" id="canceler1" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="canceler"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <p>メッセージ</p>
+                    <p>明細が選択されていません !</p>
+                </div>
+                <div class="modal-footer" style="justify-content: center;">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- <script src="{{ URL::asset('js/jquery.min.js') }}"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
