@@ -357,7 +357,7 @@
                                 </h1>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <button type="submit" name="submit" value="submit_data" class="btn btn-primary mb-2 "
+                                <button type="button" id="btn-save-data" value="submit_data" class="btn btn-primary mb-2 "
                                     style="margin-left: 15px;">保存</button>
                                 <button type="button" id="btn-back"
                                     class="btn btn-primary mb-2">閉じる</button>
@@ -372,7 +372,7 @@
                             <button type="submit" name="submit" value="submit_print_pdf"
                                 class="btn btn-primary mb-2 error">PDF</button>
                             <button type="submit" name="submit" value="submit_print_excel"
-                                class="btn btn-primary mb-2 error">Excel</button>                        
+                                class="btn btn-primary mb-2 error">Excel</button>
                         </div>
                     </div>
                 </div>
@@ -812,7 +812,7 @@
                     <div class="modal-body">
                         <p>保存しますか？</p>
                         @if(Auth::user()->HACYUSAKI_CD != '')
-                        <p>※保存後10分間は変更可能です。</p>
+                        <p>※保存後30分間は変更可能です。</p>
                         @endif
                     </div>
                     <div class="modal-footer" style="justify-content: center;">
@@ -854,7 +854,20 @@
                     </div>
                 </div>
             </div>
-            <!-- END modal-->            
+            <!-- END modal-->
+            <div class="modal fade show" id="modalDelFile" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>削除しますか？</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="submit" name="submit" value="delete_file" class="btn btn-primary">はい</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-default">いいえ</button>
+                        </div>
+                    </div>
+                </div>
+             </div>            
         </form>
 
 

@@ -446,6 +446,13 @@ $(function(){
     })
 
 
+    
+
+    $(document).on('click','#btn-save-data',function(){
+        $("#static").modal('show');
+    })
+
+
     $(document).on('click','.btn-add-file',function(){       
         var id = $(this).data('id');
         var index = $("#hdIndex").val();        
@@ -485,7 +492,8 @@ $(function(){
                     }                
                 }
             });
-            $(".hdFileDelete"+id).val(arrID.join());
+            $(".hdFileDelete"+id).val(arrID.join());            
+            $("#modalDelFile").modal('show');
         }else{
             $("#canceler1").modal('show');
         }

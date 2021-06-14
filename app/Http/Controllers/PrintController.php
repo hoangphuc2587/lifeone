@@ -140,22 +140,26 @@ class PrintController extends Controller
         return $delivery_company;
     }
 
-    public function search_print($id)
-    {
+    private function displayData($list_id){
         $sourceName = 'ライフワン担当';
         if(Auth::user()->HACYUSAKI_CD != ''){
             $sourceName = '仕入先様名';
         }
         $deliveryCompany = $this->deliveryCompany();
         $data = array();
-        $query = $this->getSQLHACYU(array($id));
-        $data = $query->get();               
+        $query = $this->getSQLHACYU($list_id);
+        $data = $query->get();
         foreach($data as &$item){
             $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
             $item->HACYUMSAI = $detail;
             $item->FILE = $this->getDataFILE($item->HACYU_ID);
         } 
-        return view('detail', compact('deliveryCompany', 'data', 'sourceName'));
+        return view('detail', compact('deliveryCompany', 'data', 'sourceName')); 
+    }
+
+    public function search_print($id)
+    {
+         $this->displayData(array($id));
     }
     public function post_search_print(Request $request)
     {
@@ -189,20 +193,8 @@ class PrintController extends Controller
                 return redirect()->route('list');
                 break;
             case 'submit_detail': 
-                $sourceName = 'ライフワン担当';
-                if(Auth::user()->HACYUSAKI_CD != ''){
-                    $sourceName = '仕入先様名';
-                }
-                $deliveryCompany = $this->deliveryCompany();
-                $data = array();
-                $query = $this->getSQLHACYU($lists_checkboxID);
-                $data = $query->get();
-                foreach($data as &$item){
-                    $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
-                    $item->HACYUMSAI = $detail;
-                    $item->FILE = $this->getDataFILE($item->HACYU_ID);
-                }                 
-                return view('detail', compact('deliveryCompany','data', 'sourceName'));
+                $this->displayData($lists_checkboxID);
+                break;
             default:
                 break;
         }
@@ -220,93 +212,101 @@ class PrintController extends Controller
         $date = $date->format('Y-m-d H:i:s');
         $data = $request->data;
         $user = Auth::user();
-        foreach($data as $key => $value){
-            $HACYU_ID = $key;
-            $HACYU = $value;
-            $details = array();
-            if (isset($value['DETAIL'])){
-               $details = $value['DETAIL'];
-               unset($HACYU['DETAIL']);
-            }            
-            
-            $files = array();
-            if (isset($value['FILE'])){
-                $files = $value['FILE'];
-                unset($HACYU['FILE']);
-            }
 
-            $delete_files = '';
-            if (!empty($value['FILE_DELETE'])){
-                $delete_files = $value['FILE_DELETE'];                
-            }
-            unset($HACYU['FILE_DELETE']);
-
-            if (isset($HACYU['NO_DENPYO_FLG']) && $HACYU['NO_DENPYO_FLG'] == 'on'){
-                $HACYU['NO_DENPYO_FLG'] = 1;
-            }else{
-                $HACYU['NO_DENPYO_FLG'] = 0;
-            }
-
-
-            $HACYU['UPD_TANTCD'] = $user->TANT_CD;
-            $HACYU['UPD_YMD'] = $date;
-            DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($HACYU);
-
-            foreach($details as $k => $v){
-                $HACYUMSAI = $v;
-                $HACYUMSAI_ID = $k;
-                if (isset($HACYUMSAI['SURYO']) && $HACYUMSAI['SURYO'] == ''){
-                    $HACYUMSAI['SURYO'] = 0;
+        if (isset($request->submit) && $request->submit == 'delete_file'){
+            foreach($data as $key => $value){
+                $delete_files = '';
+                if (!empty($value['FILE_DELETE'])){
+                    $delete_files = $value['FILE_DELETE'];                
                 }
-                if (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] == ''){
-                    unset($HACYUMSAI['KAITO_NOKI']);
-                }elseif (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
-                    $HACYUMSAI['KAITO_NOKI'] = str_replace('/', '-', $HACYUMSAI['KAITO_NOKI']);
+                if ($delete_files !== ''){
+                    $arrFiles = explode(',', $delete_files);
+                    $TFILE = array();
+                    $TFILE['DEL_FLG'] = 1;
+                    $TFILE['UPD_TANTCD'] = $user->TANT_CD;
+                    $TFILE['UPD_YMD'] = $date;
+                    DB::table('T_FILE')
+                    ->whereIn('ID',$arrFiles)
+                    ->update($TFILE);
                 }
-                if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] == ''){
-                    unset($HACYUMSAI['NOHIN_YMD']);
-                }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
-                    $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
-                }   
-                $HACYUMSAI['UPD_TANTCD'] = $user->TANT_CD;
-                $HACYUMSAI['UPD_YMD'] = $date;             
-
-                DB::table('T_HACYUMSAI')
-                ->where('HACYU_ID',$HACYU_ID)
-                ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
-                ->update($HACYUMSAI);
-            }
-            if (isset($value['FILE'])){
-                $a = count($this->getDataFILE($HACYU_ID)) + 1;
-                foreach($files as $key => $item){
-                    //Start of Upload Files
-                    $fileName = time(). rand(1111,
-                                9999) . '.' . $item->getClientOriginalExtension();
-                    $path = './uploads';
-                    $item->move($path, $fileName);
-                    DB::table('T_FILE')->insert([
-                        'HACYU_ID' => $HACYU_ID,
-                        'JYUNJO' => $a,
-                        'FILE_NAME' => $fileName,
-                        'FILE_PATH' => '/uploads/'.$fileName,
-                        'TANT_CD' => $user->TANT_CD,
-                        'UPD_TANTCD' => $user->TANT_CD,
-                        'UPD_YMD' => $date
-                    ]);
-                    $a++;
-                }  
-            }
-            if ($delete_files !== ''){
-                $arrFiles = explode(',', $delete_files);
-                $TFILE = array();
-                $TFILE['DEL_FLG'] = 1;
-                $TFILE['UPD_TANTCD'] = $user->TANT_CD;
-                $TFILE['UPD_YMD'] = $date;
-                DB::table('T_FILE')
-                ->whereIn('ID',$arrFiles)               
-                ->update($TFILE);
             }
         }
+        else{
+            foreach($data as $key => $value){
+                $HACYU_ID = $key;
+                $HACYU = $value;
+                $details = array();
+                if (isset($value['DETAIL'])){
+                   $details = $value['DETAIL'];
+                   unset($HACYU['DETAIL']);
+                }            
+                
+                $files = array();
+                if (isset($value['FILE'])){
+                    $files = $value['FILE'];
+                    unset($HACYU['FILE']);
+                }
+
+                unset($HACYU['FILE_DELETE']);
+
+                if (isset($HACYU['NO_DENPYO_FLG']) && $HACYU['NO_DENPYO_FLG'] == 'on'){
+                    $HACYU['NO_DENPYO_FLG'] = 1;
+                }else{
+                    $HACYU['NO_DENPYO_FLG'] = 0;
+                }
+
+
+                $HACYU['UPD_TANTCD'] = $user->TANT_CD;
+                $HACYU['UPD_YMD'] = $date;
+                DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($HACYU);
+
+                foreach($details as $k => $v){
+                    $HACYUMSAI = $v;
+                    $HACYUMSAI_ID = $k;
+                    if (isset($HACYUMSAI['SURYO']) && $HACYUMSAI['SURYO'] == ''){
+                        $HACYUMSAI['SURYO'] = 0;
+                    }
+                    if (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] == ''){
+                        unset($HACYUMSAI['KAITO_NOKI']);
+                    }elseif (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
+                        $HACYUMSAI['KAITO_NOKI'] = str_replace('/', '-', $HACYUMSAI['KAITO_NOKI']);
+                    }
+                    if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] == ''){
+                        unset($HACYUMSAI['NOHIN_YMD']);
+                    }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
+                        $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
+                    }   
+                    $HACYUMSAI['UPD_TANTCD'] = $user->TANT_CD;
+                    $HACYUMSAI['UPD_YMD'] = $date;             
+
+                    DB::table('T_HACYUMSAI')
+                    ->where('HACYU_ID',$HACYU_ID)
+                    ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
+                    ->update($HACYUMSAI);
+                }
+                if (isset($value['FILE'])){
+                    $a = count($this->getDataFILE($HACYU_ID)) + 1;
+                    foreach($files as $key => $item){
+                        //Start of Upload Files
+                        $fileName = time(). rand(1111,
+                                    9999) . '.' . $item->getClientOriginalExtension();
+                        $path = './uploads/'.$HACYU_ID;
+                        $item->move($path, $fileName);
+                        DB::table('T_FILE')->insert([
+                            'HACYU_ID' => $HACYU_ID,
+                            'JYUNJO' => $a,
+                            'FILE_NAME' => $fileName,
+                            'FILE_PATH' => '/uploads/'.$HACYU_ID.'/'.$fileName,
+                            'TANT_CD' => $user->TANT_CD,
+                            'UPD_TANTCD' => $user->TANT_CD,
+                            'UPD_YMD' => $date
+                        ]);
+                        $a++;
+                    }  
+                }
+            }
+        }
+
         return redirect()->route('list');
     }
 }
