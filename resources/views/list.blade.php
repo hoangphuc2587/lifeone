@@ -641,7 +641,7 @@
                                 @foreach($lists as $item)
                             <tr>                                 
                                 <td>
-                                    <input id="chk{{ $item->HACYU_ID }}-0" name="check_box_list[]" data-pdf="{{ $item->PDF_PATH }}" data-excel="{{ $item->EXCEL_PATH }}" class="save_list_checkbox" {{ $item->STS_CD == '01' ? 'checked' : '' }} type="checkbox" value="{{ $item->HACYU_ID }}-0">
+                                    <input id="chk{{ $item->HACYU_ID }}-0" name="check_box_list[]" data-pdf="{{ $item->PDF_PATH }}" data-excel="{{ $item->EXCEL_PATH }}" class="save_list_checkbox" {{ $item->STS_CD == '01' && !$isUserLifeOne ? 'checked' : '' }} type="checkbox" value="{{ $item->HACYU_ID }}-0">
                                 </td>
                                 <td style="background: {{ empty($item->IRAI_COLOR) ? 'none' : $item->IRAI_COLOR }}">{{ $item->IRAI_CD_NAME }}</td>
                                 <td>{{ !empty($item->IRAI_YMD) ? date('m/d/Y', strtotime($item->IRAI_YMD)) : '' }}</td>
@@ -656,14 +656,15 @@
                                 <td>{{ $item->STS_CD_NAME }}</td>
                                 <td>{{ $item->MAKER }}</td>
                                 <td>{{ $item->HAISO_INF }}</td>
-                                <td class="tdDot">@if (!empty($item->COMMENT2)) <span class="dot"></span> @endif</td>                                                               
                                 @if ($isUserLifeOne)
+                                <td class="tdDot">@if (!empty($item->COMMENT2)) <span class="dot"></span> @endif</td>
                                 <td>{{ $item->TAIO_TANT_NAME }}</td>
                                 <td>{{ $item->TAIO_CD }}</td>
                                 <td>{{ !empty($item->LAST_NKAYOTEI_YMD) ? date('m/d/Y', strtotime($item->LAST_NKAYOTEI_YMD)) : '' }}</td>
                                 <td>{{ $item->HACYUSAKI_NAME }}</td> 
                                 @else
-                                <td>@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
+                                <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>
+                                <td class="tdDot">@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
                                 <td>{{ $item->FREE }}</td> 
                                 @endif
 
@@ -696,6 +697,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="hdUserLifeOne" value="{{ $isUserLifeOne ? 1 : 0 }}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>   
     <script src="{{ URL::asset('js/tether.min.js') }}"></script>

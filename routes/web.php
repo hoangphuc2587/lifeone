@@ -30,6 +30,7 @@
 
     route::get('/logout', function () {
         \Auth::logout();
+        \Session::flush();
         return redirect('/login');
     })->name('logout');
 
