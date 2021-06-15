@@ -80,8 +80,8 @@ class PrintController extends Controller
         'T_HACYU.SUM',
         'T_HACYU.NEBIKI_SUM',
         'T_HACYU.PDF_PATH',
-        'T_HACYU.EXCEL_PATH',        
-          
+        'T_HACYU.EXCEL_PATH',
+        'T_HACYU.STS_CD'
         )
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
         ->whereIn('T_HACYU.HACYU_ID', $lists_id);
@@ -143,6 +143,34 @@ class PrintController extends Controller
 
         $data = $query->first();
         return $data;
+    }
+
+    private function getDataOneHACYUMSAI($id, $id_detail, $no = 1){
+        $query = DB::table('T_HACYUMSAI')
+        ->select(
+        'T_HACYUMSAI.HACYUMSAI_ID',
+        'T_HACYUMSAI.SPLIT_NO',
+        'T_HACYUMSAI.CTGORY',
+        'T_HACYUMSAI.MAKER',
+        'T_HACYUMSAI.HINBAN',
+        'T_HACYUMSAI.TANKA',
+        'T_HACYUMSAI.SURYO',
+        'T_HACYUMSAI.KINGAK',
+        'T_HACYUMSAI.SIKIRI_RATE',
+        'T_HACYUMSAI.NEBIKI_TANKA',
+        'T_HACYUMSAI.NEBIKI_GAK',
+        'T_HACYUMSAI.NEBIKI_YM',
+        'T_HACYUMSAI.NOHIN_KIBO_YMD',
+        'T_HACYUMSAI.BIKO',
+        'T_HACYUMSAI.KAITO_NOKI',
+        'T_HACYUMSAI.NOHIN_YMD',
+        'T_HACYUMSAI.NYUKA_ID'          
+        )
+        ->where(['T_HACYUMSAI.DEL_FLG'=> 0])
+        ->where('T_HACYUMSAI.HACYU_ID', $id)
+        ->where('T_HACYUMSAI.HACYUMSAI_ID', $id_detail)
+        ->where('T_HACYUMSAI.SPLIT_NO', $no);
+        return $query->first();
     }    
 
 
@@ -212,8 +240,13 @@ class PrintController extends Controller
             $detail = $this->getDataHACYUMSAI($item->HACYU_ID);
             $item->HACYUMSAI = $detail;
             $item->FILE = $this->getDataFILE($item->HACYU_ID);
-        } 
-        return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne'); 
+        }
+        $hasSTS01Load = false;  
+        if(session()->has('hasSTS01')){           
+            $hasSTS01Load = true;
+            session()->forget('hasSTS01');
+        }        
+        return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne' ,'hasSTS01Load'); 
     }
 
     public function search_print($id)
@@ -293,6 +326,7 @@ class PrintController extends Controller
         $data = $request->data;
         $user = Auth::user();
         $HACYU_ID = '0';
+        $hasSTS01 = false;
         if (isset($request->submit) && $request->submit == 'delete_file'){
             foreach($data as $key => $value){
                 $delete_files = '';
@@ -321,7 +355,7 @@ class PrintController extends Controller
             $request->session()->put('list_csv',$lists_checkboxID2);
             $this->__updateStatus($lists_checkboxID);
             return redirect()->route('export');
-        }elseif(isset($request->submit) && ($request->submit == 'submit_print_pdf' || $request->submit == 'submit_print_excel')){
+        }elseif(isset($request->submit) && ($request->submit == 'submit_print_pdf' || $request->submit == 'submit_print_excel' || $request->submit == 'order_sale')){
             $lists_checkboxID = array();
             foreach($data as $key => $value){
                 $lists_checkboxID[] = $key;                
@@ -368,11 +402,18 @@ class PrintController extends Controller
                        unset($HACYU['COMMENT1']);
                     }
 
+                    if ($HACYU['COMMENT2'] != $oldData->COMMENT2){
+                        $HACYU['COMMENT2'] = '【'.date('Y/m/d H:i').'】' . $HACYU['COMMENT2'];
+                    }
+
                     $dataUpdate = $HACYU;
 
                     foreach($details as $k => $v){
                         $HACYUMSAI = $v;
                         $HACYUMSAI_ID = $k;
+
+                        $oddDetail = $this->getDataOneHACYUMSAI($HACYU_ID, $HACYUMSAI_ID, $HACYUMSAI['SPLIT_NO']);
+
                         if (isset($HACYUMSAI['SURYO']) && $HACYUMSAI['SURYO'] == ''){
                             $HACYUMSAI['SURYO'] = 0;
                         }
@@ -380,20 +421,72 @@ class PrintController extends Controller
                             unset($HACYUMSAI['KAITO_NOKI']);
                         }elseif (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
                             $HACYUMSAI['KAITO_NOKI'] = str_replace('/', '-', $HACYUMSAI['KAITO_NOKI']);
+                            $arrDateNoHin[] = $HACYUMSAI['KAITO_NOKI'];
                         }
                         if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] == ''){
                             unset($HACYUMSAI['NOHIN_YMD']);
                         }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
                             $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
                             $arrDateNoHin[] = $HACYUMSAI['NOHIN_YMD'];
-                        }   
-                        $HACYUMSAI['UPD_TANTCD'] = $user->TANT_CD;
-                        $HACYUMSAI['UPD_YMD'] = $date;             
+                        }
 
-                        DB::table('T_HACYUMSAI')
-                        ->where('HACYU_ID',$HACYU_ID)
-                        ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
-                        ->update($HACYUMSAI);
+                        $dataUpdateDetail = array();
+                        $split = false;
+
+                        if($oddDetail->SURYO != $HACYUMSAI['SURYO'] && $HACYUMSAI['SURYO'] > 0){
+                            $dataUpdateDetail['SURYO'] = $HACYUMSAI['SURYO'];
+                            $dataUpdateDetail['KINGAK'] = $HACYUMSAI['SURYO'] * $oddDetail->TANKA;
+                            $dataUpdateDetail['NEBIKI_GAK'] = $HACYUMSAI['SURYO'] * $oddDetail->NEBIKI_TANKA;                            
+                            $split = true;
+                        }
+
+                        if(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){
+                            $dataUpdateDetail['KAITO_NOKI'] = $HACYUMSAI['KAITO_NOKI'];
+                        }
+
+                        if(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
+                            $dataUpdateDetail['NOHIN_YMD'] = $HACYUMSAI['NOHIN_YMD'];
+                        }                        
+
+                        if (!empty($dataUpdateDetail)){
+
+                            $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
+                            $dataUpdateDetail['UPD_YMD'] = $date;             
+
+                            DB::table('T_HACYUMSAI')
+                            ->where('HACYU_ID',$HACYU_ID)
+                            ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
+                            ->where('SPLIT_NO',$HACYUMSAI['SPLIT_NO'])
+                            ->update($dataUpdateDetail);
+                        }                        
+                        if ($split){
+                            $dataUpdateDetailNew = $dataUpdateDetail;                           
+                            $dataUpdateDetailNew['HACYU_ID'] = $HACYU_ID;
+                            $dataUpdateDetailNew['HACYUMSAI_ID'] = $HACYUMSAI_ID;
+                            $dataUpdateDetailNew['SPLIT_NO'] = $HACYUMSAI['SPLIT_NO'] + 1;
+                            $dataUpdateDetailNew['CTGORY'] = $oddDetail->CTGORY;
+                            $dataUpdateDetailNew['MAKER'] = $oddDetail->MAKER;
+                            $dataUpdateDetailNew['HINBAN'] = $oddDetail->HINBAN;
+                            $dataUpdateDetailNew['TANKA'] = $oddDetail->TANKA;
+                            $dataUpdateDetailNew['SIKIRI_RATE'] = $oddDetail->SIKIRI_RATE;
+                            $dataUpdateDetailNew['NEBIKI_TANKA'] = $oddDetail->NEBIKI_TANKA;
+                            $dataUpdateDetailNew['DEL_FLG'] = 0;
+                            $dataUpdateDetail['ADD_TANTCD'] = $user->TANT_CD;
+                            $dataUpdateDetail['ADD_YMD'] = $date; 
+
+                            if(empty($dataUpdateDetailNew['KAITO_NOKI'])){
+                               $dataUpdateDetailNew['KAITO_NOKI'] = $oddDetail->KAITO_NOKI;
+                            }
+
+                            if(empty($dataUpdateDetailNew['NOHIN_YMD'])){
+                               $dataUpdateDetailNew['NOHIN_YMD'] = $oddDetail->NOHIN_YMD;
+                            }                            
+
+                            $new_suryo = $oddDetail->SURYO - $HACYUMSAI['SURYO'];
+                            $dataUpdateDetailNew['KINGAK'] = $new_suryo * $oddDetail->TANKA;
+                            $dataUpdateDetailNew['NEBIKI_GAK'] = $new_suryo * $oddDetail->NEBIKI_TANKA;
+                            DB::table('T_HACYUMSAI')->insert($dataUpdateDetailNew);
+                        }
                     }
                 }else{
                     $dataUpdate = array();
@@ -409,7 +502,7 @@ class PrintController extends Controller
                     }
                     if ($HACYU['COMMENT1'] != $oldData->COMMENT1){
                         $dataUpdate['COMMENT1'] = '【'.date('Y/m/d H:i').' '.$user->TANT_NAME.'】' . $HACYU['COMMENT1'];
-                    }                    
+                    }
                 }
                 $countNoHin = 0;
                 if (!empty($dataUpdate)){
@@ -441,6 +534,10 @@ class PrintController extends Controller
                     DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($dataUpdate);
                 }
 
+                if (((!empty($dataUpdate['STS_CD']) && $dataUpdate['STS_CD'] != '01') || empty($dataUpdate['STS_CD'])) && $oldData->STS_CD == '01'){
+                    $hasSTS01 = true;
+                }
+
                 if (isset($value['FILE'])){
                     $a = count($this->getDataFILE($HACYU_ID)) + 1;
                     foreach($files as $key => $item){
@@ -464,10 +561,17 @@ class PrintController extends Controller
             }
         }
 
-        if (count($data) > 1){
-             return redirect()->route('get_search_print');
+        if (isset($request->submit) && $request->submit == 'submit_back_list' && !$hasSTS01){
+            return redirect()->route('list');
         }else{
-            return redirect()->route('search_print', array('id' => $HACYU_ID));
-        } 
+            if($hasSTS01){
+              $request->session()->put('hasSTS01',1);  
+            }            
+            if (count($data) > 1){
+                return redirect()->route('get_search_print');
+            }else{
+                return redirect()->route('search_print', array('id' => $HACYU_ID));
+            } 
+        }
     }
 }

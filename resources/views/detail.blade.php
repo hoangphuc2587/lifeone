@@ -57,8 +57,9 @@
         border: 1px solid black;
     }
     .tb_list_checkbox{
-        width: 10px !important;
-        height: 10px !important;
+        width: 15px !important;
+        height: 15px !important;
+        margin-top: 4px !important;
     }
     .total{
         margin-left: 400px;
@@ -238,6 +239,7 @@
         text-align: center;
         table-layout: fixed;
         overflow: hidden;
+        vertical-align: middle;
     }
 
     .table-bordered td a {
@@ -382,12 +384,20 @@
         </div>   
         @php
             $index_file = 0;
+            $hasSTS01 = 0;
         @endphp
         @if (!empty($data)) 
         <div class="container-fluid" style="margin-top: 100px">
             @foreach ($data as $item)
             <input type="hidden" class="link-download-pdf" value="{{ $item-> PDF_PATH }}">
             <input type="hidden" class="link-download-excel" value="{{ $item-> EXCEL_PATH }}">
+            @php
+            if($item->STS_CD == '01'){
+                $hasSTS01 = 1;
+            }
+            @endphp
+            <input type="hidden" class="hdHasSTS01" value="{{ $hasSTS01}}">
+            
             <div class="container">
                 <div class="row mt-5">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -524,14 +534,15 @@
                             <tbody>
                                 <input type="hidden" name="data[{{ $item->HACYU_ID }}][IRAI_CD]" value="{{ $item->IRAI_CD }}">
                                 @foreach ($item->HACYUMSAI as $detail)
-                                <tr>
+                                <input type="hidden" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][SPLIT_NO]" value="{{ $detail->SPLIT_NO }}">
+                                <tr class="cacl-total-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">
                                     <td>{{ $detail->HACYUMSAI_ID }}</td>
                                     <td>{{ $detail->CTGORY }}</td>
                                     <td>{{ $detail->MAKER }}</td>
                                     <td>{{ $detail->HINBAN }}</td>
-                                    <td class="text-right">{{ number_format($detail->TANKA) }}</td>
+                                    <td class="text-right data-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">{{ number_format($detail->TANKA) }}</td>
                                     <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
-                                        <input type="text" {{ !$isUserLifeOne ? '' : 'disabled' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][SURYO]" style="width: 100%;text-align: right;" value="{{ $detail->SURYO }}">
+                                        <input data-value="{{ $detail->SURYO }}" data-id="{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}" type="text" {{ !$isUserLifeOne ? '' : 'disabled' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][SURYO]" class="txt-suryo" style="width: 100%;text-align: right;" maxlength="10" value="{{ $detail->SURYO }}">
                                     </td>
                                     <td class="text-right">{{ number_format($detail->KINGAK) }}</td>
                                     <td class="text-right">{{ $detail->SIKIRI_RATE }}%</td>
@@ -541,7 +552,7 @@
                                     <td>{{ $detail->BIKO }}</td>
                                     <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                         <input type="text"
-                                        data-date-format="yyyy/mm/dd"
+                                        data-date-format="yyyy/mm/dd" data-value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}"
                                         autocomplete="off" class="{{ !$isUserLifeOne ? 'datepicker-input' : 'no-edit' }} date-{{ $item->HACYU_ID }}" style="width: 95px;"
                                         {{ !$isUserLifeOne ? '' : 'disabled' }} 
                                         name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
@@ -808,6 +819,7 @@
         @endif    
             <input type="hidden" id="hdSourceName" value="{{ $sourceName }}">
             <input type="hidden" id="hdIndex" value="{{ $index_file }}">
+            <input type="hidden" id="hdHasSTS01Load" value="{{ $hasSTS01Load ? 1 : 0 }}">
 
 
         <!-- static modal-->
@@ -836,10 +848,8 @@
                             <p>入力内容を保存しますか？</p>
                         </div>
                         <div class="modal-footer" style="justify-content: center;">
-                            <button type="submit" class="btn btn-primary" id="submit">はい</button>
-                            <a id="cancelsub" class="btn btn-raised btn-primary" style="display: none">保存</a>
-                            <a href="{{ URL::to(route('list')) }}" class="btn btn-default"
-                                style="background: #ddd;color: #000 !important">いいえ</a>
+                            <button type="submit" name="submit" value="submit_back_list" class="btn btn-primary" id="submit">はい</button>
+                             <button type="button" class="btn btn-primary" id="btnBackList">いいえ</button>                            
                             <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
                         </div>
                     </div>
@@ -859,6 +869,32 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade in" id="modalCallLifeOne" tabindex="-1" role="dialog" aria-hidden="false">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>ライフワンへお電話下さい。</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade in" id="modalCaclTotal" tabindex="-1" role="dialog" aria-hidden="false">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>合計数量を変更することはできません。</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- END modal-->
             <div class="modal fade show" id="modalDelFile" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -872,7 +908,21 @@
                         </div>
                     </div>
                 </div>
-             </div>            
+            </div>
+
+            <div class="modal fade show" id="modalOrder" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>未発注のデータがありますが、よろしいですか？</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="submit" name="submit" value="order_sale" class="btn btn-primary">発注済</button>
+                            <a href="{{ URL::to(route('list')) }}" class="btn btn-primary">未発注</a>
+                        </div>
+                    </div>
+                </div>
+            </div> 
         </form>
 
 

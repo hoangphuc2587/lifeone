@@ -27,11 +27,9 @@ $(function(){
         var data = [];
         sessionStorage.setItem('data_list_checkbox',JSON.stringify(data));
         sessionStorage.setItem('load_page',JSON.stringify(true));
-    })
-    console.log(window.location.pathname);
+    })  
     $('body').on('change','#icb8hk',function(){
         var total_row_on_one_page = $(this).val();
-        console.log(total_row_on_one_page);
         $.ajax({
             url : 'take-total-row-on-one-page/' + total_row_on_one_page,
             success:function(data){
@@ -104,8 +102,25 @@ $(function(){
         }) 
     })
 
+    $(document).on('keypress','.form_list input, .form_list select',function(e){
+        var p = e.which;
+        if(p==13){           
+           $('.search_by_item').trigger('click');
+        }
+    })
+
+    $(document).on('click','#btnBackList',function(){
+        if ($(".hdHasSTS01").val() == '1')
+        {
+           $("#modalOrder").modal('show');
+        }else{
+           window.location = '/list';            
+        }
+
+    })    
+
     $(document).on('click','#btn-back',function(){
-        window.location = '/list';
+        $("#static1").modal('show');
     })
 
     $(document).on('click','.search_reply',function(){
@@ -555,16 +570,45 @@ $(function(){
        }    
     })
 
-    // $("#form_detail :input").change(function() {
-    //    $("#form_detail").data("changed",true);
-    // });    
+    $("#form_detail :input").change(function() {
+       $("#form_detail").data("changed",true);
+    });  
+
+    $(".txt-suryo").on("keypress keyup blur",function (event) {    
+       $(this).val($(this).val().replace(/[^\d].+/, ""));
+        if ((event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+
+    $(document).on('change','.txt-suryo',function(){
+      var n_value = parseInt($(this).val());
+      var d_value = parseInt($(this).data('value'));
+      if (n_value > d_value){
+        $("#modalCaclTotal").modal('show');
+        $(this).val(d_value);
+      }
+    })
 
     if($('.datepicker-input').length) {
         $('.datepicker-input').datepicker({
             autoclose: true,
             todayHighlight: true
         });
-        //$('.datepicker').datepicker("setDate", new Date());
+
+        $('.datepicker-input').datepicker()
+        .on('changeDate', function(e) {            
+            var new_val =  this.value;
+            var $this = this;         
+            var d_value = $(this).data('value');
+            if (d_value == '' || CompareDate(new_val, d_value) == false){              
+               $(this).val(new_val);
+            }
+            else{
+               $("#modalCallLifeOne").modal('show'); 
+               setTimeout(function(){ $this.value = d_value; }, 1000);
+            }
+        });        
     }
 
     if($('.datepicker-change').length) {
@@ -576,8 +620,26 @@ $(function(){
         $('.datepicker-change').datepicker()
         .on('changeDate', function(e) {
             var id = $(this).data('id');
-            $('.date-'+id).val(this.value);
+            var $this = this;
+            var new_val =  this.value;
+            $( ".date-" + id ).each(function( index ) {
+                var d_value = $(this).data('value');
+                if (d_value == '' || CompareDate(new_val, d_value) == false){
+                   $(this).val(new_val);
+                }
+                else{
+                   $("#modalCallLifeOne").modal('show');
+                   $this.value = '';
+                   $(this).val(d_value);
+                }
+            });           
         });
+    }
+
+    if($('#hdHasSTS01Load').length) {
+        if ($('#hdHasSTS01Load').val() ==  1){
+            $("#modalOrder").modal('show');
+        }
     }
 })
 
@@ -595,3 +657,16 @@ function download(files) {
             });
     });
 }
+
+ function CompareDate(date1 , date2) {    
+   //Note: 00 is month i.e. January 
+   var res = date1.split("/");
+   var res2 = date2.split("/");
+   var dateOne = new Date(res[0], res[1], res[2]); //Year, Month, Date    
+   var dateTwo = new Date(res2[0], res2[1], res2[2]); //Year, Month, Date    
+   if (dateOne > dateTwo) {    
+        return true;
+    }else {
+        return false;
+    }
+}  
