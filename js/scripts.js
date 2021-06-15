@@ -520,8 +520,23 @@ $(function(){
         }else{
             $("#canceler1").modal('show');
         }       
-    })    
+    }) 
 
+    $(document).on('click','.chkTaiOCd1',function(){  
+       if ($(this).is(':checked')){ 
+           $('.chkTaiOCd2').prop('checked', false); 
+       }
+    }) 
+
+    $(document).on('click','.chkTaiOCd2',function(){  
+       if ($(this).is(':checked')){ 
+           $('.chkTaiOCd1').prop('checked', false); 
+       }    
+    }) 
+
+    $("#form_detail :input").change(function() {
+       $("#form_detail").data("changed",true);
+    });    
 
     if($('.datepicker-input').length) {
         $('.datepicker-input').datepicker({

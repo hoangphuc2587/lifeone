@@ -279,35 +279,59 @@ class PrintController extends Controller
                     $HACYU['NO_DENPYO_FLG'] = 0;
                 }
 
-
-                $HACYU['UPD_TANTCD'] = $user->TANT_CD;
-                $HACYU['UPD_YMD'] = $date;
-                DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($HACYU);
-
-                foreach($details as $k => $v){
-                    $HACYUMSAI = $v;
-                    $HACYUMSAI_ID = $k;
-                    if (isset($HACYUMSAI['SURYO']) && $HACYUMSAI['SURYO'] == ''){
-                        $HACYUMSAI['SURYO'] = 0;
+                if($user->HACYUSAKI_CD != ''){
+                    if (isset($value['TAIO_CD1'])){
+                       unset($HACYU['TAIO_CD1']);
                     }
-                    if (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] == ''){
-                        unset($HACYUMSAI['KAITO_NOKI']);
-                    }elseif (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
-                        $HACYUMSAI['KAITO_NOKI'] = str_replace('/', '-', $HACYUMSAI['KAITO_NOKI']);
+                    if (isset($value['TAIO_CD2'])){
+                       unset($HACYU['TAIO_CD2']);
+                    }                    
+                    if (isset($value['COMMENT1'])){
+                       unset($HACYU['COMMENT1']);
                     }
-                    if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] == ''){
-                        unset($HACYUMSAI['NOHIN_YMD']);
-                    }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
-                        $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
-                    }   
-                    $HACYUMSAI['UPD_TANTCD'] = $user->TANT_CD;
-                    $HACYUMSAI['UPD_YMD'] = $date;             
+                    $HACYU['UPD_TANTCD'] = $user->TANT_CD;
+                    $HACYU['UPD_YMD'] = $date;
+                    DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($HACYU);
 
-                    DB::table('T_HACYUMSAI')
-                    ->where('HACYU_ID',$HACYU_ID)
-                    ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
-                    ->update($HACYUMSAI);
+                    foreach($details as $k => $v){
+                        $HACYUMSAI = $v;
+                        $HACYUMSAI_ID = $k;
+                        if (isset($HACYUMSAI['SURYO']) && $HACYUMSAI['SURYO'] == ''){
+                            $HACYUMSAI['SURYO'] = 0;
+                        }
+                        if (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] == ''){
+                            unset($HACYUMSAI['KAITO_NOKI']);
+                        }elseif (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
+                            $HACYUMSAI['KAITO_NOKI'] = str_replace('/', '-', $HACYUMSAI['KAITO_NOKI']);
+                        }
+                        if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] == ''){
+                            unset($HACYUMSAI['NOHIN_YMD']);
+                        }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
+                            $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
+                        }   
+                        $HACYUMSAI['UPD_TANTCD'] = $user->TANT_CD;
+                        $HACYUMSAI['UPD_YMD'] = $date;             
+
+                        DB::table('T_HACYUMSAI')
+                        ->where('HACYU_ID',$HACYU_ID)
+                        ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
+                        ->update($HACYUMSAI);
+                    }
+                }else{
+                    $dataUpdate = array();
+                    $dataUpdate['TAIO_CD'] = '';
+                    if (isset($HACYU['TAIO_CD1']) && $HACYU['TAIO_CD1'] == 'on'){
+                        $dataUpdate['TAIO_CD'] = '01';
+                    }
+                    if (isset($HACYU['TAIO_CD2']) && $HACYU['TAIO_CD2'] == 'on'){
+                        $dataUpdate['TAIO_CD'] = '02';
+                    }
+                    $dataUpdate['COMMENT1'] = $HACYU['COMMENT1'];
+                    $dataUpdate['UPD_TANTCD'] = $user->TANT_CD;
+                    $dataUpdate['UPD_YMD'] = $date;
+                    DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($dataUpdate);
                 }
+
                 if (isset($value['FILE'])){
                     $a = count($this->getDataFILE($HACYU_ID)) + 1;
                     foreach($files as $key => $item){
