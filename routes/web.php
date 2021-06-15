@@ -58,6 +58,7 @@
     route::get('/search-print/{id}','PrintController@search_print')->name('search_print');
 
     route::post('/search-print','PrintController@post_search_print')->name('post_search_print');
+    route::get('/search-print','PrintController@get_search_print')->name('get_search_print');
 
     route::get('/search-reply/{key_seacrch_reply}','ListController@search_reply');
     route::get('/search-no-reply/{key_seacrch_reply}','ListController@search_no_reply');

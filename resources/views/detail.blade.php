@@ -28,13 +28,16 @@
         padding: 0.5rem;
     }
 
+    .brg-edit{
+        background-color: #FFF2CC !important;
+    }
+
     input.datepicker-input, input.datepicker-change{
         border-radius: unset;
         padding: 3px 4px;
         direction: unset;
         border: 1px solid rgba(0,0,0,.5);
         font-size: 14px;
-        background: #FFF2CC;
     }
 
     .datepicker{
@@ -51,7 +54,6 @@
         font-weight: bold;
     }
     .brg-input{
-        background-color: #FFF2CC;
         border: 1px solid black;
     }
     .tb_list_checkbox{
@@ -423,10 +425,10 @@
                                {{ $item->TAIO_TANT_NAME }}
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <input onclick="return false;" type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
-                                <label style="margin-right: 10px;">対応中</label>
-                                <input onclick="return false;" class="ml-1" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
-                                <label>対応完了</label> 
+                                <input onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}" style="margin-right: 10px;">対応中</label>
+                                <input onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" class="ml-1" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}">対応完了</label> 
                             </div>
                         </div>                           
                     </div>
@@ -491,7 +493,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
                             <label>納品日：</label>
-                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-change" type="text" data-id="{{ $item->HACYU_ID }}"  class="brg-input"  style="width: 120px;"/>        
+                            <input data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-change {{ !$isUserLifeOne ? ' brg-edit' : '' }}" type="text" data-id="{{ $item->HACYU_ID }}"  class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
                 </div>
@@ -507,14 +509,14 @@
                                     <th class="th4" width="85">メーカー</th>
                                     <th class="th5" width="140">品番</th>
                                     <th class="th6" width="63">単価</th>
-                                    <th class="brg-input" scope="col" class="th7" width="80">数量</th>
+                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" scope="col" class="th7" width="80">数量</th>
                                     <th class="th8" width="63">金額</th>
                                     <th class="th9" width="45">掛率</th>
                                     <th class="th9" width="80">値引額</th>
                                     <th class="th9" width="80">値引予定月</th>
                                     <th class="th9" width="80">納品希望日</th>
                                     <th class="th9" width="180">備考</th>
-                                    <th class="brg-input" class="th9" width="auto">納品日<br/>※分納の場合は数量を変更して下さい。</th>
+                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" class="th9" width="auto">納品日<br/>※分納の場合は数量を変更して下さい。</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -526,7 +528,7 @@
                                     <td>{{ $detail->MAKER }}</td>
                                     <td>{{ $detail->HINBAN }}</td>
                                     <td class="text-right">{{ number_format($detail->TANKA) }}</td>
-                                    <td class="brg-input">
+                                    <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                         <input type="text" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][SURYO]" style="width: 100%;text-align: right;" value="{{ $detail->SURYO }}">
                                     </td>
                                     <td class="text-right">{{ number_format($detail->KINGAK) }}</td>
@@ -535,7 +537,7 @@
                                     <td>{{ $detail->NEBIKI_YM }}</td>
                                     <td>{{ empty($detail->NOHIN_KIBO_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
                                     <td>{{ $detail->BIKO }}</td>
-                                    <td class="brg-input">
+                                    <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                         <input type="text"
                                         data-date-format="yyyy/mm/dd"
                                         autocomplete="off" class="datepicker-input date-{{ $item->HACYU_ID }}" style="width: 95px;" 
@@ -596,7 +598,7 @@
                                     </td>
                                 </tr>
                                 <td class="bordered">
-                                    <textarea  class="textarea-cmt" readonly="true">{{ $item->COMMENT1 }}</textarea>
+                                    <textarea class="textarea-cmt{{ $isUserLifeOne ?  ' brg-edit' : ''  }}"{{ $isUserLifeOne ?  '' : ' readonly'  }}>{{ $item->COMMENT1 }}</textarea>
                                 </td>
                                 </tr>
                                
@@ -606,7 +608,7 @@
                                 </tr>
                                 <tr>
                                     <td class="bordered">
-                                        <textarea name="data[{{ $item->HACYU_ID }}][COMMENT2]" class="textarea-cmt brg-input">{{ $item->COMMENT2 }}</textarea>
+                                        <textarea{{ !$isUserLifeOne ?  '' : ' readonly'  }} name="data[{{ $item->HACYU_ID }}][COMMENT2]" class="textarea-cmt brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">{{ $item->COMMENT2 }}</textarea>
                                     </td>
                                 </tr>
                             </tbody>
@@ -708,7 +710,7 @@
                 <!-- ------------- -->
                 
 
-                @if($item->HAISOGYOSYA_MULTI_FLG == 1){
+                @if($item->HAISOGYOSYA_MULTI_FLG == 1)
                 <div class="row mt-1">
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
@@ -770,7 +772,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div style="padding-left: 30px;">                            
                             <input name="data[{{ $item->HACYU_ID }}][NO_DENPYO_FLG]" type="checkbox" <?php if($item->NO_DENPYO_FLG == 1){ echo 'checked';} ?> style="position: relative; top: 4px;" />
-                            <label style="margin-left: 10px;background: #FFF2CC;">送り状なし。　当日お客様にお電話します。</label>
+                            <label style="margin-left: 10px;">送り状なし。　当日お客様にお電話します。</label>
                         </div>
                    </div>
                 </div>

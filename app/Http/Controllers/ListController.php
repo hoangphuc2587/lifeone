@@ -114,7 +114,8 @@ class ListController extends Controller
         $query = $query->skip(($page_click - 1) * $total_row_on_one_page)
         ->take($total_row_on_one_page)
         ->orderBy($field_sort,$query_sort)
-        ->orderBy('T_HACYU.HACYU_ID', 'asc');
+        ->orderBy('T_HACYU.HACYU_ID', 'asc')
+        ->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc');
         $lists = $query->get();
 
         return view('list',compact('isUserLifeOne','lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList', 'arrTotal', 'paramSearch'));

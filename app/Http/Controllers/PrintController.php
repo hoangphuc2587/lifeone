@@ -142,9 +142,11 @@ class PrintController extends Controller
 
     private function displayData($list_id){
         $sourceName = 'ライフワン担当';
+        $isUserLifeOne = true;
         if(Auth::user()->HACYUSAKI_CD != ''){
             $sourceName = '仕入先様名';
-        }
+            $isUserLifeOne = false;
+        }       
         $deliveryCompany = $this->deliveryCompany();
         $data = array();
         $query = $this->getSQLHACYU($list_id);
@@ -154,12 +156,13 @@ class PrintController extends Controller
             $item->HACYUMSAI = $detail;
             $item->FILE = $this->getDataFILE($item->HACYU_ID);
         } 
-        return view('detail', compact('deliveryCompany', 'data', 'sourceName')); 
+        return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne'); 
     }
 
     public function search_print($id)
     {
-         $this->displayData(array($id));
+         $item = $this->displayData(array($id));
+         return view('detail', $item); 
     }
     public function post_search_print(Request $request)
     {
@@ -193,12 +196,32 @@ class PrintController extends Controller
                 return redirect()->route('list');
                 break;
             case 'submit_detail': 
-                $this->displayData($lists_checkboxID);
+                $item = $this->displayData($lists_checkboxID);
+                return view('detail', $item); 
                 break;
             default:
                 break;
         }
     }
+
+    public function get_search_print()
+    {
+        if(session()->has('data_list_checkbox')){
+            if( empty(session()->get('data_list_checkbox')) )
+                return redirect()->route('list');
+        }
+        $data               = [];
+        $lists_checkboxID   = [];        
+        if(session()->has('data_list_checkbox')){
+            $data = session()->get('data_list_checkbox');
+        }
+        
+        foreach($data as $key => $value){
+            $lists_checkboxID[] = substr($value,0,strpos($value,'-'));
+        }
+        $item = $this->displayData($lists_checkboxID);
+        return view('detail', $item); 
+    }    
 
     private function __updateStatus($listID){
         DB::table('T_HACYU')
@@ -212,10 +235,11 @@ class PrintController extends Controller
         $date = $date->format('Y-m-d H:i:s');
         $data = $request->data;
         $user = Auth::user();
-
-        if (isset($request->submit) && $request->submit == 'delete_file'){
+        $HACYU_ID = '0';
+        if (isset($request->submit) && $request->submit == 'delete_file'){            
             foreach($data as $key => $value){
                 $delete_files = '';
+                $HACYU_ID = $key;
                 if (!empty($value['FILE_DELETE'])){
                     $delete_files = $value['FILE_DELETE'];                
                 }
@@ -229,7 +253,7 @@ class PrintController extends Controller
                     ->whereIn('ID',$arrFiles)
                     ->update($TFILE);
                 }
-            }
+            }           
         }
         else{
             foreach($data as $key => $value){
@@ -307,6 +331,10 @@ class PrintController extends Controller
             }
         }
 
-        return redirect()->route('list');
+        if (count($data) > 1){
+             return redirect()->route('get_search_print');
+        }else{
+            return redirect()->route('search_print', array('id' => $HACYU_ID));
+        } 
     }
 }
