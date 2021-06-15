@@ -369,12 +369,12 @@
                  
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
-                            <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2 error "
+                            <button type="submit" name="submit" value="submit_export" class="btn btn-primary mb-2"
                                 style="margin-left: 15px;">CSV</button>
-                            <button type="submit" name="submit" value="submit_print_pdf"
-                                class="btn btn-primary mb-2 error">PDF</button>
-                            <button type="submit" name="submit" value="submit_print_excel"
-                                class="btn btn-primary mb-2 error">Excel</button>
+                            <button type="submit" id="btnDowloadPDF" name="submit" value="submit_print_pdf"
+                                class="btn btn-primary mb-2">PDF</button>
+                            <button type="submit" id="btnDowloadExcel" name="submit" value="submit_print_excel"
+                                class="btn btn-primary mb-2">Excel</button>
                         </div>
                     </div>
                 </div>
@@ -386,6 +386,8 @@
         @if (!empty($data)) 
         <div class="container-fluid" style="margin-top: 100px">
             @foreach ($data as $item)
+            <input type="hidden" class="link-download-pdf" value="{{ $item-> PDF_PATH }}">
+            <input type="hidden" class="link-download-excel" value="{{ $item-> EXCEL_PATH }}">
             <div class="container">
                 <div class="row mt-5">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -425,9 +427,9 @@
                                {{ $item->TAIO_TANT_NAME }}
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <input name="data[{{ $item->HACYU_ID }}][TAIO_CD1]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> class="chkTaiOCd1" style="position: relative; top: 4px;" />
+                                <input name="data[{{ $item->HACYU_ID }}][TAIO_CD1]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> class="{{ $isUserLifeOne ? 'chkTaiOCd1' : 'no-chk' }}" style="position: relative; top: 4px;" />
                                 <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}" style="margin-right: 10px;">対応中</label>
-                                <input name="data[{{ $item->HACYU_ID }}][TAIO_CD2]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" class="ml-1 chkTaiOCd2" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                <input name="data[{{ $item->HACYU_ID }}][TAIO_CD2]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" class="ml-1 {{ $isUserLifeOne ? 'chkTaiOCd2' : 'no-chk' }}" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
                                 <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}">対応完了</label> 
                             </div>
                         </div>                           

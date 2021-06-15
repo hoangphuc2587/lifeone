@@ -522,6 +522,27 @@ $(function(){
         }       
     }) 
 
+    $(document).on('click','#btnDowloadPDF',function(){        
+        var urls = [];
+        $( ".link-download-pdf" ).each(function( index ) {
+            urls.push($(this).val());
+        });
+        if (urls.length > 0){
+            download(urls); 
+        } 
+    })
+
+    $(document).on('click','#btnDowloadExcel',function(){ 
+        var urls = [];
+        $( ".link-download-excel" ).each(function( index ) {
+            urls.push($(this).val());
+        });
+        if (urls.length > 0){
+            download(urls); 
+        } 
+    })    
+    
+
     $(document).on('click','.chkTaiOCd1',function(){  
        if ($(this).is(':checked')){ 
            $('.chkTaiOCd2').prop('checked', false); 
@@ -532,11 +553,11 @@ $(function(){
        if ($(this).is(':checked')){ 
            $('.chkTaiOCd1').prop('checked', false); 
        }    
-    }) 
+    })
 
-    $("#form_detail :input").change(function() {
-       $("#form_detail").data("changed",true);
-    });    
+    // $("#form_detail :input").change(function() {
+    //    $("#form_detail").data("changed",true);
+    // });    
 
     if($('.datepicker-input').length) {
         $('.datepicker-input').datepicker({

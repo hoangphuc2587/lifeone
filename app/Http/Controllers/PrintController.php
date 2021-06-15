@@ -89,6 +89,63 @@ class PrintController extends Controller
     }
 
 
+    private function getOneSQLHACYU($id){
+        $query = DB::table('T_HACYU')
+        ->select(
+        'T_HACYU.HACYU_ID',
+        'T_HACYU.IRAI_DAY',
+        'T_HACYU.STS_CD',
+        'T_HACYU.HACYU_SYBET_CD',
+        'T_HACYU.CO_ADDRESS',
+        'T_HACYU.CO_TELNO',
+        'T_HACYU.CO_FAX',
+        'T_HACYU.CO_TANT_NAME',
+        'T_HACYU.NONYUSAKI_POSTNO',
+        'T_HACYU.NONYUSAKI_NAME',
+        'T_HACYU.NONYUSAKI_ADDRESS',
+        'T_HACYU.NONYUSAKI_TELNO',
+        'T_HACYU.NONYUSAKI_TANT_NAME',
+        'T_HACYU.KENMEI',
+        'T_HACYU.IRAI_YMD_NAME',
+        'T_HACYU.IRAI_YMD',
+        'T_HACYU.MESSAGE',
+        'T_HACYU.COMMENT1',
+        'T_HACYU.COMMENT2',
+        'T_HACYU.HAISO_SYBET_CD',
+        'T_HACYU.IRAI_CD',
+        'T_HACYU.HAISOGYOSYA1',
+        'T_HACYU.DENPYONO1',
+        'T_HACYU.HAISOGYOSYA2',
+        'T_HACYU.DENPYONO2',        
+        'T_HACYU.RENRAKUSAKI2',
+        'T_HACYU.HAISOGYOSYA_MULTI_FLG',
+        'T_HACYU.HAISOGYOSYA3_1_LABEL',
+        'T_HACYU.HAISOGYOSYA3_2_LABEL',
+        'T_HACYU.HAISOGYOSYA3_1',
+        'T_HACYU.DENPYONO3_1',
+        'T_HACYU.HAISOGYOSYA3_2',
+        'T_HACYU.DENPYONO3_2',
+        'T_HACYU.DRIVER_NAME',
+        'T_HACYU.RENRAKUSAKI4',
+        'T_HACYU.NO_DENPYO_FLG',
+        'T_HACYU.BIKO', 
+        'T_HACYU.SYOKEI',
+        'T_HACYU.SORYO',
+        'T_HACYU.SYOHIZEI',
+        'T_HACYU.SUM',
+        'T_HACYU.NEBIKI_SUM',
+        'T_HACYU.PDF_PATH',
+        'T_HACYU.EXCEL_PATH',
+        'T_HACYU.TAIO_CD'
+        )
+        ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
+        ->where('T_HACYU.HACYU_ID', $id);
+
+        $data = $query->first();
+        return $data;
+    }    
+
+
     private function getDataHACYUMSAI($id){
         $query = DB::table('T_HACYUMSAI')
         ->select(
@@ -232,11 +289,11 @@ class PrintController extends Controller
 
     public function postUpdate(Request $request){  
         $date = New \DateTime();  
-        $date = $date->format('Y-m-d H:i:s');
+        $date = $date->format('Y-m-d H:i:s');        
         $data = $request->data;
         $user = Auth::user();
         $HACYU_ID = '0';
-        if (isset($request->submit) && $request->submit == 'delete_file'){            
+        if (isset($request->submit) && $request->submit == 'delete_file'){
             foreach($data as $key => $value){
                 $delete_files = '';
                 $HACYU_ID = $key;
@@ -254,12 +311,30 @@ class PrintController extends Controller
                     ->update($TFILE);
                 }
             }           
-        }
-        else{
+        }elseif(isset($request->submit) && $request->submit == 'submit_export'){
+            $lists_checkboxID = array();
+            $lists_checkboxID2 = array();
+            foreach($data as $key => $value){
+                $lists_checkboxID[] = $key; 
+                $lists_checkboxID2[] = $key.'-0';
+            }
+            $request->session()->put('list_csv',$lists_checkboxID2);
+            $this->__updateStatus($lists_checkboxID);
+            return redirect()->route('export');
+        }elseif(isset($request->submit) && ($request->submit == 'submit_print_pdf' || $request->submit == 'submit_print_excel')){
+            $lists_checkboxID = array();
+            foreach($data as $key => $value){
+                $lists_checkboxID[] = $key;                
+            }            
+            $this->__updateStatus($lists_checkboxID);
+            return redirect()->route('list');
+        }else{
             foreach($data as $key => $value){
                 $HACYU_ID = $key;
                 $HACYU = $value;
                 $details = array();
+                $dataUpdate = array();
+                $driverChange = false;
                 if (isset($value['DETAIL'])){
                    $details = $value['DETAIL'];
                    unset($HACYU['DETAIL']);
@@ -279,6 +354,9 @@ class PrintController extends Controller
                     $HACYU['NO_DENPYO_FLG'] = 0;
                 }
 
+                $oldData = $this->getOneSQLHACYU($HACYU_ID);
+                $arrDateNoHin = array();
+
                 if($user->HACYUSAKI_CD != ''){
                     if (isset($value['TAIO_CD1'])){
                        unset($HACYU['TAIO_CD1']);
@@ -289,9 +367,8 @@ class PrintController extends Controller
                     if (isset($value['COMMENT1'])){
                        unset($HACYU['COMMENT1']);
                     }
-                    $HACYU['UPD_TANTCD'] = $user->TANT_CD;
-                    $HACYU['UPD_YMD'] = $date;
-                    DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($HACYU);
+
+                    $dataUpdate = $HACYU;
 
                     foreach($details as $k => $v){
                         $HACYUMSAI = $v;
@@ -308,6 +385,7 @@ class PrintController extends Controller
                             unset($HACYUMSAI['NOHIN_YMD']);
                         }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
                             $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
+                            $arrDateNoHin[] = $HACYUMSAI['NOHIN_YMD'];
                         }   
                         $HACYUMSAI['UPD_TANTCD'] = $user->TANT_CD;
                         $HACYUMSAI['UPD_YMD'] = $date;             
@@ -319,14 +397,45 @@ class PrintController extends Controller
                     }
                 }else{
                     $dataUpdate = array();
-                    $dataUpdate['TAIO_CD'] = '';
+                    $TAIO_CD = '';
                     if (isset($HACYU['TAIO_CD1']) && $HACYU['TAIO_CD1'] == 'on'){
-                        $dataUpdate['TAIO_CD'] = '01';
+                        $TAIO_CD = '01';
                     }
                     if (isset($HACYU['TAIO_CD2']) && $HACYU['TAIO_CD2'] == 'on'){
-                        $dataUpdate['TAIO_CD'] = '02';
+                        $TAIO_CD = '02';
                     }
-                    $dataUpdate['COMMENT1'] = $HACYU['COMMENT1'];
+                    if ($TAIO_CD != $oldData->TAIO_CD){
+                        $dataUpdate['TAIO_CD'] = $TAIO_CD;
+                    }
+                    if ($HACYU['COMMENT1'] != $oldData->COMMENT1){
+                        $dataUpdate['COMMENT1'] = '【'.date('Y/m/d H:i').' '.$user->TANT_NAME.'】' . $HACYU['COMMENT1'];
+                    }                    
+                }
+                $countNoHin = 0;
+                if (!empty($dataUpdate)){
+                    if (!empty($arrDateNoHin)){
+                        $countNoHin = count(array_count_values($arrDateNoHin));
+                    }
+                    if (in_array($oldData->STS_CD, array('01', '02', '03', '04'))){
+                        if ($countNoHin == 1){
+                            if ($oldData->IRAI_CD == '01' || $oldData->IRAI_CD == '02'){
+                                $dataUpdate['STS_CD'] = '05';    
+                            }elseif ($oldData->IRAI_CD == '03'){
+                                if ($oldData->HACYU_SYBET_CD == '04'){
+                                    $dataUpdate['STS_CD'] = '06';
+                                }else{
+                                    $dataUpdate['STS_CD'] = '10';
+                                }
+                            }
+                        }elseif ($countNoHin == count($arrDateNoHin)){
+                            $dataUpdate['STS_CD'] = '02';
+                        }else{
+                            $dataUpdate['STS_CD'] = '03';
+                        }
+                    
+                    }elseif($oldData->STS_CD == '06' && $driverChange){
+                        $dataUpdate['STS_CD'] = '07';
+                    }
                     $dataUpdate['UPD_TANTCD'] = $user->TANT_CD;
                     $dataUpdate['UPD_YMD'] = $date;
                     DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($dataUpdate);
