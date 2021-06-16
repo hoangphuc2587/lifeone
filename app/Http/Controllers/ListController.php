@@ -112,13 +112,34 @@ class ListController extends Controller
         $page_total = ceil($total_datas/$total_row_on_one_page);
 
         $query = $query->skip(($page_click - 1) * $total_row_on_one_page)
-        ->take($total_row_on_one_page)
-        ->orderBy($field_sort,$query_sort)
-        ->orderBy('T_HACYU.HACYU_ID', 'asc')
-        ->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc');
+        ->take($total_row_on_one_page);
+
+        $query = $this->__getOrder($query,$field_sort,$query_sort, $request);        
         $lists = $query->get();
 
         return view('list',compact('isUserLifeOne','lists','page_click','page_total','page_center','total_datas', 'requestDetails', 'statusList', 'arrTotal', 'paramSearch'));
+    }
+    private function __getOrder($query,$field_sort,$query_sort, Request $request){        
+        if($request->session()->has('sort_list')){
+            $items_sort = $request->session()->get('items_sort');
+            foreach ($items_sort as $value) {
+                if($request->session()->has($value)){
+                    $asc = $request->session()->get($value.'_asc');
+                    if ($value == 'MAKER'){
+                        $query->orderBy('T_HACYUMSAI.'.$value, empty($asc) ? 'asc' : $asc);
+                    }else{
+                        $query->orderBy('T_HACYU.'.$value, empty($asc) ? 'asc' : $asc);
+                    }
+                }
+            }
+
+        }else{
+            $query->orderBy($field_sort, $query_sort);
+            $query->orderBy('T_HACYU.HACYU_ID', 'asc');
+        }
+        $query->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc');
+        return $query;
+
     }
     private function __getCondition($query, Request $request, &$paramSearch){
         if($request->session()->has('search_reply')){
@@ -281,7 +302,32 @@ class ListController extends Controller
         session()->put('list_csv',$request->lists_csv);
     }
     public function field_sort($field_sort,Request $request){
-        $request->session()->put('field_sort',$field_sort);
+        $request->session()->put('sort_list',1);
+        $request->session()->put($field_sort,$field_sort);
+
+
+        if($request->session()->has($field_sort.'_asc')){
+            $asc = $request->session()->get($field_sort.'_asc') == 'asc' ? 'desc' : 'asc' ;
+            $request->session()->put($field_sort.'_asc', $asc);
+        }else{
+            $request->session()->put($field_sort.'_asc','desc');
+        }
+
+        if($request->session()->has('items_sort')){
+            $items_sort = $request->session()->get('items_sort');
+            if (!in_array($field_sort , $items_sort, true)){
+                $items_sort[] = $field_sort;
+            }
+            $request->session()->put('items_sort', $items_sort);
+        }else{
+            $items_sort = array(); 
+            $items_sort[] = $field_sort;
+            $request->session()->put('items_sort', $items_sort);
+        }
+
+
+
+        
         $request->session()->put('page_click',1);
     }
     public function query_sort($query_sort,Request $request){

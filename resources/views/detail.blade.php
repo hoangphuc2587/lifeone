@@ -402,7 +402,7 @@
             @endphp
             <input type="hidden" class="hdHasSTS01" value="{{ $hasSTS01}}">
             
-            <div class="container">
+            <div class="container" style="background: {{ empty($item->IRAI_COLOR) ? 'none' : $item->IRAI_COLOR }}">
                 <div class="row mt-5">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <span data-type="header" style="padding-left: 10px;" ><span id="home">状況：{{ $item->STS_CD_NAME }}</span>
@@ -856,7 +856,8 @@
                             <p>入力内容を保存しますか？</p>
                         </div>
                         <div class="modal-footer" style="justify-content: center;">
-                            <button type="submit" name="submit" value="submit_back_list" class="btn btn-primary btn-update-data">はい</button>
+                            <button type="button" class="btn btn-primary btn-update-data-2">はい</button>
+                            <button style="display:none;" type="submit" name="submit" value="submit_back_list" class="btn btn-primary btn-submit-data-2">はい</button>
                              <button type="button" class="btn btn-primary" id="btnBackList">いいえ</button>                            
                             <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
                         </div>

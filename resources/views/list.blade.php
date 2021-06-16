@@ -273,6 +273,10 @@
     .table2 th, .tdDot {
         vertical-align: middle !important;
     }
+
+    .col-order{
+        cursor: pointer;
+    }
     </style>
 </head>
 
@@ -558,31 +562,31 @@
                                 @if (!$isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th scope="col" class="th2" width="90">依頼内容</th>
-                                <th scope="col" class="th3" width="100">依頼日</th>
-                                <th scope="col" class="th4" width="100">ID</th>
-                                <th scope="col" class="th5" width="120">状況</th>
-                                <th scope="col" class="th6" width="120">メーカー</th>
-                                <th scope="col" class="th7" width="200">配送先情報</th>
-                                <th scope="col" class="th8" width="60">備考有</th>
-                                <th scope="col" class="th9" width="80">納品希望有</th>
-                                <th scope="col" class="th10" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="90">依頼内容</th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="100">依頼日</th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="100">ID</th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="120">状況</th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="120">メーカー</th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="200">配送先情報</th>
+                                <th data-col="COMMENT1" scope="col" class="th8 col-order" width="60">備考有</th>
+                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="80">納品希望有</th>
+                                <th data-col="FREE" scope="col" class="th10 col-order" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
 
                                 @else
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th scope="col" class="th2" width="85">依頼内容</th>
-                                <th scope="col" class="th3" width="85">依頼日</th>
-                                <th scope="col" class="th3" width="65">発注種別</th>
-                                <th scope="col" class="th4" width="95">ID</th>
-                                <th scope="col" class="th5" width="115">状況</th>
-                                <th scope="col" class="th6" width="115">メーカー</th>
-                                <th scope="col" class="th7" width="195">配送先情報</th>
-                                <th scope="col" class="th8" width="60">備考有</th>
-                                <th scope="col" class="th9" width="80">担当者</th>
-                                <th scope="col" class="th9" width="83">対応状況</th>
-                                <th scope="col" class="th9" width="100">最終入荷予定日</th>
-                                <th scope="col" class="th9" width="auto">仕入先様名</th>                                
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="85">依頼内容</th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="85">依頼日</th>
+                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="65">発注種別</th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="95">ID</th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="115">状況</th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="115">メーカー</th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="195">配送先情報</th>
+                                <th data-col="COMMENT2" scope="col" class="th8 col-order" width="60">備考有</th>
+                                <th data-col="TAIO_TANT_CD" scope="col" class="th9 col-order" width="80">担当者</th>
+                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="83">対応状況</th>
+                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="100">最終入荷予定日</th>
+                                <th data-col="HACYUSAKI_NAME" scope="col" class="th9 col-order" width="auto">仕入先様名</th>                                
                                 @endif
                              
                             </tr>
@@ -607,31 +611,31 @@
                                 @if (!$isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th scope="col" class="th2" width="90">依頼内容</th>
-                                <th scope="col" class="th3" width="100">依頼日</th>
-                                <th scope="col" class="th4" width="100">ID</th>
-                                <th scope="col" class="th5" width="120">状況</th>
-                                <th scope="col" class="th6" width="120">メーカー</th>
-                                <th scope="col" class="th7" width="200">配送先情報</th>
-                                <th scope="col" class="th8" width="60">備考有</th>
-                                <th scope="col" class="th9" width="80">納品希望有</th>
-                                <th scope="col" class="th10" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="90">依頼内容</th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="100">依頼日</th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="100">ID</th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="120">状況</th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="120">メーカー</th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="200">配送先情報</th>
+                                <th data-col="COMMENT1" scope="col" class="th8 col-order" width="60">備考有</th>
+                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="80">納品希望有</th>
+                                <th data-col="FREE" scope="col" class="th10 col-order" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
 
                                 @else
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th scope="col" class="th2" width="85">依頼内容</th>
-                                <th scope="col" class="th3" width="85">依頼日</th>
-                                <th scope="col" class="th3" width="65">発注種別</th>
-                                <th scope="col" class="th4" width="95">ID</th>
-                                <th scope="col" class="th5" width="115">状況</th>
-                                <th scope="col" class="th6" width="115">メーカー</th>
-                                <th scope="col" class="th7" width="195">配送先情報</th>
-                                <th scope="col" class="th8" width="60">備考有</th>
-                                <th scope="col" class="th9" width="80">担当者</th>
-                                <th scope="col" class="th9" width="83">対応状況</th>
-                                <th scope="col" class="th9" width="100">最終入荷予定日</th>
-                                <th scope="col" class="th9" width="auto">仕入先様名</th>
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="85"><a>依頼内容</a></th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="85">依頼日</th>
+                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="65">発注種別</th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="95">ID</th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="115">状況</th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="115">メーカー</th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="195">配送先情報</th>
+                                <th data-col="COMMENT2" scope="col" class="th8 col-order" width="60">備考有</th>
+                                <th data-col="TAIO_TANT_CD" scope="col" class="th9 col-order" width="80">担当者</th>
+                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="83">対応状況</th>
+                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="100">最終入荷予定日</th>
+                                <th data-col="HACYUSAKI_NAME" scope="col" class="th9 col-order" width="auto">仕入先様名</th>
                                 @endif
                             </tr>
 

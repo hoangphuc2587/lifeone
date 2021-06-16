@@ -510,9 +510,67 @@ $(function(){
           $("#modalError").modal('show');
           $('html, body').animate({
             scrollTop: $('.error-'+idError).offset().top - 120
-          }, 2000);          
+          }, 2000);
        }
     })
+
+
+    $(document).on('click','.btn-update-data-2',function(){
+       var hasError = false;
+       var idError = '';
+       $( ".hdSTSCD").each(function( index ) {
+            var id = $(this).data('id');
+            $('.error-'+id).fadeOut();
+            var irai = $('.data-irai-cd-'+id).val();
+            var sybet = $('.data-haiso-sybet-cd-'+id).val(); 
+            var multi = $('.data-haiso-multi-flg-'+id).val(); 
+            if ($(this).val() == '06' && sybet == '04' && irai == '03'){
+                $( ".item-hacyu-"+id).each(function( pos ) {
+                    if ($.trim($(this).val()) == ''){
+                      $('.error-'+id).fadeIn();
+                      hasError = true;
+                      idError = id;
+                    }            
+                });
+
+                if (!$('.item-hacyu-chk-'+id).is(':checked')){
+                    $('.error-'+id).fadeIn();
+                    hasError = true;
+                    idError = id;
+                }
+
+
+                if (multi == '1'){
+                    $( ".item-hacyu-2-"+id).each(function( pos2 ) {
+                        if ($.trim($(this).val()) == ''){
+                          $('.error-'+id).fadeIn();
+                          hasError = true;
+                          idError = id;
+                        }
+                    });
+                } 
+            }
+        });
+
+       if(!hasError){
+        $('.btn-submit-data-2').trigger('click');
+       }
+       else{
+          $("#static1").modal('hide');
+          $("#modalError").modal('show');
+          $('html, body').animate({
+            scrollTop: $('.error-'+idError).offset().top - 120
+          }, 2000);
+       }
+    })
+
+
+    $(document).on('click','.col-order',function(){ 
+        var field_sort = $(this).data('col');
+        $.get('/field-sort/'+field_sort,function(data){
+            window.location = '/list';
+        })
+    });
 
 
     $(document).on('click','.btn-add-file',function(){       
