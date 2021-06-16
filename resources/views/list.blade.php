@@ -562,31 +562,31 @@
                                 @if (!$isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="90">依頼内容</th>
-                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="100">依頼日</th>
-                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="100">ID</th>
-                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="120">状況</th>
-                                <th data-col="MAKER" scope="col" class="th6 col-order" width="120">メーカー</th>
-                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="200">配送先情報</th>
-                                <th data-col="COMMENT1" scope="col" class="th8 col-order" width="60">備考有</th>
-                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="80">納品希望有</th>
-                                <th data-col="FREE" scope="col" class="th10 col-order" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="90">依頼内容<?php if(Session::has('IRAI_CD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="100">依頼日<?php if(Session::has('IRAI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_YMD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="100">ID<?php if(Session::has('HACYU_ID')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_ID_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="120">状況<?php if(Session::has('STS_CD')){ echo '<i class="fa fa-caret-'.(session()->get('STS_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="120">メーカー<?php if(Session::has('MAKER')){ echo '<i class="fa fa-caret-'.(session()->get('MAKER_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="200">配送先情報<?php if(Session::has('HAISO_INF')){ echo '<i class="fa fa-caret-'.(session()->get('HAISO_INF_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="COMMENT1" scope="col" class="th8 col-order" width="60">備考有<?php if(Session::has('COMMENT1')){ echo '<i class="fa fa-caret-'.(session()->get('COMMENT1_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="85">納品希望有<?php if(Session::has('NOHIN_KIBO_FLG')){ echo '<i class="fa fa-caret-'.(session()->get('NOHIN_KIBO_FLG_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="FREE" scope="col" class="th10 col-order" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)<?php if(Session::has('FREE')){ echo '<i class="fa fa-caret-'.(session()->get('FREE_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
 
                                 @else
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="85">依頼内容</th>
-                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="85">依頼日</th>
-                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="65">発注種別</th>
-                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="95">ID</th>
-                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="115">状況</th>
-                                <th data-col="MAKER" scope="col" class="th6 col-order" width="115">メーカー</th>
-                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="195">配送先情報</th>
-                                <th data-col="COMMENT2" scope="col" class="th8 col-order" width="60">備考有</th>
-                                <th data-col="TAIO_TANT_CD" scope="col" class="th9 col-order" width="80">担当者</th>
-                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="83">対応状況</th>
-                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="100">最終入荷予定日</th>
-                                <th data-col="HACYUSAKI_NAME" scope="col" class="th9 col-order" width="auto">仕入先様名</th>                                
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="85">依頼内容<?php if(Session::has('IRAI_CD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="85">依頼日<?php if(Session::has('IRAI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_YMD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="70">発注種別<?php if(Session::has('HACYU_SYBET_NAME')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_SYBET_NAME_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="95">ID<?php if(Session::has('HACYU_ID')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_ID_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="100">状況<?php if(Session::has('STS_CD')){ echo '<i class="fa fa-caret-'.(session()->get('STS_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="100">メーカー<?php if(Session::has('MAKER')){ echo '<i class="fa fa-caret-'.(session()->get('MAKER_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="195">配送先情報<?php if(Session::has('HAISO_INF')){ echo '<i class="fa fa-caret-'.(session()->get('HAISO_INF_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="COMMENT2" scope="col" class="th8 col-order" width="60">備考有<?php if(Session::has('COMMENT2')){ echo '<i class="fa fa-caret-'.(session()->get('COMMENT2_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="TAIO_TANT_CD" scope="col" class="th9 col-order" width="80">担当者<?php if(Session::has('TAIO_TANT_CD')){ echo '<i class="fa fa-caret-'.(session()->get('TAIO_TANT_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="80">対応状況<?php if(Session::has('TAIO_CD')){ echo '<i class="fa fa-caret-'.(session()->get('TAIO_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="110">最終入荷予定日<?php if(Session::has('LAST_NKAYOTEI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('LAST_NKAYOTEI_YMD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="HACYUSAKI_NAME" scope="col" class="th9 col-order" width="auto">仕入先様名<?php if(Session::has('HACYUSAKI_NAME')){ echo '<i class="fa fa-caret-'.(session()->get('HACYUSAKI_NAME_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>                                
                                 @endif
                              
                             </tr>
@@ -618,7 +618,7 @@
                                 <th data-col="MAKER" scope="col" class="th6 col-order" width="120">メーカー</th>
                                 <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="200">配送先情報</th>
                                 <th data-col="COMMENT1" scope="col" class="th8 col-order" width="60">備考有</th>
-                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="80">納品希望有</th>
+                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="85">納品希望有</th>
                                 <th data-col="FREE" scope="col" class="th10 col-order" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)</th>
 
                                 @else
@@ -626,15 +626,15 @@
                                     width="90"><a>全てチェック</a></th>
                                 <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="85"><a>依頼内容</a></th>
                                 <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="85">依頼日</th>
-                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="65">発注種別</th>
+                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="70">発注種別</th>
                                 <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="95">ID</th>
-                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="115">状況</th>
-                                <th data-col="MAKER" scope="col" class="th6 col-order" width="115">メーカー</th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="100">状況</th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="100">メーカー</th>
                                 <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="195">配送先情報</th>
                                 <th data-col="COMMENT2" scope="col" class="th8 col-order" width="60">備考有</th>
                                 <th data-col="TAIO_TANT_CD" scope="col" class="th9 col-order" width="80">担当者</th>
-                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="83">対応状況</th>
-                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="100">最終入荷予定日</th>
+                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="80">対応状況</th>
+                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="110">最終入荷予定日</th>
                                 <th data-col="HACYUSAKI_NAME" scope="col" class="th9 col-order" width="auto">仕入先様名</th>
                                 @endif
                             </tr>
