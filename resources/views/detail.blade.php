@@ -537,7 +537,6 @@
                             </thead>
                             <tbody>                                
                                 @foreach ($item->HACYUMSAI as $detail)
-                                <input type="hidden" name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][SPLIT_NO]" value="{{ $detail->SPLIT_NO }}">
                                 <tr class="cacl-total-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">
                                     <td>{{ $detail->HACYUMSAI_ID }}</td>
                                     <td>{{ $detail->CTGORY }}</td>
@@ -545,7 +544,7 @@
                                     <td>{{ $detail->HINBAN }}</td>
                                     <td class="text-right data-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">{{ number_format($detail->TANKA) }}</td>
                                     <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
-                                        <input data-value="{{ $detail->SURYO }}" data-id="{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}" type="text" {{ !$isUserLifeOne ? '' : 'disabled' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][SURYO]" class="txt-suryo" style="width: 100%;text-align: right;" maxlength="10" value="{{ $detail->SURYO }}">
+                                        <input data-value="{{ $detail->SURYO }}" data-id="{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}" type="text" {{ !$isUserLifeOne ? '' : 'disabled' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}-{{ $detail->SPLIT_NO }}][SURYO]" class="txt-suryo" style="width: 100%;text-align: right;" maxlength="10" value="{{ $detail->SURYO }}">
                                     </td>
                                     <td class="text-right">{{ number_format($detail->KINGAK) }}</td>
                                     <td class="text-right">{{ $detail->SIKIRI_RATE }}%</td>
@@ -558,7 +557,7 @@
                                         data-date-format="yyyy/mm/dd" data-value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}"
                                         autocomplete="off" class="{{ !$isUserLifeOne ? 'datepicker-input' : 'no-edit' }} date-{{ $item->HACYU_ID }}" style="width: 95px;"
                                         {{ !$isUserLifeOne ? '' : 'disabled' }} 
-                                        name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
+                                        name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}-{{ $detail->SPLIT_NO }}][{{ $item->IRAI_CD == '03' ? 'NOHIN_YMD' : 'KAITO_NOKI' }}]" value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}">
                                     </td>
                                 </tr>
                                 @endforeach

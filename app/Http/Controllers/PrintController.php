@@ -196,9 +196,28 @@ class PrintController extends Controller
         'T_HACYUMSAI.NYUKA_ID'          
         )
         ->where(['T_HACYUMSAI.DEL_FLG'=> 0])
-        ->where('T_HACYUMSAI.HACYU_ID', $id);
+        ->where('T_HACYUMSAI.HACYU_ID', $id)
+        ->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc')
+        ->orderBy('T_HACYUMSAI.SPLIT_NO', 'asc');
         return $query->get();
     }
+
+    private function getMaxSPLITNO($id){
+        $query = DB::table('T_HACYUMSAI')
+        ->select(
+        DB::raw("MAX(T_HACYUMSAI.SPLIT_NO) AS SPLIT_NO")   
+        )
+        ->where(['T_HACYUMSAI.DEL_FLG'=> 0])
+        ->where('T_HACYUMSAI.HACYUMSAI_ID', $id)
+        ->groupBy('T_HACYUMSAI.HACYUMSAI_ID');
+
+        $rs = $query->first();
+        $no = 0;
+        if (!empty($rs)){
+            $no  = (int)$rs->SPLIT_NO;
+        }
+        return $no;
+    }    
 
     private function getDataFILE($id){
         $query = DB::table('T_FILE')
@@ -328,8 +347,9 @@ class PrintController extends Controller
         $HACYU_ID = '0';
         $hasSTS01 = false;
 
-//         echo '<pre>',print_r($data,1),'</pre>';
-// die;
+        echo '<pre>',print_r($data,1),'</pre>';
+        die;
+
         if (isset($request->submit) && $request->submit == 'delete_file'){
             foreach($data as $key => $value){
                 $delete_files = '';
@@ -413,7 +433,9 @@ class PrintController extends Controller
 
                     foreach($details as $k => $v){
                         $HACYUMSAI = $v;
-                        $HACYUMSAI_ID = $k;
+                        $arrData = explode('-', $k);
+                        $HACYUMSAI_ID = $arrData[0];
+                        $HACYUMSAI['SPLIT_NO'] = $arrData[1];
 
                         $oddDetail = $this->getDataOneHACYUMSAI($HACYU_ID, $HACYUMSAI_ID, $HACYUMSAI['SPLIT_NO']);
 
@@ -468,7 +490,7 @@ class PrintController extends Controller
                             $dataUpdateDetailNew = $dataUpdateDetail;
                             $dataUpdateDetailNew['HACYU_ID'] = $HACYU_ID;
                             $dataUpdateDetailNew['HACYUMSAI_ID'] = $HACYUMSAI_ID;
-                            $dataUpdateDetailNew['SPLIT_NO'] = $HACYUMSAI['SPLIT_NO'] + 1;
+                            $dataUpdateDetailNew['SPLIT_NO'] = $this->getMaxSPLITNO($HACYUMSAI_ID) + 1;
                             $dataUpdateDetailNew['CTGORY'] = $oddDetail->CTGORY;
                             $dataUpdateDetailNew['MAKER'] = $oddDetail->MAKER;
                             $dataUpdateDetailNew['HINBAN'] = $oddDetail->HINBAN;
@@ -514,10 +536,10 @@ class PrintController extends Controller
                                 $dateNoHinOld = str_replace('-', '/', $oddDetail->NOHIN_YMD);
                             }
 
-                            if (!empty($comment2)){
-                                $comment2 .= PHP_EOL;
-                            }
                             if (!empty($dateNoHinChange)){
+                                if (!empty($comment2)){
+                                    $comment2 .= PHP_EOL;
+                                }                                
                                 $comment2 .= '【'.date('Y/m/d H:i').'　'.$dateNoHinOld.' → '.$dateNoHinChange.'】'; 
                             }                             
                         }
