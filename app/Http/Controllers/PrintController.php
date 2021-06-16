@@ -231,7 +231,23 @@ class PrintController extends Controller
         ->where(['T_FILE.DEL_FLG'=> 0])
         ->where('T_FILE.HACYU_ID', $id);
         return $query->get();
-    }    
+    }
+
+    private function getDriverInfo(){
+        $query = DB::table('M_KBN_WEB')
+        ->select(
+        'M_KBN_WEB.KBNMSAI_CD',
+        'M_KBN_WEB.KBNMSAI_NAME'
+        )
+        ->where(['M_KBN_WEB.DEL_FLG'=> 0])
+        ->where('M_KBN_WEB.KBN_CD', '05');
+        $data =  $query->get();
+        $arr = array();
+        foreach ($data as $value) { 
+           $arr[$value->KBNMSAI_CD] = $value->KBNMSAI_NAME;          
+        }
+        return $arr;
+    } 
 
 
     private function deliveryCompany(){
@@ -347,8 +363,8 @@ class PrintController extends Controller
         $HACYU_ID = '0';
         $hasSTS01 = false;
 
-        echo '<pre>',print_r($data,1),'</pre>';
-        die;
+        // echo '<pre>',print_r($data,1),'</pre>';
+        // die;
 
         if (isset($request->submit) && $request->submit == 'delete_file'){
             foreach($data as $key => $value){
@@ -386,6 +402,7 @@ class PrintController extends Controller
             $this->__updateStatus($lists_checkboxID);
             return redirect()->route('list');
         }else{
+            $arrDriverName = $this->getDriverInfo();
             foreach($data as $key => $value){
                 $HACYU_ID = $key;
                 $HACYU = $value;
@@ -545,9 +562,30 @@ class PrintController extends Controller
                         }
 
                     }
-                    //if (!empty($comment2)){
-                        $HACYU['COMMENT2'] = $comment2;
-                    //}
+
+                    $arrItemChange = array('HAISOGYOSYA1', 'DENPYONO1','HAISOGYOSYA2', 'DENPYONO2', 'RENRAKUSAKI2', 'HAISOGYOSYA3_1', 'DENPYONO3_1', 'HAISOGYOSYA3_2', 'DENPYONO3_2' , 'DRIVER_NAME', 'RENRAKUSAKI4', 'NO_DENPYO_FLG', 'BIKO');
+                    $dataChange = array();
+
+                    foreach ($arrItemChange as $itemChange) {
+                        if (isset($HACYU[$itemChange]) && $HACYU[$itemChange]  != $oldData->$itemChange){
+                            if (in_array($itemChange , array('HAISOGYOSYA1', 'HAISOGYOSYA2', 'HAISOGYOSYA3_1', 'HAISOGYOSYA3_2'), true)){
+                                $oldName = isset($arrDriverName[$oldData->$itemChange]) ? $arrDriverName[$oldData->$itemChange] : $oldData->$itemChange;
+                                $newName = isset($arrDriverName[$HACYU[$itemChange]]) ? $arrDriverName[$HACYU[$itemChange]] : $HACYU[$itemChange];
+
+                                $dataChange[] = $oldName.' → '.$newName;
+                            }else{
+                                $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];                            }
+                        }
+                    }                                     
+
+                    if(!empty($dataChange)){
+                        if (!empty($comment2)){
+                            $comment2 .= PHP_EOL;
+                        }                         
+                        $comment2 .= '【'.date('Y/m/d H:i').'　'.implode(', ', $dataChange).'】';  
+                    } 
+
+                    $HACYU['COMMENT2'] = $comment2;
                     $dataUpdate = $HACYU;
                 }else{
                     $dataUpdate = array();
