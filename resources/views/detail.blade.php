@@ -343,6 +343,10 @@
       display: none;
     }
 
+    .total .row .col-12{
+        padding: 0px;
+    }
+
     </style>
 </head>
 
@@ -435,7 +439,8 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">                      
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12"> 
+                        @if($isUserLifeOne)
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                {{ $item->TAIO_TANT_NAME }}
@@ -446,7 +451,8 @@
                                 <input name="data[{{ $item->HACYU_ID }}][TAIO_CD2]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" class="ml-1 {{ $isUserLifeOne ? 'chkTaiOCd2' : 'no-chk' }}" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
                                 <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}">対応完了</label> 
                             </div>
-                        </div>                           
+                        </div>
+                        @endif
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -475,7 +481,7 @@
                                 <tr>
                                     <td width="80" style="vertical-align: middle;">納品場所</td>
                                     <td style="text-align: left; padding-left:5px;"><span>
-                                    〒{{ $item->NONYUSAKI_POSTNO }}<br>{{ $item->NONYUSAKI_NAME }}<br>TEL：{{ $item->NONYUSAKI_TELNO }}<br>{{ $item->NONYUSAKI_TANT_NAME }}</span></td> 
+                                    〒{{ $item->NONYUSAKI_POSTNO }}  {{ $item->NONYUSAKI_ADDRESS }}<br>{{ $item->NONYUSAKI_NAME }}<br>TEL：{{ $item->NONYUSAKI_TELNO }}<br>{{ $item->NONYUSAKI_TANT_NAME }}</span></td> 
                                 </tr> 
                             </tbody>
                         </table>
@@ -567,14 +573,58 @@
                 </div>
 
                 <div class="row total">
-                    <div>
-                        <div>
-                            <span>
-                            小計
-                            </span>
-                            <span class="total-num">{{ number_format($item->SYOKEI) }}</span>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="row">
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12">
+                                <span>
+                                    小計
+                                </span>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right">
+                                <span>{{ number_format($item->SYOKEI) }}</span>
+                            </div> 
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 text-center">
+                                <span>
+                                    値引額合計
+                                </span>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+                                <span>{{ number_format($item->SYOKEI) }}</span>
+                            </div>
                         </div>
-                        <div>
+                        <div class="row">
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12">
+                                <span>
+                                    送料
+                                </span>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right">
+                                <span>{{ number_format($item->SORYO) }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12" style="border-bottom: 1px solid;">
+                                <span>
+                                    消費税
+                                </span>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right" style="border-bottom: 1px solid;">
+                                <span>{{ number_format($item->SYOHIZEI) }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12">
+                                <span>
+                                    合計
+                                </span>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right">
+                                <span>{{ number_format($item->SUM) }}</span>
+                            </div>
+                        </div>                                                                       
+                    </div>                                           
+                        
+                       <!--  <div>
                             <span>
                             送料
                             </span>
@@ -591,16 +641,7 @@
                             合計
                             </span>
                             <span class="total-num">{{ number_format($item->SUM) }}</span>
-                        </div>
-                    </div>
-                    <div class="ml-1">
-                        <div>
-                            <span>
-                            値引額合計
-                            </span>
-                            <span class="total-num-90">{{ number_format($item->NEBIKI_SUM) }}</span>
-                        </div>
-                    </div>
+                        </div>      -->               
                 </div>
 
 
@@ -614,7 +655,10 @@
                                     </td>
                                 </tr>
                                 <td class="bordered">
-                                    <textarea name="data[{{ $item->HACYU_ID }}][COMMENT1]" class="textarea-cmt{{ $isUserLifeOne ?  ' brg-edit' : ''  }}"{{ $isUserLifeOne ?  '' : ' disabled'  }}>{{ $item->COMMENT1 }}</textarea>
+                                    <textarea id="comment1-{{ $item->HACYU_ID }}" name="data[{{ $item->HACYU_ID }}][COMMENT1]" class="textarea-cmt{{ $isUserLifeOne ?  ' brg-edit' : ''  }}"{{ $isUserLifeOne ?  '' : ' disabled'  }}>{{ $item->COMMENT1 }}</textarea>
+                                    <div class="row error-comment1-{{ $item->HACYU_ID }}" style="display:none;">
+                                        <label style="padding-left: 8px;color: #ff0000;">「文字数は1000文字以下で入力してください。」</label>
+                                    </div>                                   
                                 </td>
                                 </tr>
                                
@@ -624,7 +668,11 @@
                                 </tr>
                                 <tr>
                                     <td class="bordered">
-                                        <textarea{{ !$isUserLifeOne ?  '' : ' disabled'  }} name="data[{{ $item->HACYU_ID }}][COMMENT2]" class="textarea-cmt brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">{{ $item->COMMENT2 }}</textarea>
+                                        <textarea{{ !$isUserLifeOne ?  '' : ' disabled'  }} id="comment2-{{ $item->HACYU_ID }}" name="data[{{ $item->HACYU_ID }}][COMMENT2]" class="textarea-cmt brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">{{ $item->COMMENT2 }}</textarea>
+                                        <div class="row error-comment2-{{ $item->HACYU_ID }}" style="display:none;">
+                                            <label style="padding-left: 8px;color: #ff0000;">「文字数は1000文字以下で入力してください。」</label>
+                                        </div>                                             
+                                            
                                     </td>
                                 </tr>
                             </tbody>
@@ -688,7 +736,7 @@
                             <select {{ !$isUserLifeOne ?  '' : ' disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA1]" style="width: 155px;" class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
-                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA1 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -707,7 +755,7 @@
                             <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA2]" style="width: 155px;" class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
-                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA2 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -738,7 +786,7 @@
                             <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_1]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
-                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_1 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA3_1 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -756,7 +804,7 @@
                             <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_2]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
-                                <option value="{{ $option->KBNMSAI_CD }}" {{ $item->HAISOGYOSYA3_2 == $option->KBNMSAI_CD ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
+                                <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA3_2 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -826,7 +874,7 @@
             <input type="hidden" id="hdSourceName" value="{{ $sourceName }}">
             <input type="hidden" id="hdIndex" value="{{ $index_file }}">
             <input type="hidden" id="hdHasSTS01Load" value="{{ $hasSTS01Load ? 1 : 0 }}">
-
+            <input type="hidden" id="hdUserLifeOne" value="{{ $isUserLifeOne ? 1 : 0 }}">
 
         <!-- static modal-->
         <div class="modal fade show" id="static" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="static" aria-hidden="true">

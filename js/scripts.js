@@ -467,10 +467,13 @@ $(function(){
 
     $(document).on('click','.btn-update-data-1',function(){
        var hasError = false;
+       var isComment = false;
        var idError = '';
+       var comment = $('#hdUserLifeOne').val() == '1' ? '1' : '2';
        $( ".hdSTSCD").each(function( index ) {
             var id = $(this).data('id');
             $('.error-'+id).fadeOut();
+            $('.error-comment'+comment+'-'+id).fadeOut();
             var irai = $('.data-irai-cd-'+id).val();
             var sybet = $('.data-haiso-sybet-cd-'+id).val(); 
             var multi = $('.data-haiso-multi-flg-'+id).val(); 
@@ -500,6 +503,15 @@ $(function(){
                     });
                 } 
             }
+
+            var text_c = $('#comment'+comment+'-'+id).val();
+            if (text_c.length > 1000){
+                $('.error-comment'+comment+'-'+id).fadeIn();
+                hasError = true;
+                idError = id;
+                isComment = true;
+            }
+            
         });
 
        if(!hasError){
@@ -508,16 +520,25 @@ $(function(){
        else{
           $("#static").modal('hide');
           $("#modalError").modal('show');
-          $('html, body').animate({
-            scrollTop: $('.error-'+idError).offset().top - 120
-          }, 2000);
+          if (isComment == true){
+              $('html, body').animate({
+                scrollTop: $('.error-comment'+comment+'-'+idError).offset().top -  400
+              }, 2000);
+          }else{
+              $('html, body').animate({
+                scrollTop: $('.error-'+idError).offset().top - 120
+              }, 2000);
+          }
+
        }
     })
 
 
     $(document).on('click','.btn-update-data-2',function(){
        var hasError = false;
+       var isComment = false;
        var idError = '';
+       var comment = $('#hdUserLifeOne').val() == '1' ? '1' : '2';
        $( ".hdSTSCD").each(function( index ) {
             var id = $(this).data('id');
             $('.error-'+id).fadeOut();
@@ -550,6 +571,14 @@ $(function(){
                     });
                 } 
             }
+
+            var text_c = $('#comment'+comment+'-'+id).val();
+            if (text_c.length > 1000){
+                $('.error-comment'+comment+'-'+id).fadeIn();
+                hasError = true;
+                idError = id;
+                isComment = true;
+            }            
         });
 
        if(!hasError){
@@ -558,9 +587,15 @@ $(function(){
        else{
           $("#static1").modal('hide');
           $("#modalError").modal('show');
-          $('html, body').animate({
-            scrollTop: $('.error-'+idError).offset().top - 120
-          }, 2000);
+          if (isComment == true){
+              $('html, body').animate({
+                scrollTop: $('.error-comment'+comment+'-'+idError).offset().top -  400
+              }, 2000);
+          }else{
+              $('html, body').animate({
+                scrollTop: $('.error-'+idError).offset().top - 120
+              }, 2000);
+          }
        }
     })
 
@@ -774,4 +809,33 @@ function download(files) {
     }else {
         return false;
     }
+}
+
+function count_word(string)
+{
+    r1 = new RegExp('[\u3000-\u4DFF]','g');
+    r2 = new RegExp('[\u4E00-\u9FFF]','g');
+    r3 = new RegExp('[\u0E00-\u0E7F]','g');
+    string = string.replace(r1,' {PNK} ');
+    string = string.replace(r2,' {CJK} ');
+    string = string.replace(r3,' {THI} ');
+    //string = string.replace(/(<([^>]+)>)/ig,”") ;
+    string = string.replace(/(\(|\)|\*|\||\+|\”|\’|_|;|:|,|\.|\?)/ig," ") ;
+    string = string.replace(/\s+/ig," ");
+    //string = string.replace(/_+/ig," ");
+    var a = string.split(/[\s+|\\|\/]/g);
+    var count = 0;
+    var pnkCounter = 0;
+    var thiCounter = 0;
+    for (var i=0;i<a.length;i++){
+        if (a[i]=='{PNK}'){
+              pnkCounter++;
+        }else if(a[i]=='{THI}'){
+              thiCounter++;
+        }else if (a[i].length>0){
+              count++;
+        }
+    }
+    count += Math.ceil(pnkCounter/3) + Math.ceil(thiCounter/4);
+    return count;
 }  

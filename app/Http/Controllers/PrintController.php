@@ -568,13 +568,8 @@ class PrintController extends Controller
 
                     foreach ($arrItemChange as $itemChange) {
                         if (isset($HACYU[$itemChange]) && $HACYU[$itemChange]  != $oldData->$itemChange){
-                            if (in_array($itemChange , array('HAISOGYOSYA1', 'HAISOGYOSYA2', 'HAISOGYOSYA3_1', 'HAISOGYOSYA3_2'), true)){
-                                $oldName = isset($arrDriverName[$oldData->$itemChange]) ? $arrDriverName[$oldData->$itemChange] : $oldData->$itemChange;
-                                $newName = isset($arrDriverName[$HACYU[$itemChange]]) ? $arrDriverName[$HACYU[$itemChange]] : $HACYU[$itemChange];
-
-                                $dataChange[] = $oldName.' → '.$newName;
-                            }else{
-                                $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];                            }
+                        
+                            $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];
                         }
                     }                                     
 
