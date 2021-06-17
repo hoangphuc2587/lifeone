@@ -244,7 +244,7 @@ class PrintController extends Controller
         $data =  $query->get();
         $arr = array();
         foreach ($data as $value) { 
-           $arr[$value->KBNMSAI_CD] = $value->KBNMSAI_NAME;          
+           $arr[] = $value->KBNMSAI_NAME;          
         }
         return $arr;
     } 
@@ -280,8 +280,9 @@ class PrintController extends Controller
         if(session()->has('hasSTS01')){           
             $hasSTS01Load = true;
             session()->forget('hasSTS01');
-        }        
-        return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne' ,'hasSTS01Load'); 
+        }
+        $driverList = $this->getDriverInfo();       
+        return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne' ,'hasSTS01Load', 'driverList'); 
     }
 
     public function search_print($id)
@@ -442,6 +443,7 @@ class PrintController extends Controller
                     }
                     $comment2 = '';
                     $comment2Private = $oldData->COMMENT2;
+                    $isChangeComment = false;
                     if(empty(trim($HACYU['COMMENT2']))){
                         $comment2Private = '';
                     }elseif ($HACYU['COMMENT2'] != $oldData->COMMENT2){
@@ -450,6 +452,7 @@ class PrintController extends Controller
                         }else{
                             $comment2Private = $HACYU['COMMENT2'];
                         }
+                        $isChangeComment = true;
                     }
 
                     foreach($details as $k => $v){
@@ -584,10 +587,19 @@ class PrintController extends Controller
                         $comment2 .= '【'.date('Y/m/d H:i').'　'.implode(', ', $dataChange).'】';  
                     } 
 
-                    if (!empty($comment2)){
-                        $comment2 .= PHP_EOL;
+                    if ($isChangeComment){
+                        if (!empty($comment2)){
+                            $comment2 .= PHP_EOL;
+                        }
+                        $comment2 .= $comment2Private;
                     }
-                    $comment2 .= $comment2Private;
+                    else{
+                        if (!empty($comment2)){
+                            $comment2Private .= PHP_EOL;
+                        }
+                        $comment2Private .= $comment2;
+                        $comment2 = $comment2Private;
+                    }
                     $HACYU['COMMENT2'] = $comment2;
                     $dataUpdate = $HACYU;
                 }else{

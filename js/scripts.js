@@ -781,6 +781,13 @@ $(function(){
             $("#modalOrder").modal('show');
         }
     }
+
+    $('.autocomplete').autocomplete({
+        source: driverList,
+        minLength: 0
+    }).focus(function(){            
+        $(this).data("uiAutocomplete").search($(this).val());
+    });    
 })
 
 function download(files) {

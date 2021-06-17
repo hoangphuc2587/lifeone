@@ -347,6 +347,19 @@
         padding: 0px;
     }
 
+    .ui-autocomplete{
+        background-color: #FFF2CC !important;
+        width: 260px;
+        list-style: none;
+        height: 300px;
+        overflow: auto;
+        border: 1px solid #ccc;
+    }
+
+    .ui-autocomplete li{
+        margin-left: -30px !important;
+    }
+
     </style>
 </head>
 
@@ -752,12 +765,9 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ 配送業者</label>
-                            <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA2]" style="width: 155px;" class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
-                                <option></option>
-                                @foreach ($deliveryCompany as $option)
-                                <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA2 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
-                                @endforeach
-                            </select>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA2]" class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }} autocomplete" value="{{ $item->HAISOGYOSYA2 }}" type="text" placeholder=""  style="width: 155px;"/>
+
+                            
                         </div>
                    </div>
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -1011,13 +1021,15 @@
             </div>
         </div>
 
-    <!-- <script src="{{ URL::asset('js/jquery.min.js') }}"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
     <!-- <script src="http://code.jquery.com/jquery-1.7.2.js"></script> -->
     <script src="{{ URL::asset('js/tether.min.js') }}"></script>
     <script src="{{ URL::asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script>    
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
-    
+    <script>
+    var driverList = {!! json_encode($driverList) !!};
+    </script>    
     <script src="{{ URL::asset('js/scripts.js') }}"></script>
 </body>
 
