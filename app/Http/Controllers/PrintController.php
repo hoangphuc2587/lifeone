@@ -697,7 +697,7 @@ class PrintController extends Controller
         if (isset($request->submit) && $request->submit == 'submit_back_list' && !$hasSTS01){
             return redirect()->route('list');
         }else{
-            if($hasSTS01){
+            if($hasSTS01 && $request->submit == 'submit_back_list'){
               $request->session()->put('hasSTS01',1);  
             }            
             if (count($data) > 1){
