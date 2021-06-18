@@ -588,6 +588,7 @@ class PrintController extends Controller
                         if (isset($HACYU[$itemChange]) && $HACYU[$itemChange]  != $oldData->$itemChange){
                         
                             $dataChange[] = (empty($oldData->$itemChange) ? '' : $oldData->$itemChange.' → ').$HACYU[$itemChange];
+                            $driverChange = true;
                         }
                     }                                     
 
@@ -640,20 +641,21 @@ class PrintController extends Controller
                     if (!empty($arrDateNoHin)){
                         $countNoHin = count($arrDateNoHin);
                     }
+
                     if (in_array($oldData->STS_CD, array('01', '02', '03', '04'))){
-                        if ($countNoHin == count($details)){                            
+                        if ($countNoHin == count($details)){
                             if ($oldData->IRAI_CD == '01' || $oldData->IRAI_CD == '02'){
                                 $dataUpdate['STS_CD'] = '05';    
                             }elseif ($oldData->IRAI_CD == '03'){
-                                if ($oldData->HACYU_SYBET_CD == '04'){
+                                if ($oldData->HAISO_SYBET_CD == '04'){
                                     $dataUpdate['STS_CD'] = '06';
                                 }else{
                                     $dataUpdate['STS_CD'] = '10';
                                 }
                             }
-                        }elseif ($countNoHin == 0){                           
+                        }elseif ($countNoHin == 0){
                             $dataUpdate['STS_CD'] = '02';
-                        }else{                         
+                        }else{
                             $dataUpdate['STS_CD'] = '03';
                         }
                     
