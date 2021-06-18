@@ -449,13 +449,13 @@ class PrintController extends Controller
                     $isChangeComment = false;
                     if(empty(trim($HACYU['COMMENT2']))){
                         $comment2Private = '';
-                    }elseif ($HACYU['COMMENT2'] != $oldData->COMMENT2){
+                    }elseif (trim($HACYU['COMMENT2']) != trim($oldData->COMMENT2)){
                         if (empty($oldData->COMMENT2)){
                             $comment2Private = '【'.date('Y/m/d H:i').'】' . $HACYU['COMMENT2'];
                         }else{
                             $comment2Private = $HACYU['COMMENT2'];
                         }
-                        $isChangeComment = true;
+                        $isChangeComment = true;                        
                     }
 
                     foreach($details as $k => $v){
@@ -469,15 +469,12 @@ class PrintController extends Controller
                         if (isset($HACYUMSAI['SURYO']) && $HACYUMSAI['SURYO'] == ''){
                             $HACYUMSAI['SURYO'] = 0;
                         }
-                        if (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] == ''){
-                            unset($HACYUMSAI['KAITO_NOKI']);
-                        }elseif (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
+                        if (isset($HACYUMSAI['KAITO_NOKI']) && $HACYUMSAI['KAITO_NOKI'] != ''){
                             $HACYUMSAI['KAITO_NOKI'] = str_replace('/', '-', $HACYUMSAI['KAITO_NOKI']);
                             $arrDateNoHin[] = $HACYUMSAI['KAITO_NOKI'];
                         }
-                        if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] == ''){
-                            unset($HACYUMSAI['NOHIN_YMD']);
-                        }elseif (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
+
+                        if (isset($HACYUMSAI['NOHIN_YMD']) && $HACYUMSAI['NOHIN_YMD'] != ''){
                             $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
                             $arrDateNoHin[] = $HACYUMSAI['NOHIN_YMD'];
                         }
@@ -492,11 +489,15 @@ class PrintController extends Controller
                             $split = true;                            
                         }
 
-                        if(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){
+                        if(empty($HACYUMSAI['KAITO_NOKI'])){
+                            $dataUpdateDetail['KAITO_NOKI'] = null;
+                        }elseif(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){
                             $dataUpdateDetail['KAITO_NOKI'] = $HACYUMSAI['KAITO_NOKI'];
                         }
 
-                        if(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
+                        if(empty($HACYUMSAI['NOHIN_YMD'])){
+                            $dataUpdateDetail['NOHIN_YMD'] = null;
+                        }elseif(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
                             $dataUpdateDetail['NOHIN_YMD'] = $HACYUMSAI['NOHIN_YMD'];
                         }                        
 
@@ -554,17 +555,23 @@ class PrintController extends Controller
                             }                            
                             $comment2 .= '【'.date('Y/m/d H:i').'　('.$oddDetail->SURYO.')'.( !empty($dateNoHinChange) ? ':'.$dateNoHinOld.' → ' : '' ).'('.$new_suryo.')'.( !empty($dateNoHinChange) ? ':'.$dateNoHinChange : '' ).'】';
                         }else{
-                            if(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){                               
+                            if(empty($HACYUMSAI['KAITO_NOKI'])){
+                                $dateNoHinChange = '';
+                                $dateNoHinOld = str_replace('-', '/', $oddDetail->KAITO_NOKI);
+                            }elseif(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){                               
                                 $dateNoHinChange = str_replace('-', '/', $HACYUMSAI['KAITO_NOKI']);
                                 $dateNoHinOld = str_replace('-', '/', $oddDetail->KAITO_NOKI);
                             }
 
-                            if(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
+                            if(empty($HACYUMSAI['NOHIN_YMD'])){
+                                $dateNoHinChange = '';
+                                $dateNoHinOld = str_replace('-', '/', $oddDetail->NOHIN_YMD);
+                            }elseif(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
                                 $dateNoHinChange = str_replace('-', '/', $HACYUMSAI['NOHIN_YMD']);
                                 $dateNoHinOld = str_replace('-', '/', $oddDetail->NOHIN_YMD);
                             }
 
-                            if (!empty($dateNoHinChange)){
+                            if (!empty($dateNoHinChange) || (empty($HACYUMSAI['KAITO_NOKI']) && !empty($oddDetail->KAITO_NOKI)) || (empty($HACYUMSAI['NOHIN_YMD'])&& !empty($oddDetail->NOHIN_YMD))){
                                 if (!empty($comment2)){
                                     $comment2 .= PHP_EOL;
                                 }                                
@@ -620,7 +627,7 @@ class PrintController extends Controller
                     }
                     if (empty($HACYU['COMMENT1'])){
                         $dataUpdate['COMMENT1']  = '';
-                    }elseif ($HACYU['COMMENT1'] != $oldData->COMMENT1){
+                    }elseif (trim($HACYU['COMMENT1']) != trim($oldData->COMMENT1)){
                         if (empty($oldData->COMMENT1)){
                             $dataUpdate['COMMENT1'] = '【'.date('Y/m/d H:i').' '.$user->TANT_NAME.'】' . $HACYU['COMMENT1'];
                         }else{
@@ -631,10 +638,10 @@ class PrintController extends Controller
                 $countNoHin = 0;
                 if (!empty($dataUpdate)){
                     if (!empty($arrDateNoHin)){
-                        $countNoHin = count(array_count_values($arrDateNoHin));
+                        $countNoHin = count($arrDateNoHin);
                     }
                     if (in_array($oldData->STS_CD, array('01', '02', '03', '04'))){
-                        if ($countNoHin == 1){
+                        if ($countNoHin == count($details)){                            
                             if ($oldData->IRAI_CD == '01' || $oldData->IRAI_CD == '02'){
                                 $dataUpdate['STS_CD'] = '05';    
                             }elseif ($oldData->IRAI_CD == '03'){
@@ -644,9 +651,9 @@ class PrintController extends Controller
                                     $dataUpdate['STS_CD'] = '10';
                                 }
                             }
-                        }elseif ($countNoHin == count($arrDateNoHin)){
+                        }elseif ($countNoHin == 0){                           
                             $dataUpdate['STS_CD'] = '02';
-                        }else{
+                        }else{                         
                             $dataUpdate['STS_CD'] = '03';
                         }
                     

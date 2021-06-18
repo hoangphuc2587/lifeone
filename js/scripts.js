@@ -120,7 +120,12 @@ $(function(){
     })    
 
     $(document).on('click','#btn-back',function(){
-        $("#static1").modal('show');
+        if($("#form_detail").data("changed")){
+            $("#static1").modal('show');
+        }else{
+            $('#btnBackList').trigger('click'); 
+        }
+        
     })
 
     $(document).on('click','.search_reply',function(){
@@ -305,12 +310,16 @@ $(function(){
         }else{
             var urls = [];
             var v  = $(this).val();
+            var idOrder = '0';
             for(let i = 0 ; i < data.length ; i++){
-                if (v == 'submit_print_pdf'){
-                    urls.push($("#chk"+data[i]).data('pdf'));
-                }else if (v == 'submit_print_excel'){
-                    urls.push($("#chk"+data[i]).data('excel'));
+                if (data[i] != idOrder){
+                    if (v == 'submit_print_pdf'){
+                        urls.push($("#chk"+data[i]).data('pdf'));
+                    }else if (v == 'submit_print_excel'){
+                        urls.push($("#chk"+data[i]).data('excel'));
+                    }                    
                 }
+                idOrder = data[i];
             }        
             if (urls.length > 0){
                 download(urls); 
@@ -816,33 +825,4 @@ function download(files) {
     }else {
         return false;
     }
-}
-
-function count_word(string)
-{
-    r1 = new RegExp('[\u3000-\u4DFF]','g');
-    r2 = new RegExp('[\u4E00-\u9FFF]','g');
-    r3 = new RegExp('[\u0E00-\u0E7F]','g');
-    string = string.replace(r1,' {PNK} ');
-    string = string.replace(r2,' {CJK} ');
-    string = string.replace(r3,' {THI} ');
-    //string = string.replace(/(<([^>]+)>)/ig,”") ;
-    string = string.replace(/(\(|\)|\*|\||\+|\”|\’|_|;|:|,|\.|\?)/ig," ") ;
-    string = string.replace(/\s+/ig," ");
-    //string = string.replace(/_+/ig," ");
-    var a = string.split(/[\s+|\\|\/]/g);
-    var count = 0;
-    var pnkCounter = 0;
-    var thiCounter = 0;
-    for (var i=0;i<a.length;i++){
-        if (a[i]=='{PNK}'){
-              pnkCounter++;
-        }else if(a[i]=='{THI}'){
-              thiCounter++;
-        }else if (a[i].length>0){
-              count++;
-        }
-    }
-    count += Math.ceil(pnkCounter/3) + Math.ceil(thiCounter/4);
-    return count;
-}  
+} 
