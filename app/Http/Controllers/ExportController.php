@@ -43,7 +43,7 @@ class ExportController extends Controller implements FromCollection, WithHeading
          'T_HACYU.SUM',
          'T_HACYU.NEBIKI_SUM',
          'T_HACYU.COMMENT1',
-         'T_HACYU.IRAI_CD',
+         'T_HACYU.IRAI_CD'
         )
         ->whereIn('T_HACYU.HACYU_ID',$lists_checkboxID)
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])

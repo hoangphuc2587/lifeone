@@ -999,6 +999,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="link-home-url" value="{{ URL::to('/') }}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>

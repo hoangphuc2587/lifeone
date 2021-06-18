@@ -2,7 +2,7 @@ const windowWidth = parseInt(window.innerWidth);
 let takeTotalRowOnPage = JSON.parse(sessionStorage.getItem('takeTotalRowOnPage'));
 if((windowWidth <= 768) && !takeTotalRowOnPage && window.location.pathname == '/list'){
     $.ajax({
-        url : 'take-total-row-on-one-page/' + 10,
+        url : $("#link-home-url").val() + '/take-total-row-on-one-page/' + 10,
         success:function(data){
             sessionStorage.setItem('takeTotalRowOnPage',JSON.stringify('true'));
             window.location.reload();
@@ -31,7 +31,7 @@ $(function(){
     $('body').on('change','#icb8hk',function(){
         var total_row_on_one_page = $(this).val();
         $.ajax({
-            url : 'take-total-row-on-one-page/' + total_row_on_one_page,
+            url : $("#link-home-url").val() +'/take-total-row-on-one-page/' + total_row_on_one_page,
             success:function(data){
                 window.location.reload();
             }
@@ -40,15 +40,15 @@ $(function(){
     
     $('body').on('change','#illur5',function(){
         var field_sort = $(this).val();
-        $.get('/field-sort/'+field_sort,function(data){
-            window.location = '/list';
+        $.get($("#link-home-url").val() + '/field-sort/'+field_sort,function(data){
+            window.location = $("#link-home-url").val() + '/list';
         })
     });
     $('body').on('change','#imrevo',function(){
         var query_sort = $(this).val();
         console.log(query_sort)
-        $.get('/query-sort/'+query_sort,function(){
-            window.location = '/list';
+        $.get($("#link-home-url").val() +'/query-sort/'+query_sort,function(){
+           window.location = $("#link-home-url").val() + '/list';
         })
     })
     $(document).on('click','#check_all',function(){
@@ -93,7 +93,7 @@ $(function(){
             sessionStorage.setItem('data_list_checkbox',JSON.stringify(data_list_checkbox));
         }  
         $.ajax({
-            url  : '/get-list-checkbox',
+            url  : $("#link-home-url").val() + '/get-list-checkbox',
             type : 'POST',
             cache : false,
             data : {data_list_checkbox:data_list_checkbox} ,
@@ -114,7 +114,7 @@ $(function(){
         {
            $("#modalOrder").modal('show');
         }else{
-           window.location = '/list';            
+           window.location = $("#link-home-url").val() + '/list';            
         }
 
     })    
@@ -130,14 +130,14 @@ $(function(){
 
     $(document).on('click','.search_reply',function(){
         var search_reply = $(this)[0];
-        $.get('/search-reply/'+search_reply.checked,function(data){
-            window.location = '/list';
+        $.get($("#link-home-url").val() + '/search-reply/'+search_reply.checked,function(data){
+            window.location = $("#link-home-url").val() + '/list';
         })
     })
     $(document).on('click','.search_no_reply',function(){
         var search_reply = $(this)[0];
-        $.get('/search-no-reply/'+search_reply.checked,function(data){
-            window.location = '/list';
+        $.get($("#link-home-url").val() + '/search-no-reply/'+search_reply.checked,function(data){
+            window.location = $("#link-home-url").val() + '/list';
         })   
     })
     $(document).on('click','.search_by_item',function(){
@@ -168,7 +168,7 @@ $(function(){
             id = input_id;
         }        
         $.ajax({
-            url     : '/search-list-by-item',
+            url     : $("#link-home-url").val() + '/search-list-by-item',
             type    : 'POST',
             data    : 
             {
@@ -187,13 +187,13 @@ $(function(){
             cache   : false,
             success : function(data){
                 console.log(data)
-                window.location = '/list';
+                window.location = $("#link-home-url").val() + '/list';
             }
         });
         return;
     })
     $(document).on('click','#home',function(){
-        window.location = '/home';
+        window.location = $("#link-home-url").val() + '/home';
     })
     function browserName(){
         var Browser = navigator.userAgent;
@@ -354,7 +354,7 @@ $(function(){
         } 
         $.ajax({
             cache : false,
-            url  : '/get-list-checkbox',
+            url  : $("#link-home-url").val() + '/get-list-checkbox',
             type : 'POST',
             data : {data_list_checkbox:data_list_checkbox} ,
             success:function(data){
@@ -389,7 +389,7 @@ $(function(){
             if (data_list_checkbox.length > 0){
                 $.ajax({
                     cache : false,
-                    url  : '/get-list-checkbox',
+                    url  : $("#link-home-url").val() + '/get-list-checkbox',
                     type : 'POST',
                     data : {data_list_checkbox:data_list_checkbox} ,
                     success:function(data){
@@ -446,7 +446,7 @@ $(function(){
             sessionStorage.setItem('data_list_checkbox',JSON.stringify(data_list_checkbox));
         }  
         $.ajax({
-            url  : '/get-list-checkbox',
+            url  : $("#link-home-url").val() + '/get-list-checkbox',
             type : 'POST',
             cache : false,
             data : {data_list_checkbox:data_list_checkbox} ,
@@ -611,8 +611,8 @@ $(function(){
 
     $(document).on('click','.col-order',function(){ 
         var field_sort = $(this).data('col');
-        $.get('/field-sort/'+field_sort,function(data){
-            window.location = '/list';
+        $.get($("#link-home-url").val() + '/field-sort/'+field_sort,function(data){
+            window.location = $("#link-home-url").val() + '/list';
         })
     });
 
@@ -791,12 +791,14 @@ $(function(){
         }
     }
 
-    $('.autocomplete').autocomplete({
-        source: driverList,
-        minLength: 0
-    }).focus(function(){            
-        $(this).data("uiAutocomplete").search($(this).val());
-    });    
+    if($('.autocomplete').length) {
+        $('.autocomplete').autocomplete({
+            source: driverList,
+            minLength: 0
+        }).focus(function(){            
+            $(this).data("uiAutocomplete").search($(this).val());
+        });
+    }    
 })
 
 function download(files) {
