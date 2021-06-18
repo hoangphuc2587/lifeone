@@ -154,6 +154,7 @@ class PrintController extends Controller
         'T_HACYUMSAI.MAKER',
         'T_HACYUMSAI.HINBAN',
         'T_HACYUMSAI.TANKA',
+        'T_HACYUMSAI.ZEINUKI_TANKA',
         'T_HACYUMSAI.SURYO',
         'T_HACYUMSAI.KINGAK',
         'T_HACYUMSAI.SIKIRI_RATE',
@@ -183,6 +184,7 @@ class PrintController extends Controller
         'T_HACYUMSAI.MAKER',
         'T_HACYUMSAI.HINBAN',
         'T_HACYUMSAI.TANKA',
+        'T_HACYUMSAI.ZEINUKI_TANKA',
         'T_HACYUMSAI.SURYO',
         'T_HACYUMSAI.KINGAK',
         'T_HACYUMSAI.SIKIRI_RATE',
@@ -312,7 +314,7 @@ class PrintController extends Controller
         }
         switch ($request->submit) {
             case 'submit_export':
-                $request->session()->put('list_csv',$request->check_box_list);
+                $request->session()->put('list_csv',$lists_checkboxID);
                 $this->__updateStatus($lists_checkboxID);
                 return redirect()->route('export');
                 break;
@@ -386,22 +388,23 @@ class PrintController extends Controller
                 }
             }           
         }elseif(isset($request->submit) && $request->submit == 'submit_export'){
-            $lists_checkboxID = array();
-            $lists_checkboxID2 = array();
+            $lists_checkboxID = array();          
             foreach($data as $key => $value){
-                $lists_checkboxID[] = $key; 
-                $lists_checkboxID2[] = $key.'-0';
+                $lists_checkboxID[] = $key;                 
             }
-            $request->session()->put('list_csv',$lists_checkboxID2);
+            $request->session()->put('list_csv',$lists_checkboxID);
             $this->__updateStatus($lists_checkboxID);
             return redirect()->route('export');
         }elseif(isset($request->submit) && ($request->submit == 'submit_print_pdf' || $request->submit == 'submit_print_excel' || $request->submit == 'order_sale')){
             $lists_checkboxID = array();
             foreach($data as $key => $value){
-                $lists_checkboxID[] = $key;                
+                $HACYU_ID = $key;
+                $lists_checkboxID[] = $key;
             }            
             $this->__updateStatus($lists_checkboxID);
-            return redirect()->route('list');
+            if ($request->submit == 'order_sale'){
+               return redirect()->route('list');
+            }            
         }else{
             foreach($data as $key => $value){
                 $HACYU_ID = $key;
@@ -519,6 +522,7 @@ class PrintController extends Controller
                             $dataUpdateDetailNew['MAKER'] = $oddDetail->MAKER;
                             $dataUpdateDetailNew['HINBAN'] = $oddDetail->HINBAN;
                             $dataUpdateDetailNew['TANKA'] = $oddDetail->TANKA;
+                            $dataUpdateDetailNew['ZEINUKI_TANKA'] = $oddDetail->ZEINUKI_TANKA;
                             $dataUpdateDetailNew['SIKIRI_RATE'] = $oddDetail->SIKIRI_RATE;
                             $dataUpdateDetailNew['NEBIKI_TANKA'] = $oddDetail->NEBIKI_TANKA;
                             $dataUpdateDetailNew['DEL_FLG'] = 0;
@@ -541,7 +545,7 @@ class PrintController extends Controller
 
                             $new_suryo = $oddDetail->SURYO - $HACYUMSAI['SURYO'];
                             $dataUpdateDetailNew['SURYO'] = $new_suryo;
-                            $dataUpdateDetailNew['KINGAK'] = $new_suryo * $oddDetail->TANKA;
+                            $dataUpdateDetailNew['KINGAK'] = $new_suryo * $oddDetail->ZEINUKI_TANKA;
                             $dataUpdateDetailNew['NEBIKI_GAK'] = $new_suryo * $oddDetail->NEBIKI_TANKA;
                             DB::table('T_HACYUMSAI')->insert($dataUpdateDetailNew);
 

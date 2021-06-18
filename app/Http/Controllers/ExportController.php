@@ -22,17 +22,8 @@ class ExportController extends Controller implements FromCollection, WithHeading
         $field_sort         =  session()->get('field_sort');
         $query_sort         =  session()->get('query_sort');
         if(session()->has('list_csv')){
-            $data = session()->get('list_csv');
+            $lists_checkboxID = session()->get('list_csv');
         }
-        if(session()->has('data_list_checkbox')){
-            $data = session()->get('data_list_checkbox');
-        }
-        
-        foreach($data as $key => $value){
-            $lists_checkboxID[] = substr($value,0,strpos($value,'-'));
-        }
-
-
         $query = DB::table('T_HACYU')
         ->select(
          'T_HACYU.IRAI_YMD',
@@ -81,7 +72,9 @@ class ExportController extends Controller implements FromCollection, WithHeading
             )       
             ->where(['T_HACYUMSAI.DEL_FLG'=> 0, 'T_HACYUMSAI.HACYU_ID'=> $value->HACYU_ID]);  
 
+           
             $data = $subQuery->get();
+            
             if (count($data) > 0){
                 foreach($data as $k => $v){
                     $lists_csv[] = array(

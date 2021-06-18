@@ -634,27 +634,8 @@
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right">
                                 <span>{{ number_format($item->SUM) }}</span>
                             </div>
-                        </div>                                                                       
-                    </div>                                           
-                        
-                       <!--  <div>
-                            <span>
-                            送料
-                            </span>
-                            <span class="total-num">{{ number_format($item->SORYO) }}</span>
                         </div>
-                        <div style="border-bottom: 1px solid;">
-                            <span>
-                            消費税
-                            </span>
-                            <span class="total-num-98">{{ number_format($item->SYOHIZEI) }}</span>
-                        </div>
-                        <div>
-                            <span>
-                            合計
-                            </span>
-                            <span class="total-num">{{ number_format($item->SUM) }}</span>
-                        </div>      -->               
+                    </div>
                 </div>
 
 
@@ -738,10 +719,8 @@
 
                 <div class="row mt-4">
                     <label style="padding-left: 25px;">【ドライバー情報】</label>
+                    <label class="row error-{{ $item->HACYU_ID }}" style="padding-left: 25px;color: #ff0000;display: none;">「いずれかの項目を全て入力してください。」</label>
                 </div>
-                <div class="row error-{{ $item->HACYU_ID }}" style="display: none;">
-                    <label style="padding-left: 25px;color: #ff0000;">【ドライバー情報】の右隣に「いずれかの項目を全て入力してください。」</label>
-                </div>                 
                 <div class="row">
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
