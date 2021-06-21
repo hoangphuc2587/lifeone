@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Session;
 use DateTime;
+use URL;
 class PrintController extends Controller
 {
     public function __construct()
@@ -35,7 +36,7 @@ class PrintController extends Controller
         'T_HACYU.IRAI_DAY',
         DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_CD_NAME"),
         DB::raw("(SELECT KBNMSAI_BIKO FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.KBN_CD = '00' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS IRAI_COLOR"),      
-        DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = '03' AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),       
+        DB::raw("(SELECT KBNMSAI_NAME FROM M_KBN_WEB WHERE M_KBN_WEB.KBNMSAI_CD = T_HACYU.STS_CD AND M_KBN_WEB.KBN_CD = T_HACYU.IRAI_CD AND M_KBN_WEB.DEL_FLG = 0 LIMIT 1) AS STS_CD_NAME"),       
         'T_HACYU.HACYUSAKI_NAME',
         'T_HACYU.TAIO_CD',       
         DB::raw("(SELECT TANT_NAME FROM M_TANT_WEB WHERE M_TANT_WEB.TANT_CD = T_HACYU.TAIO_TANT_CD AND M_TANT_WEB.DEL_FLG = 0 LIMIT 1) AS TAIO_TANT_NAME"),
@@ -677,13 +678,13 @@ class PrintController extends Controller
                         //Start of Upload Files
                         $fileName = time(). rand(1111,
                                     9999) . '.' . $item->getClientOriginalExtension();
-                        $path = './uploads/'.$HACYU_ID;
+                        $path = './download/'.$HACYU_ID;
                         $item->move($path, $fileName);
                         DB::table('T_FILE')->insert([
                             'HACYU_ID' => $HACYU_ID,
                             'JYUNJO' => $a,
                             'FILE_NAME' => $fileName,
-                            'FILE_PATH' => '/uploads/'.$HACYU_ID.'/'.$fileName,
+                            'FILE_PATH' => URL::to('/').'/download/'.$HACYU_ID.'/'.$fileName,
                             'TANT_CD' => $user->TANT_CD,
                             'UPD_TANTCD' => $user->TANT_CD,
                             'UPD_YMD' => $date

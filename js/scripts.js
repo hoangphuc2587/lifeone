@@ -650,7 +650,6 @@ $(function(){
                 var line = $(this).data('id');
                 var id_db = $(this).data('tfile');
                 if ($(this).is(':checked')){
-                    $(".line-"+line).remove();
                     if (id_db != ''){
                       arrID.push(id_db);    
                     }                

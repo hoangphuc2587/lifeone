@@ -602,7 +602,7 @@
                                 </span>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
-                                <span>{{ number_format($item->SYOKEI) }}</span>
+                                <span>{{ number_format($item->NEBIKI_SUM) }}</span>
                             </div>
                         </div>
                         <div class="row">
