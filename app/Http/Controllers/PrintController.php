@@ -375,10 +375,26 @@ class PrintController extends Controller
                 $delete_files = '';
                 $HACYU_ID = $key;
                 if (!empty($value['FILE_DELETE'])){
-                    $delete_files = $value['FILE_DELETE'];                
+                    $delete_files = $value['FILE_DELETE'];
+                    
                 }
                 if ($delete_files !== ''){
                     $arrFiles = explode(',', $delete_files);
+
+                    $query = DB::table('T_FILE')
+                    ->select(
+                    'T_FILE.FILE_NAME',
+                    'T_FILE.HACYU_ID'
+                    )
+                    ->where(['T_FILE.DEL_FLG'=> 0])
+                    ->whereIn('ID',$arrFiles);
+                    $listFiles =  $query->get();                    
+                    foreach ($listFiles as $itemFile) { 
+                        $pathFile = public_path().'/uploads/'.$itemFile->HACYU_ID.'/'.$itemFile->FILE_NAME;
+                        \File::delete($pathFile);                
+                    }
+
+
                     $TFILE = array();
                     $TFILE['DEL_FLG'] = 1;
                     $TFILE['UPD_TANTCD'] = $user->TANT_CD;
