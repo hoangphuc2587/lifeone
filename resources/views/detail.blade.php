@@ -1009,7 +1009,7 @@
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
     <script>
     var driverList = {!! json_encode($driverList) !!};
-    </script>    
+    </script>
     <script src="{{ URL::asset('js/scripts.js') }}"></script>
 </body>
 

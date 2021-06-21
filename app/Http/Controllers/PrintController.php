@@ -678,13 +678,13 @@ class PrintController extends Controller
                         //Start of Upload Files
                         $fileName = time(). rand(1111,
                                     9999) . '.' . $item->getClientOriginalExtension();
-                        $path = './download/'.$HACYU_ID;
+                        $path = public_path().'/uploads/'.$HACYU_ID;
                         $item->move($path, $fileName);
                         DB::table('T_FILE')->insert([
                             'HACYU_ID' => $HACYU_ID,
                             'JYUNJO' => $a,
                             'FILE_NAME' => $fileName,
-                            'FILE_PATH' => URL::to('/').'/download/'.$HACYU_ID.'/'.$fileName,
+                            'FILE_PATH' => URL::to('/').'/uploads/'.$HACYU_ID.'/'.$fileName,
                             'TANT_CD' => $user->TANT_CD,
                             'UPD_TANTCD' => $user->TANT_CD,
                             'UPD_YMD' => $date

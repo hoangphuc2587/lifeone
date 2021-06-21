@@ -652,10 +652,10 @@ $(function(){
                 if ($(this).is(':checked')){
                     if (id_db != ''){
                       arrID.push(id_db);    
-                    }                
+                    }
                 }
             });
-            $(".hdFileDelete"+id).val(arrID.join());            
+            $(".hdFileDelete"+id).val(arrID.join());
             $("#modalDelFile").modal('show');
         }else{
             $("#canceler1").modal('show');

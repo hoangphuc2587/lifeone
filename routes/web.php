@@ -64,5 +64,7 @@
     route::get('/search-no-reply/{key_seacrch_reply}','ListController@search_no_reply');
     //update post
     route::post('/post-update', 'PrintController@postUpdate')->name('postUpdate');
+
+    Route::get('/uploads/{user}/{filename}', 'PageController@download_file')->name('downloadFile');
     
 
