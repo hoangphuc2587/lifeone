@@ -668,7 +668,7 @@ $(function(){
         var hasData = false;
         $( ".chk-" + id ).each(function( index ) {
             if ($(this).is(':checked')){
-                hasData = true
+                hasData = true;
             }
         });
         if (hasData){

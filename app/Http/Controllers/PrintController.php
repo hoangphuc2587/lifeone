@@ -667,7 +667,7 @@ class PrintController extends Controller
                     DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($dataUpdate);
                 }
 
-                if (((!empty($dataUpdate['STS_CD']) && $dataUpdate['STS_CD'] != '01') || empty($dataUpdate['STS_CD'])) && $oldData->STS_CD == '01'){
+                if (((!empty($dataUpdate['STS_CD']) && $dataUpdate['STS_CD'] == '01') || empty($dataUpdate['STS_CD'])) && $oldData->STS_CD == '01'){
                     $hasSTS01 = true;
                 }
 
