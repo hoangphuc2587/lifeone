@@ -690,7 +690,7 @@
                                                 @if(!empty($item->FILE))
                                                 @foreach ($item->FILE as $fileData)
                                                 <tr class="line-{{ $item->HACYU_ID }}-{{ $index_file }}">
-                                                    <td>{{ empty($fileData->HACYUSAKI_CD) ? 'ライフワン担当' : '仕入先様名' }}</td>
+                                                    <td>{{ $fileData->TANT_NAME }}</td>
                                                     <td>{{ $fileData->FILE_NAME }}</td>
                                                     <td><input data-link="{{ url($fileData->FILE_PATH) }}" data-tfile="{{ $fileData->ID }}" data-id="{{ $item->HACYU_ID }}-{{ $index_file }}" class="chk-{{ $item->HACYU_ID }} tb_list_checkbox" type="checkbox" value=""></td>
                                                 </tr>

@@ -246,7 +246,8 @@ class PrintController extends Controller
         'T_FILE.ID',
         'T_FILE.FILE_NAME',
         'T_FILE.FILE_PATH',
-        'M_TANT_WEB.HACYUSAKI_CD'
+        'M_TANT_WEB.HACYUSAKI_CD',
+        'M_TANT_WEB.TANT_NAME'
         )
         ->join('M_TANT_WEB', 'M_TANT_WEB.TANT_CD', '=', 'T_FILE.TANT_CD' )
         ->where(['T_FILE.DEL_FLG'=> 0])
@@ -282,10 +283,10 @@ class PrintController extends Controller
     }
 
     private function displayData($list_id){
-        $sourceName = 'ライフワン担当';
+        $user = Auth::user();
+        $sourceName = $user->TANT_NAME;
         $isUserLifeOne = true;
-        if(Auth::user()->HACYUSAKI_CD != ''){
-            $sourceName = '仕入先様名';
+        if($user->HACYUSAKI_CD != ''){            
             $isUserLifeOne = false;
         }       
         $deliveryCompany = $this->deliveryCompany();
