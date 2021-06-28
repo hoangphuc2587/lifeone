@@ -291,11 +291,7 @@
                     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <p data-type="paragraph" id="iy899">
-                            @if(Auth::guard('m_tant_web')->check())
-                            {{Auth::user()->TANT_NAME}}
-                            @endif
-                            様
+                        <p data-type="paragraph" id="iy899">                            
                         </p>
                     </div>
                 </div>
@@ -306,7 +302,12 @@
                         
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <h1 data-type="header" class="title-header"><span>仕入先名</span>
+                        <h1 data-type="header" class="title-header">
+                            <span>
+                            @if(Auth::guard('m_tant_web')->check() && !$isUserLifeOne)
+                            {{Auth::user()->TANT_NAME}}
+                            @endif
+                            </span>
                         </h1>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -414,7 +415,7 @@
                 <div class="row">
                     <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12">
                         <label>
-                        未発注件：{{ $arrTotal[0] }}件
+                        未発注：{{ $arrTotal[0] }}件
                         </label>
                     </div>
                 </div>

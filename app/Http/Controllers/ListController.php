@@ -35,7 +35,7 @@ class ListController extends Controller
 
         //状況
         $query = DB::table('M_KBN_WEB')
-        ->where('KBN_CD','04')
+        ->where('KBN_CD','03')
         ->where('DEL_FLG', 0);
         $statusList = $query->get();
         if($request->session()->has('page_click') && $request->session()->has('page_center') && $request->session()->has('total_row_on_one_page') && $request->session()->has('field_sort') && $request->session()->has('query_sort') ){
@@ -183,7 +183,7 @@ class ListController extends Controller
         if($request->session()->has('key_search_status')){
             $status_id = $request->session()->get('key_search_status');
             $paramSearch['status_id'] = $status_id;
-            $query->where('T_HACYU.TAIO_CD', $status_id);
+            $query->where('T_HACYU.STS_CD', $status_id);
         }
 
         if($request->session()->has('key_search_maker')){
@@ -195,7 +195,7 @@ class ListController extends Controller
         if($request->session()->has('key_search_address')){
             $address = $request->session()->get('key_search_address');
             $paramSearch['address'] = $address;
-            $query->where('T_HACYU.NONYUSAKI_ADDRESS', 'LIKE' , '%'.$address.'%'); 
+            $query->where('T_HACYU.HAISO_INF', 'LIKE' , '%'.$address.'%'); 
         }
 
         if($request->session()->has('key_search_nohin_day_from')){
@@ -335,6 +335,8 @@ class ListController extends Controller
         $request->session()->put('page_click',1);
     }
     public function search_list_by_item(Request $request){
+
+        $request->session()->forget('sort_list');
 
         if ($request->name == ''){
             $request->session()->forget('key_search_name');  

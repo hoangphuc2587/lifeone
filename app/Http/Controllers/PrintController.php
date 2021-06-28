@@ -86,6 +86,24 @@ class PrintController extends Controller
         )
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
         ->whereIn('T_HACYU.HACYU_ID', $lists_id);
+
+        if(session()->has('sort_list')){
+            $items_sort = session()->get('items_sort');
+            foreach ($items_sort as $value) {
+                if(session()->has($value)){
+                    $asc = session()->get($value.'_asc');
+                    if ($value != 'MAKER'){                       
+                        $query->orderBy('T_HACYU.'.$value, empty($asc) ? 'asc' : $asc);
+                    }
+                }
+            }
+        }else{
+            $field_sort             =  session()->get('field_sort');
+            $query_sort             =  session()->get('query_sort');
+            $query->orderBy($field_sort, $query_sort);
+            $query->orderBy('T_HACYU.HACYU_ID', 'asc');
+        }
+
         return $query;
     }
 
@@ -299,11 +317,9 @@ class PrintController extends Controller
             if( empty(session()->get('data_list_checkbox')) )
                 return redirect()->route('list');
         }
-        if($request->session()->get('field_sort') == 'KBNMSAI_NAME1')
-            $field_sort         = 'KBNMSAI_NAME';
-        else
-            $field_sort         =  $request->session()->get('field_sort');
-        $query_sort             =  $request->session()->get('query_sort');
+     
+        $field_sort         =  $request->session()->get('field_sort');
+        $query_sort         =  $request->session()->get('query_sort');
         $data = array();
         if(session()->has('data_list_checkbox')){
             $check_box = session()->get('data_list_checkbox');
@@ -353,10 +369,12 @@ class PrintController extends Controller
     }    
 
     private function __updateStatus($listID){
-        DB::table('T_HACYU')
+        if(Auth::user()->HACYUSAKI_CD != ''){
+            DB::table('T_HACYU')
            ->whereIn('HACYU_ID',$listID)
            ->where('STS_CD', '01')
            ->update(['STS_CD' => '02']);
+        }        
     }
 
     public function postUpdate(Request $request){  

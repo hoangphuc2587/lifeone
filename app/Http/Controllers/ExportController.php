@@ -194,7 +194,7 @@ class ExportController extends Controller implements FromCollection, WithHeading
             $hours = '0'.$hours;
         if($minute < 10)
             $minute = '0'.$minute;
-        $name = "日程調整依頼書_".$now['year'].$month.$day."_".$hours.$minute.".csv";
+        $name = "依頼一覧_".$now['year'].$month.$day."_".$hours.$minute.".csv";
         return Excel::download(new ExportController(), $name);
     }
 }
