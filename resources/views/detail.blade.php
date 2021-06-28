@@ -1005,7 +1005,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
     <!-- <script src="http://code.jquery.com/jquery-1.7.2.js"></script> -->
     <script src="{{ URL::asset('js/tether.min.js') }}"></script>
-    <script src="{{ URL::asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script>    
+    <script src="{{ URL::asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('datepicker/locales/bootstrap-datepicker.ja.min.js') }}"></script>    
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
     <script>
     var driverList = {!! json_encode($driverList) !!};

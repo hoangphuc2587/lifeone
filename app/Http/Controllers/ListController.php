@@ -164,13 +164,13 @@ class ListController extends Controller
         if($request->session()->has('key_search_irai_day_from')){
             $irai_day_from = $request->session()->get('key_search_irai_day_from');
 
-            $paramSearch['irai_day_from'] = date('m/d/Y', strtotime($irai_day_from));
+            $paramSearch['irai_day_from'] = date('Y/m/d', strtotime($irai_day_from));
             $query->where('T_HACYU.IRAI_YMD', '>=', $irai_day_from); 
         }
 
         if($request->session()->has('key_search_irai_day_to')){
             $irai_day_to = $request->session()->get('key_search_irai_day_to');
-            $paramSearch['irai_day_to'] = date('m/d/Y', strtotime($irai_day_to));
+            $paramSearch['irai_day_to'] = date('Y/m/d', strtotime($irai_day_to));
             $query->where('T_HACYU.IRAI_YMD', '<=', $irai_day_to); 
         }         
 
@@ -200,13 +200,13 @@ class ListController extends Controller
 
         if($request->session()->has('key_search_nohin_day_from')){
             $nohin_day_from = $request->session()->get('key_search_nohin_day_from');
-            $paramSearch['nohin_day_from'] = date('m/d/Y', strtotime($nohin_day_from));
+            $paramSearch['nohin_day_from'] = date('Y/m/d', strtotime($nohin_day_from));
             $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END >= '".$nohin_day_from."'"); 
         }
 
         if($request->session()->has('key_search_nohin_day_to')){
             $nohin_day_to = $request->session()->get('key_search_nohin_day_to');
-            $paramSearch['nohin_day_to'] = date('m/d/Y', strtotime($nohin_day_to));
+            $paramSearch['nohin_day_to'] = date('Y/m/d', strtotime($nohin_day_to));
             $query->whereRaw("CASE WHEN T_HACYU.IRAI_CD = '03' THEN T_HACYUMSAI.NOHIN_YMD ELSE T_HACYUMSAI.KAITO_NOKI END <= '".$nohin_day_to."'");
         }         
 
@@ -323,11 +323,7 @@ class ListController extends Controller
             $items_sort = array(); 
             $items_sort[] = $field_sort;
             $request->session()->put('items_sort', $items_sort);
-        }
-
-
-
-        
+        }        
         $request->session()->put('page_click',1);
     }
     public function query_sort($query_sort,Request $request){
@@ -335,8 +331,16 @@ class ListController extends Controller
         $request->session()->put('page_click',1);
     }
     public function search_list_by_item(Request $request){
-
+        if($request->session()->has('items_sort')){
+            $items_sort = $request->session()->get('items_sort');
+            foreach ($items_sort as $value) {
+                if($request->session()->has($value)){
+                    $request->session()->forget($value.'_asc');
+                }
+            }
+        }
         $request->session()->forget('sort_list');
+        $request->session()->forget('items_sort');  
 
         if ($request->name == ''){
             $request->session()->forget('key_search_name');  
@@ -354,7 +358,7 @@ class ListController extends Controller
             $request->session()->forget('key_search_irai_day_from');  
         }else{
             $arr = explode('/', $request->irai_day_from);
-            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $date = $arr[0].'-'.$arr[1].'-'.$arr[2];
             $request->session()->put('key_search_irai_day_from', $date);
         }
 
@@ -362,7 +366,7 @@ class ListController extends Controller
             $request->session()->forget('key_search_irai_day_to');  
         }else{
             $arr = explode('/', $request->irai_day_to);
-            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $date = $arr[0].'-'.$arr[1].'-'.$arr[2];
             $request->session()->put('key_search_irai_day_to', $date);
         }        
 
@@ -423,7 +427,7 @@ class ListController extends Controller
             $request->session()->forget('key_search_nohin_day_from');  
         }else{
             $arr = explode('/', $request->nohin_day_from);
-            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $date = $arr[0].'-'.$arr[1].'-'.$arr[2];
             $request->session()->put('key_search_nohin_day_from', $date);
         }
 
@@ -431,7 +435,7 @@ class ListController extends Controller
             $request->session()->forget('key_search_nohin_day_to');  
         }else{
             $arr = explode('/', $request->nohin_day_to);
-            $date = $arr[2].'-'.$arr[0].'-'.$arr[1];
+            $date = $arr[0].'-'.$arr[1].'-'.$arr[2];
             $request->session()->put('key_search_nohin_day_to', $date);
         }        
 
@@ -519,6 +523,35 @@ class ListController extends Controller
     }
     public function get_list_check_box(Request $request){
         $request->session()->put('data_list_checkbox',$request->data_list_checkbox);
+    }
+
+    public function search_by_reset(Request $request){
+        if($request->session()->has('items_sort')){
+            $items_sort = $request->session()->get('items_sort');
+            foreach ($items_sort as $value) {
+                if($request->session()->has($value)){
+                    $request->session()->forget($value.'_asc');
+                }
+            }
+        }
+        $request->session()->forget('sort_list');
+        $request->session()->forget('items_sort');
+        $request->session()->forget('key_search_name');
+        $request->session()->forget('key_search_request');
+        $request->session()->forget('key_search_irai_day_from');  
+        $request->session()->forget('key_search_irai_day_to');
+        $request->session()->forget('key_search_id');        
+        $request->session()->forget('key_search_status');
+        $request->session()->forget('key_search_maker'); 
+        $request->session()->forget('key_search_address');
+        $request->session()->forget('key_search_nohin_day_from');
+        $request->session()->forget('key_search_nohin_day_to');
+        $request->session()->forget('key_search_hinban');    
+        $request->session()->put('page_click',1);        
+        $request->session()->forget('data_list_checkbox');
+        $request->session()->forget('search_reply');
+        $request->session()->forget('search_no_reply');
+        $request->session()->put('total_row_on_one_page',50);     
     }
     
 }

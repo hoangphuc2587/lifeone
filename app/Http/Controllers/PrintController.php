@@ -649,6 +649,7 @@ class PrintController extends Controller
                     }
                     $HACYU['COMMENT2'] = $comment2;
                     $dataUpdate = $HACYU;
+                    $dataUpdate['HAC_ANS_YMD'] = $date;
                 }else{
                     $dataUpdate = array();
                     $TAIO_CD = '';
@@ -660,15 +661,17 @@ class PrintController extends Controller
                     }
                     if ($TAIO_CD != $oldData->TAIO_CD){
                         $dataUpdate['TAIO_CD'] = $TAIO_CD;
+                        $dataUpdate['TAIO_TANT_CD'] = $user->TANT_CD;
                     }
                     if (empty($HACYU['COMMENT1'])){
                         $dataUpdate['COMMENT1']  = '';
                     }elseif (trim($HACYU['COMMENT1']) != trim($oldData->COMMENT1)){
                         if (empty($oldData->COMMENT1)){
-                            $dataUpdate['COMMENT1'] = '【'.date('Y/m/d H:i').' '.$user->TANT_NAME.'】' . $HACYU['COMMENT1'];
+                            $dataUpdate['COMMENT1'] = '【'.date('Y/m/d H:i').' '.$user->TANT_NAME.'】' . $HACYU['COMMENT1'];                            
                         }else{
                             $dataUpdate['COMMENT1'] = $HACYU['COMMENT1'];
                         }
+                        $dataUpdate['LIF_AND_YMD'] = $date;
                     }
                 }
                 $countNoHin = 0;

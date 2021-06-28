@@ -50,6 +50,7 @@
     route::post('/search-list-by-id','ListController@search_list_by_id');
     route::post('/search-list-by-kojigyoya_name','ListController@search_list_by_kojigyoya_name');
     route::post('/search-list-all','ListController@search_list_all');
+    route::get('/search-by-reset','ListController@search_by_reset');
 
     route::get('/print-list','PrintController@print_list');
     route::Get('/detail-list','DetailController@detail_list');

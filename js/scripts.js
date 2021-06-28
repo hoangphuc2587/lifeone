@@ -110,7 +110,7 @@ $(function(){
     })
 
     $(document).on('click','#btnBackList',function(){
-        if ($(".hdHasSTS01").val() == '1')
+        if ($(".hdHasSTS01").val() == '1' && $('#hdUserLifeOne').val() ==  0)
         {
            $("#modalOrder").modal('show');
         }else{
@@ -140,9 +140,16 @@ $(function(){
             window.location = $("#link-home-url").val() + '/list';
         })   
     })
+
+    $(document).on('click','.search_by_reset',function(){        
+        $.get($("#link-home-url").val() + '/search-by-reset',function(data){
+            window.location = $("#link-home-url").val() + '/list';
+        })   
+    })
+        
+
+
     $(document).on('click','.search_by_item',function(){
-        var data = [];
-        sessionStorage.setItem('data_list_checkbox',JSON.stringify(data));
         var input_id    = $('#search-id').val();
         var name  = $('#search-name').val();
         var request  = $('#search-request').val();
@@ -185,8 +192,7 @@ $(function(){
                 hinban: hinban
             },
             cache   : false,
-            success : function(data){
-                console.log(data)
+            success : function(data){                
                 window.location = $("#link-home-url").val() + '/list';
             }
         });
@@ -741,7 +747,8 @@ $(function(){
     if($('.datepicker-input').length) {
         $('.datepicker-input').datepicker({
             autoclose: true,
-            todayHighlight: true
+            todayHighlight: true,
+            language: 'ja'
         });
 
         $('.datepicker-input').datepicker()
@@ -762,7 +769,8 @@ $(function(){
     if($('.datepicker-change').length) {
         $('.datepicker-change').datepicker({
             autoclose: true,
-            todayHighlight: true
+            todayHighlight: true,
+            language: 'ja'
         });
 
         $('.datepicker-change').datepicker()
@@ -785,7 +793,7 @@ $(function(){
     }
 
     if($('#hdHasSTS01Load').length) {
-        if ($('#hdHasSTS01Load').val() ==  1){
+        if ($('#hdHasSTS01Load').val() ==  1 && $('#hdUserLifeOne').val() ==  0 ){
             $("#modalOrder").modal('show');
         }
     }
@@ -817,13 +825,16 @@ function download(files) {
 
  function CompareDate(date1 , date2) {    
    //Note: 00 is month i.e. January 
-   var res = date1.split("/");
-   var res2 = date2.split("/");
-   var dateOne = new Date(res[0], res[1], res[2]); //Year, Month, Date    
-   var dateTwo = new Date(res2[0], res2[1], res2[2]); //Year, Month, Date    
-   if (dateOne > dateTwo) {    
-        return true;
-    }else {
-        return false;
+    if (date1 != '' && typeof(date2) != 'undefined' ){
+       var res = date1.split("/");
+       var res2 = date2.split("/");
+       var dateOne = new Date(res[0], res[1], res[2]); //Year, Month, Date    
+       var dateTwo = new Date(res2[0], res2[2], res2[2]); //Year, Month, Date    
+       if (dateOne > dateTwo) {    
+            return true;
+        }else {
+            return false;
+        }
     }
+    return false;
 } 

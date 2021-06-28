@@ -386,9 +386,9 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-right: -70px;">
                         <div>
                             <label>依頼日</label>
-                            <input type="text" value="{{ isset($paramSearch['irai_day_from']) ? $paramSearch['irai_day_from'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker-input" placeholder="" id="search-irai-day-from" style="width: 120px; "/>
+                            <input type="text" value="{{ isset($paramSearch['irai_day_from']) ? $paramSearch['irai_day_from'] : '' }}" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-input" placeholder="" id="search-irai-day-from" style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" value="{{ isset($paramSearch['irai_day_to']) ? $paramSearch['irai_day_to'] : '' }}" data-date-format="mm/dd/yyyy" autocomplete="off" class="datepicker-input" placeholder="" id="search-irai-day-to" style="width: 120px; "/>        
+                            <input type="text" value="{{ isset($paramSearch['irai_day_to']) ? $paramSearch['irai_day_to'] : '' }}" data-date-format="yyyy/mm/dd" autocomplete="off" class="datepicker-input" placeholder="" id="search-irai-day-to" style="width: 120px; "/>        
                         </div>
                     </div>
 
@@ -444,9 +444,9 @@
                      <div class="col-xl-4 col-lg-9 col-md-9 col-sm-9 col-12" style="margin-right: -50px;">
                         <div>
                             <label>納品日</label>
-                            <input type="text" value="{{ isset($paramSearch['nohin_day_from']) ? $paramSearch['nohin_day_from'] : '' }}" placeholder="" id="search-nohin-day-from" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker-input"  style="width: 120px; "/>
+                            <input type="text" value="{{ isset($paramSearch['nohin_day_from']) ? $paramSearch['nohin_day_from'] : '' }}" placeholder="" id="search-nohin-day-from" autocomplete="off" data-date-format="yyyy/mm/dd" class="datepicker-input"  style="width: 120px; "/>
                             <label style="padding:0px 15px">～</label>
-                            <input type="text" value="{{ isset($paramSearch['nohin_day_to']) ? $paramSearch['nohin_day_to'] : '' }}" placeholder="" id="search-nohin-day-to" autocomplete="off" data-date-format="mm/dd/yyyy" class="datepicker-input"  style="width: 120px; "/>        
+                            <input type="text" value="{{ isset($paramSearch['nohin_day_to']) ? $paramSearch['nohin_day_to'] : '' }}" placeholder="" id="search-nohin-day-to" autocomplete="off" data-date-format="yyyy/mm/dd" class="datepicker-input"  style="width: 120px; "/>        
                         </div>
                     </div>
 
@@ -473,7 +473,7 @@
                         </label>
                     </div>
 
-                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">                 
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">                 
                         <nav class="pag-nav" aria-label="...">
                             <ul class="pagination">
                                 <?php if($total_datas == 0) {?>
@@ -530,9 +530,9 @@
                         </nav>
                     </div>
 
-                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro63i">
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" id="iro63i">
                             <label>表示</label>
                             <select id="icb8hk">
                                 <option value="10"
@@ -547,8 +547,10 @@
                             </select>
                             
                             </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12 text-right">
                                 <button type="button" class="btn btn-primary mb-2 search_by_item">検索</button>         
+
+                                <button type="button" class="btn btn-primary ml-2 mb-2 search_by_reset">クリア</button>
                             </div>
                             
                         </div>    
@@ -563,31 +565,31 @@
                                 @if (!$isUserLifeOne)
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="90">依頼内容<?php if(Session::has('IRAI_CD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="100">依頼日<?php if(Session::has('IRAI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_YMD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="100">ID<?php if(Session::has('HACYU_ID')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_ID_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="120">状況<?php if(Session::has('STS_CD')){ echo '<i class="fa fa-caret-'.(session()->get('STS_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="MAKER" scope="col" class="th6 col-order" width="120">メーカー<?php if(Session::has('MAKER')){ echo '<i class="fa fa-caret-'.(session()->get('MAKER_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="200">配送先情報<?php if(Session::has('HAISO_INF')){ echo '<i class="fa fa-caret-'.(session()->get('HAISO_INF_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="COMMENT1" scope="col" class="th8 col-order" width="60">備考有<?php if(Session::has('COMMENT1')){ echo '<i class="fa fa-caret-'.(session()->get('COMMENT1_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="85">納品希望有<?php if(Session::has('NOHIN_KIBO_FLG')){ echo '<i class="fa fa-caret-'.(session()->get('NOHIN_KIBO_FLG_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="FREE" scope="col" class="th10 col-order" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)<?php if(Session::has('FREE')){ echo '<i class="fa fa-caret-'.(session()->get('FREE_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="90">依頼内容<?php if(Session::has('IRAI_CD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_CD_asc') == 'asc' ? 'up' : (session()->get('IRAI_CD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="100">依頼日<?php if(Session::has('IRAI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_YMD_asc') == 'asc' ? 'up' : (session()->get('IRAI_YMD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="100">ID<?php if(Session::has('HACYU_ID')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_ID_asc') == 'asc' ? 'up' : (session()->get('HACYU_ID_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="120">状況<?php if(Session::has('STS_CD')){ echo '<i class="fa fa-caret-'.(session()->get('STS_CD_asc') == 'asc' ? 'up' : (session()->get('STS_CD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="120">メーカー<?php if(Session::has('MAKER')){ echo '<i class="fa fa-caret-'.(session()->get('MAKER_asc') == 'asc' ? 'up' : (session()->get('MAKER_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="200">配送先情報<?php if(Session::has('HAISO_INF')){ echo '<i class="fa fa-caret-'.(session()->get('HAISO_INF_asc') == 'asc' ? 'up' : (session()->get('HAISO_INF_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="COMMENT1" scope="col" class="th8 col-order" width="60">備考有<?php if(Session::has('COMMENT1')){ echo '<i class="fa fa-caret-'.(session()->get('COMMENT1_asc') == 'asc' ? 'up' : (session()->get('COMMENT1_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="NOHIN_KIBO_FLG" scope="col" class="th9 col-order" width="85">納品希望有<?php if(Session::has('NOHIN_KIBO_FLG')){ echo '<i class="fa fa-caret-'.(session()->get('NOHIN_KIBO_FLG_asc') == 'asc' ? 'up' : (session()->get('NOHIN_KIBO_FLG_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="FREE" scope="col" class="th10 col-order" width="auto">フリースペース<br/>御社自由入力欄(ライフワン閲覧権限なし)<?php if(Session::has('FREE')){ echo '<i class="fa fa-caret-'.(session()->get('FREE_asc') == 'asc' ? 'up' : (session()->get('FREE_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
 
                                 @else
                                 <th scope="col" class="th1" id="check_all" style="text-decoration: underline;"
                                     width="90"><a>全てチェック</a></th>
-                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="85">依頼内容<?php if(Session::has('IRAI_CD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="85">依頼日<?php if(Session::has('IRAI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_YMD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="70">発注種別<?php if(Session::has('HACYU_SYBET_NAME')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_SYBET_NAME_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="95">ID<?php if(Session::has('HACYU_ID')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_ID_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="100">状況<?php if(Session::has('STS_CD')){ echo '<i class="fa fa-caret-'.(session()->get('STS_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="MAKER" scope="col" class="th6 col-order" width="100">メーカー<?php if(Session::has('MAKER')){ echo '<i class="fa fa-caret-'.(session()->get('MAKER_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="195">配送先情報<?php if(Session::has('HAISO_INF')){ echo '<i class="fa fa-caret-'.(session()->get('HAISO_INF_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="COMMENT2" scope="col" class="th8 col-order" width="60">備考有<?php if(Session::has('COMMENT2')){ echo '<i class="fa fa-caret-'.(session()->get('COMMENT2_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="TAIO_TANT_CD" scope="col" class="th9 col-order" width="80">担当者<?php if(Session::has('TAIO_TANT_CD')){ echo '<i class="fa fa-caret-'.(session()->get('TAIO_TANT_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="80">対応状況<?php if(Session::has('TAIO_CD')){ echo '<i class="fa fa-caret-'.(session()->get('TAIO_CD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="110">最終入荷予定日<?php if(Session::has('LAST_NKAYOTEI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('LAST_NKAYOTEI_YMD_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>
-                                <th data-col="HACYUSAKI_NAME" scope="col" class="th9 col-order" width="auto">仕入先様名<?php if(Session::has('HACYUSAKI_NAME')){ echo '<i class="fa fa-caret-'.(session()->get('HACYUSAKI_NAME_asc') == 'asc' ? 'up' : 'down').'"></i>';} ?></th>                                
+                                <th data-col="IRAI_CD" scope="col" class="th2 col-order" width="85">依頼内容<?php if(Session::has('IRAI_CD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_CD_asc') == 'asc' ? 'up' : (session()->get('IRAI_CD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="IRAI_YMD" scope="col" class="th3 col-order" width="85">依頼日<?php if(Session::has('IRAI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('IRAI_YMD_asc') == 'asc' ? 'up' : (session()->get('IRAI_YMD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="HACYU_SYBET_NAME" scope="col" class="th3 col-order" width="70">発注種別<?php if(Session::has('HACYU_SYBET_NAME')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_SYBET_NAME_asc') == 'asc' ? 'up' : (session()->get('HACYU_SYBET_NAME_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="HACYU_ID" scope="col" class="th4 col-order" width="95">ID<?php if(Session::has('HACYU_ID')){ echo '<i class="fa fa-caret-'.(session()->get('HACYU_ID_asc') == 'asc' ? 'up' : (session()->get('HACYU_ID_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="STS_CD" scope="col" class="th5 col-order" width="100">状況<?php if(Session::has('STS_CD')){ echo '<i class="fa fa-caret-'.(session()->get('STS_CD_asc') == 'asc' ? 'up' : (session()->get('STS_CD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="MAKER" scope="col" class="th6 col-order" width="100">メーカー<?php if(Session::has('MAKER')){ echo '<i class="fa fa-caret-'.(session()->get('MAKER_asc') == 'asc' ? 'up' : (session()->get('MAKER_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="HAISO_INF" scope="col" class="th7 col-order" width="195">配送先情報<?php if(Session::has('HAISO_INF')){ echo '<i class="fa fa-caret-'.(session()->get('HAISO_INF_asc') == 'asc' ? 'up' : (session()->get('HAISO_INF_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="COMMENT2" scope="col" class="th8 col-order" width="60">備考有<?php if(Session::has('COMMENT2')){ echo '<i class="fa fa-caret-'.(session()->get('COMMENT2_asc') == 'asc' ? 'up' : (session()->get('COMMENT2_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="TAIO_TANT_CD" scope="col" class="th9 col-order" width="80">担当者<?php if(Session::has('TAIO_TANT_CD')){ echo '<i class="fa fa-caret-'.(session()->get('TAIO_TANT_CD_asc') == 'asc' ? 'up' : (session()->get('TAIO_TANT_CD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="TAIO_CD" scope="col" class="th9 col-order" width="80">対応状況<?php if(Session::has('TAIO_CD')){ echo '<i class="fa fa-caret-'.(session()->get('TAIO_CD_asc') == 'asc' ? 'up' : (session()->get('TAIO_CD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="LAST_NKAYOTEI_YMD" scope="col" class="th9 col-order" width="110">最終入荷予定日<?php if(Session::has('LAST_NKAYOTEI_YMD')){ echo '<i class="fa fa-caret-'.(session()->get('LAST_NKAYOTEI_YMD_asc') == 'asc' ? 'up' : (session()->get('LAST_NKAYOTEI_YMD_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>
+                                <th data-col="HACYUSAKI_NAME" scope="col" class="th9 col-order" width="auto">仕入先様名<?php if(Session::has('HACYUSAKI_NAME')){ echo '<i class="fa fa-caret-'.(session()->get('HACYUSAKI_NAME_asc') == 'asc' ? 'up' : (session()->get('HACYUSAKI_NAME_asc') == 'desc' ? 'down' : '')).'"></i>';} ?></th>                                
                                 @endif
                              
                             </tr>
@@ -603,7 +605,7 @@
 
         <div class="container-fluid">
             <div class="container grey-bg">
-                <div class="row" style="margin-top:394px;"></div>
+                <div class="row" style="margin-top:370px;"></div>
                 <div class="row">
                     <div class="table-cover">                    
                     <table class="table table-bordered table2">
@@ -649,7 +651,7 @@
                                     <input id="chk{{ $item->HACYU_ID }}-0" name="check_box_list[]" data-pdf="{{ $item->PDF_PATH }}" data-excel="{{ $item->EXCEL_PATH }}" class="save_list_checkbox" {{ $item->STS_CD == '01' && !$isUserLifeOne ? 'checked' : '' }} type="checkbox" value="{{ $item->HACYU_ID }}-0">
                                 </td>
                                 <td style="background: {{ empty($item->IRAI_COLOR) ? 'none' : $item->IRAI_COLOR }}">{{ $item->IRAI_CD_NAME }}</td>
-                                <td>{{ !empty($item->IRAI_YMD) ? date('m/d/Y', strtotime($item->IRAI_YMD)) : '' }}</td>
+                                <td>{{ !empty($item->IRAI_YMD) ? date('Y/m/d', strtotime($item->IRAI_YMD)) : '' }}</td>
                                 @if ($isUserLifeOne)
                                 <td>{{ $item->HACYU_SYBET_NAME }}</td>
                                 @endif                                
@@ -660,12 +662,12 @@
                                 </td>
                                 <td>{{ $item->STS_CD_NAME }}</td>
                                 <td>{{ $item->MAKER }}</td>
-                                <td>{{ $item->HAISO_INF }}</td>
+                                <td>{!! nl2br(e($item->HAISO_INF)) !!}</td>
                                 @if ($isUserLifeOne)
                                 <td class="tdDot">@if (!empty($item->COMMENT2)) <span class="dot"></span> @endif</td>
                                 <td>{{ $item->TAIO_TANT_NAME }}</td>
                                 <td>{{ $item->TAIO_CD }}</td>
-                                <td>{{ !empty($item->LAST_NKAYOTEI_YMD) ? date('m/d/Y', strtotime($item->LAST_NKAYOTEI_YMD)) : '' }}</td>
+                                <td>{{ !empty($item->LAST_NKAYOTEI_YMD) ? date('Y/m/d', strtotime($item->LAST_NKAYOTEI_YMD)) : '' }}</td>
                                 <td>{{ $item->HACYUSAKI_NAME }}</td> 
                                 @else
                                 <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>
@@ -706,8 +708,9 @@
     <input type="hidden" id="link-home-url" value="{{ URL::to('/') }}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>   
-    <script src="{{ URL::asset('js/tether.min.js') }}"></script>
+    <script src="{{ URL::asset('js/tether.min.js') }}"></script>    
     <script src="{{ URL::asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('datepicker/locales/bootstrap-datepicker.ja.min.js') }}"></script>
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('js/scripts.js') }}"></script>
 </body>
