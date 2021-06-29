@@ -483,12 +483,13 @@ $(function(){
     })
 
 
-    $(document).on('click','.btn-update-data-1',function(){
-       var hasError = false;
+    $(document).on('click','.btn-update-data-1',function(){       
        var isComment = false;
        var idError = '';
        var comment = $('#hdUserLifeOne').val() == '1' ? '1' : '2';
        $( ".hdSTSCD").each(function( index ) {
+            var hasCorrect = false;
+            var hasError = false;
             var id = $(this).data('id');
             $('.error-'+id).fadeOut();
             $('.error-comment'+comment+'-'+id).fadeOut();
@@ -496,44 +497,94 @@ $(function(){
             var sybet = $('.data-haiso-sybet-cd-'+id).val(); 
             var multi = $('.data-haiso-multi-flg-'+id).val(); 
             if ($('#hdUserLifeOne').val() == '0' && $(this).val() == '06' && sybet == '04' && irai == '03'){
-                $( ".item-hacyu-"+id).each(function( pos ) {
-                    if ($.trim($(this).val()) == ''){
-                      $('.error-'+id).fadeIn();
-                      hasError = true;
-                      idError = id;
-                    }            
-                });
 
-                if (!$('.item-hacyu-chk-'+id).is(':checked')){
-                    $('.error-'+id).fadeIn();
+                var val1 = $.trim($( ".item-hacyu-"+id+'-1').val());
+                var val2 = $.trim($( ".item-hacyu-"+id+'-2').val());
+                var val3 = $.trim($( ".item-hacyu-"+id+'-3').val());
+                var val4 = $.trim($( ".item-hacyu-"+id+'-4').val());
+                var val5 = $.trim($( ".item-hacyu-"+id+'-5').val());
+                var val6 = $.trim($( ".item-hacyu-"+id+'-6').val());
+                var val7 = $.trim($( ".item-hacyu-"+id+'-7').val());
+
+                if (val1 == '' && val2 == ''){
+                    hasError = false;
+                }else if(val1 != '' && val2 != ''){
+                    hasError = false;
+                    hasCorrect = true;
+                }else{
                     hasError = true;
-                    idError = id;
+                }                
+               
+                if(!hasCorrect){
+                    if (val3 == '' && val4 == '' && val5 == '' && !hasError){
+                        hasError = false;
+                    }else if(val3 != '' && val4 != '' && val5 != ''){
+                        hasError = false;
+                        hasCorrect = true;
+                    }else{
+                        hasError = true;
+                    }
                 }
 
+                if(!hasCorrect){
+                    if (val6 == '' && val7 == '' && !hasError){
+                        hasError = false;
+                    }else if(val6 != '' && val7 != ''){
+                        hasError = false;
+                        hasCorrect = true;
+                    }else{
+                        hasError = true;
+                    }
+                }
 
-                if (multi == '1'){
-                    $( ".item-hacyu-2-"+id).each(function( pos2 ) {
-                        if ($.trim($(this).val()) == ''){
-                          $('.error-'+id).fadeIn();
-                          hasError = true;
-                          idError = id;
-                        }
-                    });
-                } 
+                if (multi == '1' && !hasCorrect){
+                    var val11 = $.trim($( ".item-hacyu-2-"+id+'-1').val());
+                    var val22 = $.trim($( ".item-hacyu-2-"+id+'-2').val());
+                    var val32 = $.trim($( ".item-hacyu-2-"+id+'-3').val());
+                    var val42 = $.trim($( ".item-hacyu-2-"+id+'-4').val());
+                    if (val11 == '' && val22 == '' && val32 == '' && val42 == '' && !hasError){
+                        hasError = false;
+                    }else if(val11 != '' && val22 != '' && val32 != '' && val42 != ''){
+                        hasError = false;
+                        hasCorrect = true;
+                    }
+                    else{
+                        hasError = true;
+                    }
+                }
+
+                if(!hasCorrect){
+                    if (!$('.item-hacyu-chk-'+id).is(':checked') && !hasError){
+                       hasError = false;                       
+                    }else if ($('.item-hacyu-chk-'+id).is(':checked')){
+                       hasCorrect = true;
+                    }else{
+                       hasError = true;   
+                    }
+                }
+                if (!hasCorrect && hasError){
+                    $('.error-'+id).fadeIn();
+                    hasError = true;
+                    if (idError == ''){
+                      idError = id;
+                    }
+                }
+
             }
 
             var text_c = $('#comment'+comment+'-'+id).val();
             if (text_c.length > 1000){
-                $('.error-comment'+comment+'-'+id).fadeIn();
-                hasError = true;
-                idError = id;
+                $('.error-comment'+comment+'-'+id).fadeIn();              
+                if (idError == ''){
+                      idError = id;
+                }
                 isComment = true;
             }
             
         });
 
-       if(!hasError){
-        $('.btn-submit-data-1').trigger('click');
+       if(idError == ''){
+          $('.btn-submit-data-1').trigger('click');
        }
        else{
           $("#static").modal('hide');
@@ -553,53 +604,106 @@ $(function(){
 
 
     $(document).on('click','.btn-update-data-2',function(){
-       var hasError = false;
        var isComment = false;
        var idError = '';
        var comment = $('#hdUserLifeOne').val() == '1' ? '1' : '2';
        $( ".hdSTSCD").each(function( index ) {
+            var hasCorrect = false;
+            var hasError = false;
             var id = $(this).data('id');
             $('.error-'+id).fadeOut();
+            $('.error-comment'+comment+'-'+id).fadeOut();
             var irai = $('.data-irai-cd-'+id).val();
             var sybet = $('.data-haiso-sybet-cd-'+id).val(); 
             var multi = $('.data-haiso-multi-flg-'+id).val(); 
-            if ($('#hdUserLifeOne').val() == '0' &&  $(this).val() == '06' && sybet == '04' && irai == '03'){
-                $( ".item-hacyu-"+id).each(function( pos ) {
-                    if ($.trim($(this).val()) == ''){
-                      $('.error-'+id).fadeIn();
-                      hasError = true;
-                      idError = id;
-                    }            
-                });
+            if ($('#hdUserLifeOne').val() == '0' && $(this).val() == '06' && sybet == '04' && irai == '03'){
 
-                if (!$('.item-hacyu-chk-'+id).is(':checked')){
-                    $('.error-'+id).fadeIn();
+                var val1 = $.trim($( ".item-hacyu-"+id+'-1').val());
+                var val2 = $.trim($( ".item-hacyu-"+id+'-2').val());
+                var val3 = $.trim($( ".item-hacyu-"+id+'-3').val());
+                var val4 = $.trim($( ".item-hacyu-"+id+'-4').val());
+                var val5 = $.trim($( ".item-hacyu-"+id+'-5').val());
+                var val6 = $.trim($( ".item-hacyu-"+id+'-6').val());
+                var val7 = $.trim($( ".item-hacyu-"+id+'-7').val());
+
+                if (val1 == '' && val2 == ''){
+                    hasError = false;
+                }else if(val1 != '' && val2 != ''){
+                    hasError = false;
+                    hasCorrect = true;
+                }else{
                     hasError = true;
-                    idError = id;
+                }                
+               
+                if(!hasCorrect){
+                    if (val3 == '' && val4 == '' && val5 == '' && !hasError){
+                        hasError = false;
+                    }else if(val3 != '' && val4 != '' && val5 != ''){
+                        hasError = false;
+                        hasCorrect = true;
+                    }else{
+                        hasError = true;
+                    }
                 }
 
+                if(!hasCorrect){
+                    if (val6 == '' && val7 == '' && !hasError){
+                        hasError = false;
+                    }else if(val6 != '' && val7 != ''){
+                        hasError = false;
+                        hasCorrect = true;
+                    }else{
+                        hasError = true;
+                    }
+                }
 
-                if (multi == '1'){
-                    $( ".item-hacyu-2-"+id).each(function( pos2 ) {
-                        if ($.trim($(this).val()) == ''){
-                          $('.error-'+id).fadeIn();
-                          hasError = true;
-                          idError = id;
-                        }
-                    });
-                } 
+                if (multi == '1' && !hasCorrect){
+                    var val11 = $.trim($( ".item-hacyu-2-"+id+'-1').val());
+                    var val22 = $.trim($( ".item-hacyu-2-"+id+'-2').val());
+                    var val32 = $.trim($( ".item-hacyu-2-"+id+'-3').val());
+                    var val42 = $.trim($( ".item-hacyu-2-"+id+'-4').val());
+                    if (val11 == '' && val22 == '' && val32 == '' && val42 == '' && !hasError){
+                        hasError = false;
+                    }else if(val11 != '' && val22 != '' && val32 != '' && val42 != ''){
+                        hasError = false;
+                        hasCorrect = true;
+                    }
+                    else{
+                        hasError = true;
+                    }
+                }
+
+                if(!hasCorrect){
+                    if (!$('.item-hacyu-chk-'+id).is(':checked') && !hasError){
+                       hasError = false;                       
+                    }else if ($('.item-hacyu-chk-'+id).is(':checked')){
+                       hasCorrect = true;
+                    }else{
+                       hasError = true;   
+                    }
+                }
+                if (!hasCorrect && hasError){
+                    $('.error-'+id).fadeIn();
+                    hasError = true;
+                    if (idError == ''){
+                      idError = id;
+                    }
+                }
+
             }
 
             var text_c = $('#comment'+comment+'-'+id).val();
             if (text_c.length > 1000){
-                $('.error-comment'+comment+'-'+id).fadeIn();
-                hasError = true;
-                idError = id;
+                $('.error-comment'+comment+'-'+id).fadeIn();              
+                if (idError == ''){
+                      idError = id;
+                }
                 isComment = true;
-            }            
+            }
+            
         });
 
-       if(!hasError){
+       if(idError == ''){
         $('.btn-submit-data-2').trigger('click');
        }
        else{

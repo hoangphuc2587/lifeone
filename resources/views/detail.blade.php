@@ -238,7 +238,7 @@
         border-color: black !important;
         text-align: center;
         table-layout: fixed;
-        overflow: hidden;
+        /*overflow: hidden;*/
         vertical-align: middle;
     }
 
@@ -725,7 +725,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ 配送業者</label>
-                            <select {{ !$isUserLifeOne ?  '' : ' disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA1]" style="width: 155px;" class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
+                            <select {{ !$isUserLifeOne ?  '' : ' disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA1]" style="width: 155px;" class="item-hacyu-{{ $item->HACYU_ID }}-1 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA1 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
@@ -736,7 +736,7 @@
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" {{ !$isUserLifeOne ?  '' : ' disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO1]"  value="{{ $item->DENPYONO1 }}" type="text" placeholder=""  style="width: 330px;"/>
+                            <input class="item-hacyu-{{ $item->HACYU_ID }}-2 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" {{ !$isUserLifeOne ?  '' : ' disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO1]"  value="{{ $item->DENPYONO1 }}" type="text" placeholder=""  style="width: 330px;"/>
                         </div>
                    </div>
                 </div>
@@ -744,7 +744,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ 配送業者</label>
-                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA2]" class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }} autocomplete" value="{{ $item->HAISOGYOSYA2 }}" type="text" placeholder=""  style="width: 155px;"/>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA2]" class="item-hacyu-{{ $item->HACYU_ID }}-3 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }} autocomplete" value="{{ $item->HAISOGYOSYA2 }}" type="text" placeholder=""  style="width: 155px;"/>
 
                             
                         </div>
@@ -752,14 +752,14 @@
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO2]" class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" value="{{ $item->DENPYONO2 }}" type="text" placeholder=""  style="width: 330px;"/>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO2]" class="item-hacyu-{{ $item->HACYU_ID }}-4 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" value="{{ $item->DENPYONO2 }}" type="text" placeholder=""  style="width: 330px;"/>
                         </div>
                    </div>
 
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                             <label>連絡先</label>
-                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" name="data[{{ $item->HACYU_ID }}][RENRAKUSAKI2]"  value="{{ $item->RENRAKUSAKI2 }}"  type="text" placeholder=""  style="width: 195px;"/>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} class="item-hacyu-{{ $item->HACYU_ID }}-5 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" name="data[{{ $item->HACYU_ID }}][RENRAKUSAKI2]"  value="{{ $item->RENRAKUSAKI2 }}"  type="text" placeholder=""  style="width: 195px;"/>
                         </div>
                    </div>
                 </div>
@@ -772,7 +772,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ {{ $item->HAISOGYOSYA3_1_LABEL }}</label>
-                            <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_1]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
+                            <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_1]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }}-1 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA3_1 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
@@ -783,14 +783,14 @@
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3col-12">
                         <div>
                             <label>送り状№</label>
-                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO3_1]" class="item-hacyu-2-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" value="{{ $item->DENPYONO3_1 }}"  type="text" placeholder=""  style="width: 230px;"/>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO3_1]" class="item-hacyu-2-{{ $item->HACYU_ID }}-2 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" value="{{ $item->DENPYONO3_1 }}"  type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
 
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 40px;">{{ $item->HAISOGYOSYA3_2_LABEL }}</label>
-                            <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_2]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
+                            <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_2]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }}-3 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA3_2 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>
@@ -802,7 +802,7 @@
                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label>送り状№</label>
-                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO3_2]" class="item-hacyu-2-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" value="{{ $item->DENPYONO3_2 }}" type="text" placeholder=""  style="width: 230px;"/>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][DENPYONO3_2]" class="item-hacyu-2-{{ $item->HACYU_ID }}-4 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" value="{{ $item->DENPYONO3_2 }}" type="text" placeholder=""  style="width: 230px;"/>
                         </div>
                    </div>
                 </div>
@@ -815,13 +815,13 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <div>
                         <label style="padding-left: 15px;">・ ドライバー名</label>
-                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" name="data[{{ $item->HACYU_ID }}][DRIVER_NAME]"  type="text" value="{{ $item->DRIVER_NAME }}" placeholder=""  style="width: 190px;"/>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} class="item-hacyu-{{ $item->HACYU_ID }}-6 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" name="data[{{ $item->HACYU_ID }}][DRIVER_NAME]"  type="text" value="{{ $item->DRIVER_NAME }}" placeholder=""  style="width: 190px;"/>
                         </div>
                    </div>
                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="margin-left:-52px;">
                         <div>
                             <label>連絡先</label>
-                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} class="item-hacyu-{{ $item->HACYU_ID }} brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}"  name="data[{{ $item->HACYU_ID }}][RENRAKUSAKI4]"  type="text" value="{{ $item->RENRAKUSAKI4 }}" placeholder=""  style="width: 190px;"/>
+                            <input {{ !$isUserLifeOne ?  '' : 'disabled'  }} class="item-hacyu-{{ $item->HACYU_ID }}-7 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}"  name="data[{{ $item->HACYU_ID }}][RENRAKUSAKI4]"  type="text" value="{{ $item->RENRAKUSAKI4 }}" placeholder=""  style="width: 190px;"/>
                         </div>
                    </div>
                 </div>

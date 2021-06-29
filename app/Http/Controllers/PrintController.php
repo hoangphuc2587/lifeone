@@ -527,8 +527,8 @@ class PrintController extends Controller
                         if($oddDetail->SURYO != $HACYUMSAI['SURYO'] && $HACYUMSAI['SURYO'] > 0){
                             $dataUpdateDetail['SURYO'] = $HACYUMSAI['SURYO'];
                             $dataUpdateDetail['KINGAK'] = $HACYUMSAI['SURYO'] * $oddDetail->TANKA;
-                            $dataUpdateDetail['NEBIKI_GAK'] = $HACYUMSAI['SURYO'] * $oddDetail->NEBIKI_TANKA;                            
-                            $split = true;                            
+                            $dataUpdateDetail['NEBIKI_GAK'] = $HACYUMSAI['SURYO'] * $oddDetail->ZEINUKI_TANKA;
+                            $split = true;
                         }
 
                         if(empty($HACYUMSAI['KAITO_NOKI'])){
