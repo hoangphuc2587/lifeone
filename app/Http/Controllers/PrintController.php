@@ -84,15 +84,19 @@ class PrintController extends Controller
         'T_HACYU.EXCEL_PATH',
         'T_HACYU.STS_CD'
         )
+        ->leftJoin('T_HACYUMSAI','T_HACYUMSAI.HACYU_ID','=','T_HACYU.HACYU_ID')
         ->where(['T_HACYU.DEL_FLG'=> 0,'T_HACYU.VISIVLE_FLG'=>1])
-        ->whereIn('T_HACYU.HACYU_ID', $lists_id);
+        ->whereIn('T_HACYU.HACYU_ID', $lists_id)
+        ->GROUPBY('T_HACYU.HACYU_ID');
 
         if(session()->has('sort_list')){
             $items_sort = session()->get('items_sort');
             foreach ($items_sort as $value) {
                 if(session()->has($value)){
                     $asc = session()->get($value.'_asc');
-                    if ($value != 'MAKER'){                       
+                    if ($value == 'MAKER'){
+                        $query->orderBy('T_HACYUMSAI.'.$value, empty($asc) ? 'asc' : $asc);
+                    }else{
                         $query->orderBy('T_HACYU.'.$value, empty($asc) ? 'asc' : $asc);
                     }
                 }
