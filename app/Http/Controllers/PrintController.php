@@ -105,10 +105,10 @@ class PrintController extends Controller
             $field_sort             =  session()->get('field_sort');
             $query_sort             =  session()->get('query_sort');
             $query->orderBy($field_sort, $query_sort);
-            $query->orderBy('T_HACYU.HACYU_ID', 'asc');
         }
 
         $query->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc');
+        $query->orderBy('T_HACYU.HACYU_ID', 'asc');
 
         return $query;
     }
@@ -309,7 +309,7 @@ class PrintController extends Controller
             $hasSTS01Load = true;
             session()->forget('hasSTS01');
         }
-        $driverList = $this->getDriverInfo();       
+        $driverList = $this->getDriverInfo();     
         return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne' ,'hasSTS01Load', 'driverList'); 
     }
 

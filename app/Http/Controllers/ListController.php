@@ -135,9 +135,9 @@ class ListController extends Controller
 
         }else{
             $query->orderBy($field_sort, $query_sort);
-            $query->orderBy('T_HACYU.HACYU_ID', 'asc');
         }
         $query->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc');
+        $query->orderBy('T_HACYU.HACYU_ID', 'asc');
         return $query;
 
     }
