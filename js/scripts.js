@@ -418,6 +418,21 @@ $(function(){
         $('#submit_detail_mobile').click();
     })
 
+    $(document).on('change','.txt-free',function(){
+        console.log();
+        $.ajax({
+            cache : false,
+            url  : $("#link-home-url").val() + '/update-text-free',
+            type : 'POST',
+            data : {id:$(this).data('id'), value: $(this).val()} ,
+            success:function(data){
+                isFirst = false;
+            }
+        })
+    })
+
+   
+
     $(document).on('click','#a2s1',function(){
         if($(this)[0].checked === true){
             var listCheckBox = document.getElementsByName('check_box_list[]');

@@ -592,7 +592,7 @@
                                 <td width="60" ><span>小計</span></td>
                                 <td width="80" class="text-right"><span>{{ number_format($item->SYOKEI) }}</span></td> 
                                 <td width="80" class="text-right"> <span>値引額合計</span></td>
-                                <td width="80" class="text-right"><span>{{ number_format($item->NEBIKI_SUM) }}&nbsp;</span></td>
+                                <td width="80" style="padding-right: 3px;" class="text-right"><span>{{ number_format($item->NEBIKI_SUM) }}</span></td>
                             </tr>
                             <tr>
                                 <td><span>送料</span></td>

@@ -525,6 +525,14 @@ class ListController extends Controller
         $request->session()->put('data_list_checkbox',$request->data_list_checkbox);
     }
 
+    public function update_text_free(Request $request){
+        $id = $request->id;
+        $text = $request->value;
+        DB::table('T_HACYU')
+           ->where('HACYU_ID',$id)
+           ->update(['FREE' => $text]);
+    }    
+
     public function search_by_reset(Request $request){
         if($request->session()->has('items_sort')){
             $items_sort = $request->session()->get('items_sort');
