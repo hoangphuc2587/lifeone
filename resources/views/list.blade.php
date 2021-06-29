@@ -672,7 +672,7 @@
                                 @else
                                 <td class="tdDot">@if (!empty($item->COMMENT1)) <span class="dot"></span> @endif</td>
                                 <td class="tdDot">@if ($item->NOHIN_KIBO_FLG == 1) <span class="dot"></span>@endif</td>
-                                <td><textarea data-id="{{ $item->HACYU_ID }}" class="txt-free" style="resize: none; width: 100%" rows="2">{{ $item->FREE }}</textarea></td> 
+                                <td style="background-color: #FFF2CC;"><textarea data-id="{{ $item->HACYU_ID }}" class="txt-free" style="resize: none; width: 100%" rows="2">{{ $item->FREE }}</textarea></td> 
                                 @endif
 
                                 
