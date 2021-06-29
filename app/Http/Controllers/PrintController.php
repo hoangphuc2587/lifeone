@@ -720,8 +720,7 @@ class PrintController extends Controller
                     $a = count($this->getDataFILE($HACYU_ID)) + 1;
                     foreach($files as $key => $item){
                         //Start of Upload Files
-                        $fileName = time(). rand(1111,
-                                    9999) . '.' . $item->getClientOriginalExtension();
+                        $fileName = time().'_' . $item->getClientOriginalName();
                         $path = public_path().'/uploads/'.$HACYU_ID;
                         $item->move($path, $fileName);
                         DB::table('T_FILE')->insert([

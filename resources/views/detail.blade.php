@@ -62,7 +62,7 @@
         margin-top: 4px !important;
     }
     .total{
-        margin-left: 400px;
+        margin-left: 352px;
         font-size: 12px;
     }
     .total-num{
@@ -541,12 +541,12 @@
                                 <tr class="blue-tr">
                                     <th scope="col" class="th2" width="40">№</th>
                                     <th class="th3" width="75">カテゴリ</th>
-                                    <th class="th4" width="85">メーカー</th>
-                                    <th class="th5" width="140">品番</th>
+                                    <th class="th4" width="80">メーカー</th>
+                                    <th class="th5" width="110">品番</th>
                                     <th class="th6" width="63">単価</th>
-                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" scope="col" class="th7" width="80">数量</th>
-                                    <th class="th8" width="63">金額</th>
-                                    <th class="th9" width="45">掛率</th>
+                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" scope="col" class="th7" width="60">数量</th>
+                                    <th class="th8" width="80">金額</th>
+                                    <th class="th9" width="80">掛率</th>
                                     <th class="th9" width="80">値引額</th>
                                     <th class="th9" width="80">値引予定月</th>
                                     <th class="th9" width="80">納品希望日</th>
@@ -586,58 +586,35 @@
                 </div>
 
                 <div class="row total">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                        <div class="row">
-                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12">
-                                <span>
-                                    小計
-                                </span>
-                            </div>
-                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right">
-                                <span>{{ number_format($item->SYOKEI) }}</span>
-                            </div> 
-                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 text-center">
-                                <span>
-                                    値引額合計
-                                </span>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
-                                <span>{{ number_format($item->NEBIKI_SUM) }}</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12">
-                                <span>
-                                    送料
-                                </span>
-                            </div>
-                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right">
-                                <span>{{ number_format($item->SORYO) }}</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12" style="border-bottom: 1px solid;">
-                                <span>
-                                    消費税
-                                </span>
-                            </div>
-                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right" style="border-bottom: 1px solid;">
-                                <span>{{ number_format($item->SYOHIZEI) }}</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-12">
-                                <span>
-                                    合計
-                                </span>
-                            </div>
-                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12 text-right">
-                                <span>{{ number_format($item->SUM) }}</span>
-                            </div>
-                        </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <table class="table-no-border" style="width: 300px;">
+                            <tr>
+                                <td width="60" ><span>小計</span></td>
+                                <td width="80" class="text-right"><span>{{ number_format($item->SYOKEI) }}</span></td> 
+                                <td width="80" class="text-right"> <span>値引額合計</span></td>
+                                <td width="80" class="text-right"><span>{{ number_format($item->NEBIKI_SUM) }}&nbsp;</span></td>
+                            </tr>
+                            <tr>
+                                <td><span>送料</span></td>
+                                <td class="text-right"><span>{{ number_format($item->SORYO) }}</span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid;"><span>消費税</span></td>
+                                <td style="border-bottom: 1px solid;" class="text-right"><span>{{ number_format($item->SYOHIZEI) }}</span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span>合計</span></td>
+                                <td class="text-right"><span>{{ number_format($item->SUM) }}</span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-
 
                 <div class="row mt-3">
                     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12" style="padding-left: 30px;">
@@ -691,7 +668,7 @@
                                                 @foreach ($item->FILE as $fileData)
                                                 <tr class="line-{{ $item->HACYU_ID }}-{{ $index_file }}">
                                                     <td>{{ $fileData->TANT_NAME }}</td>
-                                                    <td>{{ $fileData->FILE_NAME }}</td>
+                                                    <td>{{ substr($fileData->FILE_NAME, strpos($fileData->FILE_NAME, '_') + 1, strlen($fileData->FILE_NAME)) }}</td>
                                                     <td><input data-link="{{ url($fileData->FILE_PATH) }}" data-tfile="{{ $fileData->ID }}" data-id="{{ $item->HACYU_ID }}-{{ $index_file }}" class="chk-{{ $item->HACYU_ID }} tb_list_checkbox" type="checkbox" value=""></td>
                                                 </tr>
                                                 @php

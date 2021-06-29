@@ -734,15 +734,13 @@ $(function(){
         var id = $(this).data('id');
         var index = $("#hdIndex").val();        
         var item = '.btn-' + id + '-' + index;
-        var input =  '<input type="file" class="btn-file-upload btn-'+id+'-'+index+'" name="data['+id+'][FILE][]">';
+        var input =  '<input type="file" onchange="uploadFile(\''+ id +'\', '+ index +')" class="btn-file-upload btn-'+id+'-'+index+'" name="data['+id+'][FILE][]">';
 
-        var html =  '<tr class="line-'+ id + '-' + index+'">';
+        var html =  '<tr style="display:none" class="line-'+ id + '-' + index+'">';
             html += '<td>'+$("#hdSourceName").val()+'</td>'
             html += '<td>'+input+'</td>';
             html += '<td><input data-link="" data-tfile="" data-id="'+id + '-' + index+'" class="chk-'+id+' tb_list_checkbox" type="checkbox" value=""></td>';
             html += '</tr>';
-
-        // $( input ).appendTo( '.upload-file-'+id );
         $( html ).appendTo( '.tbody-upload-'+id );
         index = parseInt(index)  + 1;
         $("#hdIndex").val(index);
@@ -942,3 +940,7 @@ function download(files) {
     }
     return false;
 } 
+
+function uploadFile(id, index){   
+   $('.btn-submit-data-1').trigger('click');
+}
