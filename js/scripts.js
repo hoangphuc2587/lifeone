@@ -143,6 +143,9 @@ $(function(){
 
     $(document).on('click','.search_by_reset',function(){        
         $.get($("#link-home-url").val() + '/search-by-reset',function(data){
+            var data = [];
+            sessionStorage.setItem('data_list_checkbox',JSON.stringify(data));
+            sessionStorage.setItem('load_page',JSON.stringify(true));
             window.location = $("#link-home-url").val() + '/list';
         })   
     })
@@ -823,18 +826,15 @@ function download(files) {
     });
 }
 
- function CompareDate(date1 , date2) {    
-   //Note: 00 is month i.e. January 
-    if (date1 != '' && typeof(date2) != 'undefined' ){
-       var res = date1.split("/");
-       var res2 = date2.split("/");
-       var dateOne = new Date(res[0], res[1], res[2]); //Year, Month, Date    
-       var dateTwo = new Date(res2[0], res2[2], res2[2]); //Year, Month, Date    
-       if (dateOne > dateTwo) {    
-            return true;
-        }else {
-            return false;
-        }
+ function CompareDate(date1 , date2) {
+    if (date1 != ''  & typeof(date2) != 'undefined' && date2 != ''){
+        var a = parseInt(date1.replace(/\//g,""),10);
+        var b = parseInt(date2.replace(/\//g,""),10);
+        if(a > b){
+           return true;
+        }else{
+           return false; 
+        }       
     }
     return false;
 } 

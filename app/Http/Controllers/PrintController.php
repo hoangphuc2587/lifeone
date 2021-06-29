@@ -108,6 +108,8 @@ class PrintController extends Controller
             $query->orderBy('T_HACYU.HACYU_ID', 'asc');
         }
 
+        $query->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc');
+
         return $query;
     }
 
