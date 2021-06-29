@@ -495,7 +495,7 @@ $(function(){
             var irai = $('.data-irai-cd-'+id).val();
             var sybet = $('.data-haiso-sybet-cd-'+id).val(); 
             var multi = $('.data-haiso-multi-flg-'+id).val(); 
-            if ($(this).val() == '06' && sybet == '04' && irai == '03'){
+            if ($('#hdUserLifeOne').val() == '0' && $(this).val() == '06' && sybet == '04' && irai == '03'){
                 $( ".item-hacyu-"+id).each(function( pos ) {
                     if ($.trim($(this).val()) == ''){
                       $('.error-'+id).fadeIn();
