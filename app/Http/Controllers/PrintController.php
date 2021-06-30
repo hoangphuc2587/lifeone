@@ -394,6 +394,8 @@ class PrintController extends Controller
 
         // echo '<pre>',print_r($data,1),'</pre>';
         // die;
+        $arrDENPYO = array(0 => 'チェックなし',  1 =>'チェックあり');
+
 
         if (isset($request->submit) && $request->submit == 'delete_file'){
             foreach($data as $key => $value){
@@ -616,23 +618,33 @@ class PrintController extends Controller
                             if (!empty($dateNoHinChange) || (empty($HACYUMSAI['KAITO_NOKI']) && !empty($oddDetail->KAITO_NOKI)) || (empty($HACYUMSAI['NOHIN_YMD'])&& !empty($oddDetail->NOHIN_YMD))){
                                 if (!empty($comment2)){
                                     $comment2 .= PHP_EOL;
-                                }                                
-                                $comment2 .= '【'.date('Y/m/d H:i').'　'.(empty($dateNoHinOld) ? '' : $dateNoHinOld.' → ').$dateNoHinChange.'】'; 
-                            }                             
+                                }
+                                if(empty($dateNoHinOld)){
+                                    $comment2 .= $dateNoHinChange; 
+
+                                }else{
+                                    $pre_text = $oddDetail->HINBAN.'('.$HACYUMSAI['SURYO'].'):';
+                                    $comment2 .= '【'.date('Y/m/d H:i').'　'.$pre_text.$dateNoHinOld.' → '.$pre_text.$dateNoHinChange.'】';   
+                                }
+                            }
                         }
 
                     }
 
                     $arrItemChange = array('HAISOGYOSYA1', 'DENPYONO1','HAISOGYOSYA2', 'DENPYONO2', 'RENRAKUSAKI2', 'HAISOGYOSYA3_1', 'DENPYONO3_1', 'HAISOGYOSYA3_2', 'DENPYONO3_2' , 'DRIVER_NAME', 'RENRAKUSAKI4', 'NO_DENPYO_FLG', 'BIKO');
                     $dataChange = array();
-
-                    foreach ($arrItemChange as $itemChange) {
-                        if (isset($HACYU[$itemChange]) && $HACYU[$itemChange]  != $oldData->$itemChange){
-                        
-                            $dataChange[] = (empty($oldData->$itemChange) ? '' : $oldData->$itemChange.' → ').$HACYU[$itemChange];
-                            $driverChange = true;
+                    if ($oldData->HAISO_SYBET_CD == '04' && $oldData->IRAI_CD == '03' ){
+                        foreach ($arrItemChange as $itemChange) {
+                            if ($HACYU[$itemChange]  != $oldData->$itemChange){
+                                if (!empty($oldData->$itemChange) && $itemChange !== 'NO_DENPYO_FLG'){                                
+                                    $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];
+                                }elseif ($itemChange === 'NO_DENPYO_FLG'){
+                                    $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
+                                }
+                                $driverChange = true;
+                            }
                         }
-                    }                                     
+                    }
 
                     if(!empty($dataChange)){
                         if (!empty($comment2)){
