@@ -360,6 +360,19 @@
         margin-left: -30px !important;
     }
 
+    .txt-suryo{
+        width: 100%;
+        text-align: right;
+    }
+
+    .txt-no-border{
+        width: 100%;
+        text-align: right;
+        border: none;
+        box-shadow: none;
+        outline: none;        
+    }
+
     </style>
 </head>
 
@@ -554,8 +567,14 @@
                                     <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" class="th9" width="auto">納品日<br/>※分納の場合は数量を変更して下さい。</th>
                                 </tr>
                             </thead>
-                            <tbody>                                
+                            <tbody class="tbody-{{ $item->HACYU_ID }}">
+                                @php
+                                  $SPLIT_NO = 1;
+                                @endphp
                                 @foreach ($item->HACYUMSAI as $detail)
+                                @php
+                                  $SPLIT_NO = $detail->SPLIT_NO;
+                                @endphp
                                 <tr class="cacl-total-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">
                                     <td>{{ $detail->HACYUMSAI_ID }}</td>
                                     <td>{{ $detail->CTGORY }}</td>
@@ -563,16 +582,16 @@
                                     <td>{{ $detail->HINBAN }}</td>
                                     <td class="text-right data-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">{{ number_format($detail->TANKA) }}</td>
                                     <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
-                                        <input data-value="{{ $detail->SURYO }}" data-id="{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}" type="text" {{ !$isUserLifeOne ? '' : 'disabled' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}-{{ $detail->SPLIT_NO }}][SURYO]" class="txt-suryo" style="width: 100%;text-align: right;" maxlength="10" value="{{ $detail->SURYO }}">
+                                        <input data-nebiki="{{ $detail->NEBIKI_TANKA }}" data-zeinuki="{{ $detail->ZEINUKI_TANKA }}" data-no="{{ $detail->SPLIT_NO }}" data-value="{{ $detail->SURYO }}" data-id="{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}" type="text" {{ !$isUserLifeOne ? '' : 'disabled' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}-{{ $detail->SPLIT_NO }}][SURYO]" class="txt-suryo" maxlength="10" value="{{ $detail->SURYO }}">
                                     </td>
-                                    <td class="text-right">{{ number_format($detail->KINGAK) }}</td>
+                                    <td class="text-right"><input type="text" readonly="" value="{{ number_format($detail->KINGAK) }}" class="txt-no-border KINGAK"></td>
                                     <td class="text-right">{{ $detail->SIKIRI_RATE }}%</td>
-                                    <td class="text-right">{{ number_format($detail->NEBIKI_GAK) }}</td>
+                                    <td class="text-right"><input type="text" readonly="" value="{{ number_format($detail->NEBIKI_GAK) }}" class="txt-no-border NEBIKI_GAK"></td>
                                     <td>{{ $detail->NEBIKI_YM }}</td>
                                     <td>{{ empty($detail->NOHIN_KIBO_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
                                     <td>{{ $detail->BIKO }}</td>
                                     <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
-                                        <input type="text"
+                                        <input data-no="{{ $detail->SPLIT_NO }}" type="text"
                                         data-date-format="yyyy/mm/dd" data-value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}"
                                         autocomplete="off" class="{{ !$isUserLifeOne ? 'datepicker-input' : 'no-edit' }} date-{{ $item->HACYU_ID }}" style="width: 95px;"
                                         {{ !$isUserLifeOne ? '' : 'disabled' }} 
@@ -580,8 +599,9 @@
                                     </td>
                                 </tr>
                                 @endforeach
-                            </tbody>
+                            </tbody>                            
                         </table>
+                        <input type="hidden" class="hdSPLITNO-{{ $item->HACYU_ID }}" value="{{ $SPLIT_NO }}">
                     </div>
                 </div>
 

@@ -194,8 +194,11 @@ class PrintController extends Controller
         )
         ->where(['T_HACYUMSAI.DEL_FLG'=> 0])
         ->where('T_HACYUMSAI.HACYU_ID', $id)
-        ->where('T_HACYUMSAI.HACYUMSAI_ID', $id_detail)
-        ->where('T_HACYUMSAI.SPLIT_NO', $no);
+        ->where('T_HACYUMSAI.HACYUMSAI_ID', $id_detail);
+        if ($no > 0){
+          $query->where('T_HACYUMSAI.SPLIT_NO', $no);
+        }
+        $query->orderBy("T_HACYUMSAI.SPLIT_NO" , "ASC");
         return $query->first();
     }    
 
@@ -501,7 +504,7 @@ class PrintController extends Controller
                         }
                         $isChangeComment = true;                        
                     }
-
+                    $oddDetailFisrt = '';
                     foreach($details as $k => $v){
                         $HACYUMSAI = $v;
                         $arrData = explode('-', $k);
@@ -524,81 +527,38 @@ class PrintController extends Controller
                         }
 
                         $dataUpdateDetail = array();
-                        $split = false;
 
-                        if($oddDetail->SURYO != $HACYUMSAI['SURYO'] && $HACYUMSAI['SURYO'] > 0){
+                        if (!empty($oddDetail)){
                             $dataUpdateDetail['SURYO'] = $HACYUMSAI['SURYO'];
-                            $dataUpdateDetail['KINGAK'] = $HACYUMSAI['SURYO'] * $oddDetail->TANKA;
-                            $dataUpdateDetail['NEBIKI_GAK'] = $HACYUMSAI['SURYO'] * $oddDetail->ZEINUKI_TANKA;
-                            $split = true;
-                        }
+                            $dataUpdateDetail['KINGAK'] = $HACYUMSAI['SURYO'] * $oddDetail->ZEINUKI_TANKA;
+                            $dataUpdateDetail['NEBIKI_GAK'] = $HACYUMSAI['SURYO'] * $oddDetail->NEBIKI_TANKA;
 
-                        if(empty($HACYUMSAI['KAITO_NOKI'])){
-                            $dataUpdateDetail['KAITO_NOKI'] = null;
-                        }elseif(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){
-                            $dataUpdateDetail['KAITO_NOKI'] = $HACYUMSAI['KAITO_NOKI'];
-                        }
-
-                        if(empty($HACYUMSAI['NOHIN_YMD'])){
-                            $dataUpdateDetail['NOHIN_YMD'] = null;
-                        }elseif(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
-                            $dataUpdateDetail['NOHIN_YMD'] = $HACYUMSAI['NOHIN_YMD'];
-                        }                        
-
-                        if (!empty($dataUpdateDetail)){
-
-                            $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
-                            $dataUpdateDetail['UPD_YMD'] = $date;             
-
-                            DB::table('T_HACYUMSAI')
-                            ->where('HACYU_ID',$HACYU_ID)
-                            ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
-                            ->where('SPLIT_NO',$HACYUMSAI['SPLIT_NO'])
-                            ->update($dataUpdateDetail);
-                        }
-                        $dateNoHinChange = '';                      
-                        $dateNoHinOld = '';
-                        if ($split){
-                            $dataUpdateDetailNew = $dataUpdateDetail;
-                            $dataUpdateDetailNew['HACYU_ID'] = $HACYU_ID;
-                            $dataUpdateDetailNew['HACYUMSAI_ID'] = $HACYUMSAI_ID;
-                            $dataUpdateDetailNew['SPLIT_NO'] = $this->getMaxSPLITNO($HACYUMSAI_ID) + 1;
-                            $dataUpdateDetailNew['CTGORY'] = $oddDetail->CTGORY;
-                            $dataUpdateDetailNew['MAKER'] = $oddDetail->MAKER;
-                            $dataUpdateDetailNew['HINBAN'] = $oddDetail->HINBAN;
-                            $dataUpdateDetailNew['TANKA'] = $oddDetail->TANKA;
-                            $dataUpdateDetailNew['ZEINUKI_TANKA'] = $oddDetail->ZEINUKI_TANKA;
-                            $dataUpdateDetailNew['SIKIRI_RATE'] = $oddDetail->SIKIRI_RATE;
-                            $dataUpdateDetailNew['NEBIKI_TANKA'] = $oddDetail->NEBIKI_TANKA;
-                            $dataUpdateDetailNew['DEL_FLG'] = 0;
-                            $dataUpdateDetail['ADD_TANTCD'] = $user->TANT_CD;
-                            $dataUpdateDetail['ADD_YMD'] = $date; 
-
-                            if(empty($dataUpdateDetailNew['KAITO_NOKI'])){
-                               $dataUpdateDetailNew['KAITO_NOKI'] = $oddDetail->KAITO_NOKI;
-                               $dateNoHinOld = str_replace('-', '/', $dataUpdateDetailNew['KAITO_NOKI']);
-                            }else{
-                               $dateNoHinChange = str_replace('-', '/', $dataUpdateDetailNew['KAITO_NOKI']);
+                            if(empty($HACYUMSAI['KAITO_NOKI'])){
+                                $dataUpdateDetail['KAITO_NOKI'] = null;
+                            }elseif(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){
+                                $dataUpdateDetail['KAITO_NOKI'] = $HACYUMSAI['KAITO_NOKI'];
                             }
 
-                            if(empty($dataUpdateDetailNew['NOHIN_YMD'])){
-                               $dataUpdateDetailNew['NOHIN_YMD'] = $oddDetail->NOHIN_YMD;
-                               $dateNoHinOld = str_replace('-', '/', $dataUpdateDetailNew['NOHIN_YMD']);
-                            }else{
-                               $dateNoHinChange = str_replace('-', '/', $dataUpdateDetailNew['NOHIN_YMD']);
-                            }                            
+                            if(empty($HACYUMSAI['NOHIN_YMD'])){
+                                $dataUpdateDetail['NOHIN_YMD'] = null;
+                            }elseif(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
+                                $dataUpdateDetail['NOHIN_YMD'] = $HACYUMSAI['NOHIN_YMD'];
+                            }                        
 
-                            $new_suryo = $oddDetail->SURYO - $HACYUMSAI['SURYO'];
-                            $dataUpdateDetailNew['SURYO'] = $new_suryo;
-                            $dataUpdateDetailNew['KINGAK'] = $new_suryo * $oddDetail->ZEINUKI_TANKA;
-                            $dataUpdateDetailNew['NEBIKI_GAK'] = $new_suryo * $oddDetail->NEBIKI_TANKA;
-                            DB::table('T_HACYUMSAI')->insert($dataUpdateDetailNew);
+                            if (!empty($dataUpdateDetail)){
 
-                            if (!empty($comment2)){
-                                $comment2 .= PHP_EOL;
-                            }                            
-                            $comment2 .= '【'.date('Y/m/d H:i').'　('.$oddDetail->SURYO.')'.( !empty($dateNoHinChange) ? ':'.$dateNoHinOld.' → ' : '' ).'('.$new_suryo.')'.( !empty($dateNoHinChange) ? ':'.$dateNoHinChange : '' ).'】';
-                        }else{
+                                $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
+                                $dataUpdateDetail['UPD_YMD'] = $date;             
+
+                                DB::table('T_HACYUMSAI')
+                                ->where('HACYU_ID',$HACYU_ID)
+                                ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
+                                ->where('SPLIT_NO',$HACYUMSAI['SPLIT_NO'])
+                                ->update($dataUpdateDetail);
+                            }
+
+                            $dateNoHinChange = '';
+                            $dateNoHinOld = '';
                             if(empty($HACYUMSAI['KAITO_NOKI'])){
                                 $dateNoHinChange = '';
                                 $dateNoHinOld = str_replace('-', '/', $oddDetail->KAITO_NOKI);
@@ -626,9 +586,48 @@ class PrintController extends Controller
                                     $pre_text = $oddDetail->HINBAN.'('.$HACYUMSAI['SURYO'].'):';
                                     $comment2 .= '【'.date('Y/m/d H:i').'　'.$pre_text.$dateNoHinOld.' → '.$pre_text.$dateNoHinChange.'】';   
                                 }
-                            }
-                        }
+                            }                            
+                        }else{
+                             if(empty($oddDetailFisrt)){
+                                $oddDetailFisrt = $this->getDataOneHACYUMSAI($HACYU_ID, $HACYUMSAI_ID, 0);
+                             }                            
+                            $dataUpdateDetailNew = array();
+                            $dataUpdateDetailNew['HACYU_ID'] = $HACYU_ID;
+                            $dataUpdateDetailNew['HACYUMSAI_ID'] = $HACYUMSAI_ID;
+                            $dataUpdateDetailNew['SPLIT_NO'] = $HACYUMSAI['SPLIT_NO'];
+                            $dataUpdateDetailNew['CTGORY'] = $oddDetailFisrt->CTGORY;
+                            $dataUpdateDetailNew['MAKER'] = $oddDetailFisrt->MAKER;
+                            $dataUpdateDetailNew['HINBAN'] = $oddDetailFisrt->HINBAN;
+                            $dataUpdateDetailNew['TANKA'] = $oddDetailFisrt->TANKA;
+                            $dataUpdateDetailNew['ZEINUKI_TANKA'] = $oddDetailFisrt->ZEINUKI_TANKA;
+                            $dataUpdateDetailNew['SIKIRI_RATE'] = $oddDetailFisrt->SIKIRI_RATE;
+                            $dataUpdateDetailNew['NEBIKI_TANKA'] = $oddDetailFisrt->NEBIKI_TANKA;
+                            $dataUpdateDetailNew['NEBIKI_YM'] = $oddDetailFisrt->NEBIKI_YM;
+                            $dataUpdateDetailNew['NOHIN_KIBO_YMD'] = $oddDetailFisrt->NOHIN_KIBO_YMD;
+                            $dataUpdateDetailNew['BIKO'] = $oddDetailFisrt->BIKO;
+                            $dataUpdateDetailNew['NYUKA_ID'] = $oddDetailFisrt->NYUKA_ID;
+                            $dataUpdateDetailNew['DEL_FLG'] = 0;
+                            $dataUpdateDetailNew['ADD_TANTCD'] = $user->TANT_CD;
+                            $dataUpdateDetailNew['ADD_YMD'] = $date; 
 
+                            if(empty($HACYUMSAI['KAITO_NOKI'])){
+                                $dataUpdateDetailNew['KAITO_NOKI'] = null;
+                            }else{
+                                $dataUpdateDetailNew['KAITO_NOKI'] = $HACYUMSAI['KAITO_NOKI'];
+                            }
+
+                            if(empty($HACYUMSAI['NOHIN_YMD'])){
+                                $dataUpdateDetailNew['NOHIN_YMD'] = null;
+                            }else{
+                                $dataUpdateDetailNew['NOHIN_YMD'] = $HACYUMSAI['NOHIN_YMD'];
+                            }                                                   
+
+                            $new_suryo = $HACYUMSAI['SURYO'];
+                            $dataUpdateDetailNew['SURYO'] = $new_suryo;
+                            $dataUpdateDetailNew['KINGAK'] = $new_suryo * $oddDetailFisrt->ZEINUKI_TANKA;
+                            $dataUpdateDetailNew['NEBIKI_GAK'] = $new_suryo * $oddDetailFisrt->NEBIKI_TANKA;
+                            DB::table('T_HACYUMSAI')->insert($dataUpdateDetailNew);
+                        }
                     }
 
                     $arrItemChange = array('HAISOGYOSYA1', 'DENPYONO1','HAISOGYOSYA2', 'DENPYONO2', 'RENRAKUSAKI2', 'HAISOGYOSYA3_1', 'DENPYONO3_1', 'HAISOGYOSYA3_2', 'DENPYONO3_2' , 'DRIVER_NAME', 'RENRAKUSAKI4', 'NO_DENPYO_FLG', 'BIKO');

@@ -856,11 +856,52 @@ $(function(){
     });
 
     $(document).on('change','.txt-suryo',function(){
+      var strId = $(this).data('id');
+      var arr = strId.split("-");
+      var id = arr[0];
+      var iddetail = arr[1];
       var n_value = parseInt($(this).val());
-      var d_value = parseInt($(this).data('value'));
-      if (n_value > d_value){
+      var d_value = parseInt($(this).data('value'));      
+      if (n_value > d_value || n_value == '' || n_value == 0){
         $("#modalCaclTotal").modal('show');
-        $(this).val(d_value);
+        $(this).val(d_value);       
+      }
+      else{        
+        $(this).attr('data-value', n_value);
+        var zeinuki = parseInt($(this).data('zeinuki'));
+        var nebiki = parseInt($(this).data('nebiki'));
+        var tr = $(this).parent().parent();
+
+        tr.find('input').each(function(){ 
+            if ($(this).hasClass('KINGAK')){
+                this.value = numberWithCommas(zeinuki * n_value);
+            }else if ($(this).hasClass('NEBIKI_GAK')){
+                this.value = numberWithCommas(nebiki * n_value);
+            }            
+        });
+
+        var ob = $(tr).clone();
+        var newNo = parseInt($(".hdSPLITNO-"+id).val()) + 1;
+        ob.find('input').each(function(){ 
+            var nameStr = this.name;
+            var oldNo = $(this).data('no');
+            var newVal = d_value - n_value;
+            if (nameStr.indexOf("SURYO") > 0){
+                this.value = newVal;
+                $(this).attr('data-value', newVal);
+                
+            }else if ($(this).hasClass('KINGAK')){
+                this.value = numberWithCommas(zeinuki * newVal);
+            }else if ($(this).hasClass('NEBIKI_GAK')){
+                this.value = numberWithCommas(nebiki * n_value);
+            } else{
+                this.value = '';
+            }             
+            this.name =  nameStr.replace(iddetail+"-"+oldNo, iddetail+"-"+newNo);
+            $(this).attr('data-no', newNo);
+        });   
+        ob.appendTo(".tbody-"+id);
+        $(".hdSPLITNO-"+id).val(newNo);
       }
     })
 
@@ -958,4 +999,8 @@ function download(files) {
 
 function uploadFile(id, index){   
    $('.btn-submit-data-1').trigger('click');
+}
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
