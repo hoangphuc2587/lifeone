@@ -497,11 +497,7 @@ class PrintController extends Controller
                     if(empty(trim($HACYU['COMMENT2']))){
                         $comment2Private = '';
                     }elseif (trim($HACYU['COMMENT2']) != trim($oldData->COMMENT2)){
-                        if (empty($oldData->COMMENT2)){
-                            $comment2Private = '【'.date('Y/m/d H:i').'】' . $HACYU['COMMENT2'];
-                        }else{
-                            $comment2Private = $HACYU['COMMENT2'];
-                        }
+                        $comment2Private = '【'.date('Y/m/d H:i').'】' . $HACYU['COMMENT2'];
                         $isChangeComment = true;                        
                     }
                     $oddDetailFisrt = '';
@@ -579,10 +575,7 @@ class PrintController extends Controller
                                 if (!empty($comment2)){
                                     $comment2 .= PHP_EOL;
                                 }
-                                if(empty($dateNoHinOld)){
-                                    $comment2 .= $dateNoHinChange; 
-
-                                }else{
+                                if(!empty($dateNoHinOld)){                                  
                                     $pre_text = $oddDetail->HINBAN.'('.$HACYUMSAI['SURYO'].'):';
                                     $comment2 .= '【'.date('Y/m/d H:i').'　'.$pre_text.$dateNoHinOld.' → '.$pre_text.$dateNoHinChange.'】';   
                                 }
@@ -635,7 +628,7 @@ class PrintController extends Controller
                     if ($oldData->HAISO_SYBET_CD == '04' && $oldData->IRAI_CD == '03' ){
                         foreach ($arrItemChange as $itemChange) {
                             if ($HACYU[$itemChange]  != $oldData->$itemChange){
-                                if (!empty($oldData->$itemChange) && $itemChange !== 'NO_DENPYO_FLG'){                                
+                                if (!empty($oldData->$itemChange) && $itemChange !== 'NO_DENPYO_FLG'){
                                     $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];
                                 }elseif ($itemChange === 'NO_DENPYO_FLG'){
                                     $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
@@ -652,19 +645,12 @@ class PrintController extends Controller
                         $comment2 .= '【'.date('Y/m/d H:i').'　'.implode(', ', $dataChange).'】';  
                     } 
 
-                    if ($isChangeComment){
-                        if (!empty($comment2)){
-                            $comment2 .= PHP_EOL;
-                        }
-                        $comment2 .= $comment2Private;
+                    if (!empty($comment2)){
+                        $comment2Private .= PHP_EOL;
                     }
-                    else{
-                        if (!empty($comment2)){
-                            $comment2Private .= PHP_EOL;
-                        }
-                        $comment2Private .= $comment2;
-                        $comment2 = $comment2Private;
-                    }
+                    $comment2Private .= $comment2;
+                    $comment2 = $comment2Private;
+
                     $HACYU['COMMENT2'] = $comment2;
                     $dataUpdate = $HACYU;
                     $dataUpdate['HAC_ANS_YMD'] = $date;
@@ -684,11 +670,7 @@ class PrintController extends Controller
                     if (empty($HACYU['COMMENT1'])){
                         $dataUpdate['COMMENT1']  = '';
                     }elseif (trim($HACYU['COMMENT1']) != trim($oldData->COMMENT1)){
-                        if (empty($oldData->COMMENT1)){
-                            $dataUpdate['COMMENT1'] = '【'.date('Y/m/d H:i').' '.$user->TANT_NAME.'】' . $HACYU['COMMENT1'];                            
-                        }else{
-                            $dataUpdate['COMMENT1'] = $HACYU['COMMENT1'];
-                        }
+                        $dataUpdate['COMMENT1'] = '【'.date('Y/m/d H:i').' '.$user->TANT_NAME.'】' . $HACYU['COMMENT1']; 
                         $dataUpdate['LIF_AND_YMD'] = $date;
                     }
                 }
