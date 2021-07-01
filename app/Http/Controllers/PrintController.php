@@ -496,7 +496,7 @@ class PrintController extends Controller
                     $isChangeComment = false;
                     if(empty(trim($HACYU['COMMENT2']))){
                         $comment2Private = '';
-                    }elseif (trim($HACYU['COMMENT2']) != trim($oldData->COMMENT2)){
+                    }elseif (trim($HACYU['COMMENT2']) !== trim($oldData->COMMENT2)){
                         $comment2Private = '【'.date('Y/m/d H:i').'】' . $HACYU['COMMENT2'];
                         $isChangeComment = true;                        
                     }
@@ -630,7 +630,7 @@ class PrintController extends Controller
                             if ($HACYU[$itemChange]  != $oldData->$itemChange){
                                 if (!empty($oldData->$itemChange) && $itemChange !== 'NO_DENPYO_FLG'){
                                     $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];
-                                }elseif ($itemChange === 'NO_DENPYO_FLG'){
+                                }elseif ($itemChange === 'NO_DENPYO_FLG'  && (int)$oldData->$itemChange === 1){
                                     $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
                                 }
                                 $driverChange = true;
