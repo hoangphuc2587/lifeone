@@ -193,7 +193,7 @@ class PrintController extends Controller
         'T_HACYUMSAI.NYUKA_ID'          
         )
         ->where(['T_HACYUMSAI.DEL_FLG'=> 0])
-        ->where('T_HACYU.HACYU_ID', '=', (string)$id)
+        ->where('T_HACYUMSAI.HACYU_ID', '=', (string)$id)
         ->where('T_HACYUMSAI.HACYUMSAI_ID', '=', (string)$id_detail);
         if ($no > 0){
           $query->where('T_HACYUMSAI.SPLIT_NO', $no);
@@ -226,7 +226,7 @@ class PrintController extends Controller
         'T_HACYUMSAI.NYUKA_ID'          
         )
         ->where(['T_HACYUMSAI.DEL_FLG'=> 0])
-        ->where('T_HACYU.HACYU_ID', '=', (string)$id)
+        ->where('T_HACYUMSAI.HACYU_ID', '=', (string)$id)
         ->orderBy('T_HACYUMSAI.HACYUMSAI_ID', 'asc')
         ->orderBy('T_HACYUMSAI.SPLIT_NO', 'asc');
         return $query->get();
