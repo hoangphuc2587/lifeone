@@ -896,11 +896,27 @@ $(function(){
                 this.value = numberWithCommas(nebiki * n_value);
             } else{
                 this.value = '';
+               
+                $(this).datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    language: 'ja'
+                });
+
+                $(this).datepicker()
+                .on('changeDate', function(e) {
+                    var new_val =  this.value;
+                    var $this = this;         
+                    var d_value = $(this).data('value');
+                    if (d_value == ''){              
+                       $(this).val(new_val);
+                    }
+                });              
             }             
             this.name =  nameStr.replace(iddetail+"-"+oldNo, iddetail+"-"+newNo);
             $(this).attr('data-no', newNo);
         });   
-        ob.appendTo(".tbody-"+id);
+        tr.after(ob);
         $(".hdSPLITNO-"+id).val(newNo);
       }
     })
@@ -924,7 +940,7 @@ $(function(){
                $("#modalCallLifeOne").modal('show'); 
                setTimeout(function(){ $this.value = d_value; }, 1000);
             }
-        });        
+        });
     }
 
     if($('.datepicker-change').length) {
