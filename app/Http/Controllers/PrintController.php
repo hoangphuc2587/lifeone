@@ -196,7 +196,7 @@ class PrintController extends Controller
         ->where('T_HACYUMSAI.HACYU_ID', '=', (string)$id)
         ->where('T_HACYUMSAI.HACYUMSAI_ID', '=', (string)$id_detail);
         if ($no > 0){
-          $query->where('T_HACYUMSAI.SPLIT_NO', $no);
+          $query->where('T_HACYUMSAI.SPLIT_NO', '=', (string)$no);
         }
         $query->orderBy("T_HACYUMSAI.SPLIT_NO" , "ASC");
         return $query->first();
@@ -498,7 +498,7 @@ class PrintController extends Controller
                     $isChangeComment = false;
                     if(empty(trim($HACYU['COMMENT2']))){
                         $comment2Private = '';
-                    }elseif (trim($HACYU['COMMENT2']) != trim($oldData->COMMENT2)){
+                    }elseif (trim($HACYU['COMMENT2']) !== trim($oldData->COMMENT2)){
                         $comment2Private = '【'.date('Y/m/d H:i').'】' . $HACYU['COMMENT2'];
                         $isChangeComment = true;                        
                     }
@@ -527,9 +527,15 @@ class PrintController extends Controller
                         $dataUpdateDetail = array();
 
                         if (!empty($oddDetail)){
+
                             $dataUpdateDetail['SURYO'] = $HACYUMSAI['SURYO'];
                             $dataUpdateDetail['KINGAK'] = $HACYUMSAI['SURYO'] * $oddDetail->ZEINUKI_TANKA;
                             $dataUpdateDetail['NEBIKI_GAK'] = $HACYUMSAI['SURYO'] * $oddDetail->NEBIKI_TANKA;
+
+
+                            echo '<pre>',print_r($HACYUMSAI,1),'</pre>';
+                            echo '<pre>',print_r($oddDetail,1),'</pre>';
+
 
                             if(empty($HACYUMSAI['KAITO_NOKI'])){
                                 $dataUpdateDetail['KAITO_NOKI'] = null;
@@ -543,29 +549,17 @@ class PrintController extends Controller
                                 $dataUpdateDetail['NOHIN_YMD'] = $HACYUMSAI['NOHIN_YMD'];
                             }                        
 
-                            if (!empty($dataUpdateDetail)){
-
-                                $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
-                                $dataUpdateDetail['UPD_YMD'] = $date;             
-
-                                DB::table('T_HACYUMSAI')
-                                ->where('HACYU_ID',$HACYU_ID)
-                                ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
-                                ->where('SPLIT_NO',$HACYUMSAI['SPLIT_NO'])
-                                ->update($dataUpdateDetail);
-                            }
-
                             $dateNoHinChange = '';
                             $dateNoHinOld = '';
                             if(empty($HACYUMSAI['KAITO_NOKI'])){
                                 $dateNoHinChange = '';
                                 $dateNoHinOld = str_replace('-', '/', $oddDetail->KAITO_NOKI);
-                            }elseif(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){                               
+                            }elseif(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){
                                 $dateNoHinChange = str_replace('-', '/', $HACYUMSAI['KAITO_NOKI']);
                                 $dateNoHinOld = str_replace('-', '/', $oddDetail->KAITO_NOKI);
                             }
 
-                            if(empty($HACYUMSAI['NOHIN_YMD'])){
+                            if(empty($HACYUMSAI['NOHIN_YMD']) && $dateNoHinChange == ''){
                                 $dateNoHinChange = '';
                                 $dateNoHinOld = str_replace('-', '/', $oddDetail->NOHIN_YMD);
                             }elseif(!empty($HACYUMSAI['NOHIN_YMD']) && $oddDetail->NOHIN_YMD != $HACYUMSAI['NOHIN_YMD']){
@@ -581,7 +575,18 @@ class PrintController extends Controller
                                     $pre_text = $oddDetail->HINBAN.'('.$HACYUMSAI['SURYO'].'):';
                                     $comment2 .= '【'.date('Y/m/d H:i').'　'.$pre_text.$dateNoHinOld.' → '.$pre_text.$dateNoHinChange.'】';   
                                 }
-                            }                            
+                            }
+
+                            if (!empty($dataUpdateDetail)){
+                                $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
+                                $dataUpdateDetail['UPD_YMD'] = $date;
+
+                                DB::table('T_HACYUMSAI')
+                                ->where('HACYU_ID',$HACYU_ID)
+                                ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
+                                ->where('SPLIT_NO',$HACYUMSAI['SPLIT_NO'])
+                                ->update($dataUpdateDetail);
+                            }                           
                         }else{
                              if(empty($oddDetailFisrt)){
                                 $oddDetailFisrt = $this->getDataOneHACYUMSAI($HACYU_ID, $HACYUMSAI_ID, 0);
