@@ -496,11 +496,16 @@ class PrintController extends Controller
                     $comment2 = '';
                     $comment2Private = empty($oldData->COMMENT2) ? '' : $oldData->COMMENT2;
                     $isChangeComment = false;
+                    
+                    $order   = array("\r\n", "\n", "\r","【","】"); 
+                    $text1 = str_replace($order, "", trim($HACYU['COMMENT2'])); 
+                    $text2 = str_replace($order, "", trim($oldData->COMMENT2)); 
+
                     if(empty(trim($HACYU['COMMENT2']))){
                         $comment2Private = '';
-                    }elseif (trim($HACYU['COMMENT2']) !== trim($oldData->COMMENT2)){
+                    }elseif ($text1 != $text2){
                         $comment2Private = '【'.date('Y/m/d H:i').'】' . $HACYU['COMMENT2'];
-                        $isChangeComment = true;                        
+                        $isChangeComment = true;
                     }
                     $oddDetailFisrt = '';
                     foreach($details as $k => $v){
