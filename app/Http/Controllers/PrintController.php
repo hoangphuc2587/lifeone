@@ -492,7 +492,7 @@ class PrintController extends Controller
                        unset($HACYU['COMMENT1']);
                     }
                     $comment2 = '';
-                    $comment2Private = $oldData->COMMENT2;
+                    $comment2Private = empty($oldData->COMMENT2) ? '' : $oldData->COMMENT2;
                     $isChangeComment = false;
                     if(empty(trim($HACYU['COMMENT2']))){
                         $comment2Private = '';
