@@ -769,7 +769,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <div>
                             <label style="padding-left: 15px;">・ {{ $item->HAISOGYOSYA3_1_LABEL }}</label>
-                            <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][HAISOGYOSYA3_1]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }}-1 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
+                            <select {{ !$isUserLifeOne ?  '' : 'disabled'  }} name="data[{{ $item->HACYU_ID }}][c]" style="width: 155px;" class="item-hacyu-2-{{ $item->HACYU_ID }}-1 brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
                                 <option></option>
                                 @foreach ($deliveryCompany as $option)
                                 <option value="{{ $option->KBNMSAI_NAME }}" {{ $item->HAISOGYOSYA3_1 == $option->KBNMSAI_NAME ? 'selected' : '' }}>{{ $option->KBNMSAI_NAME }}</option>

@@ -625,15 +625,22 @@ class PrintController extends Controller
 
                     $arrItemChange = array('HAISOGYOSYA1', 'DENPYONO1','HAISOGYOSYA2', 'DENPYONO2', 'RENRAKUSAKI2', 'HAISOGYOSYA3_1', 'DENPYONO3_1', 'HAISOGYOSYA3_2', 'DENPYONO3_2' , 'DRIVER_NAME', 'RENRAKUSAKI4', 'NO_DENPYO_FLG', 'BIKO');
                     $dataChange = array();
+                    $canChange = true;
                     if ($oldData->HAISO_SYBET_CD == '04' && $oldData->IRAI_CD == '03' ){
                         foreach ($arrItemChange as $itemChange) {
-                            if ($HACYU[$itemChange]  != $oldData->$itemChange){
-                                if (!empty($oldData->$itemChange) && $itemChange !== 'NO_DENPYO_FLG'){
-                                    $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];
-                                }elseif ($itemChange === 'NO_DENPYO_FLG'){
-                                    $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
+                            if ($oldData->HAISOGYOSYA_MULTI_FLG == 0){                    
+                                if (in_array($itemChange, array('HAISOGYOSYA3_1', 'DENPYONO3_1', 'HAISOGYOSYA3_2', 'DENPYONO3_2')))
+                                $canChange = false;
+                            }
+                            if ($canChange){
+                                if ($HACYU[$itemChange]  != $oldData->$itemChange ){
+                                    if (!empty($oldData->$itemChange) && $itemChange !== 'NO_DENPYO_FLG'){
+                                        $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];
+                                    }elseif ($itemChange === 'NO_DENPYO_FLG'){
+                                        $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
+                                    }
+                                    $driverChange = true;
                                 }
-                                $driverChange = true;
                             }
                         }
                     }
@@ -646,10 +653,9 @@ class PrintController extends Controller
                     } 
 
                     if (!empty($comment2)){
-                        $comment2Private .= PHP_EOL;
+                        $comment2 .= PHP_EOL;
                     }
-                    $comment2Private .= $comment2;
-                    $comment2 = $comment2Private;
+                    $comment2 .= $comment2Private;
 
                     $HACYU['COMMENT2'] = $comment2;
                     $dataUpdate = $HACYU;
@@ -665,7 +671,7 @@ class PrintController extends Controller
                     }
                     if ($TAIO_CD != $oldData->TAIO_CD){
                         $dataUpdate['TAIO_CD'] = $TAIO_CD;
-                        $dataUpdate['TAIO_TANT_CD'] = $user->TANT_CD;
+                        $dataUpdate['TAIO_TANT_CD'] = $TAIO_CD == '' ? '' : $user->TANT_CD;
                     }
                     if (empty($HACYU['COMMENT1'])){
                         $dataUpdate['COMMENT1']  = '';
@@ -676,30 +682,33 @@ class PrintController extends Controller
                 }
                 $countNoHin = 0;
                 if (!empty($dataUpdate)){
-                    if (!empty($arrDateNoHin)){
-                        $countNoHin = count($arrDateNoHin);
+                    if($user->HACYUSAKI_CD != ''){
+                        if (!empty($arrDateNoHin)){
+                            $countNoHin = count($arrDateNoHin);
+                        }
+
+                        if (in_array($oldData->STS_CD, array('01', '02', '03', '04'))){
+                            if ($countNoHin == count($details)){
+                                if ($oldData->IRAI_CD == '01' || $oldData->IRAI_CD == '02'){
+                                    $dataUpdate['STS_CD'] = '05';    
+                                }elseif ($oldData->IRAI_CD == '03'){
+                                    if ($oldData->HAISO_SYBET_CD == '04'){
+                                        $dataUpdate['STS_CD'] = '06';
+                                    }else{
+                                        $dataUpdate['STS_CD'] = '10';
+                                    }
+                                }
+                            }elseif ($countNoHin == 0){
+                                $dataUpdate['STS_CD'] = '02';
+                            }else{
+                                $dataUpdate['STS_CD'] = '03';
+                            }
+                        
+                        }elseif($oldData->STS_CD == '06' && $driverChange){
+                            $dataUpdate['STS_CD'] = '07';
+                        }
                     }
 
-                    if (in_array($oldData->STS_CD, array('01', '02', '03', '04'))){
-                        if ($countNoHin == count($details)){
-                            if ($oldData->IRAI_CD == '01' || $oldData->IRAI_CD == '02'){
-                                $dataUpdate['STS_CD'] = '05';    
-                            }elseif ($oldData->IRAI_CD == '03'){
-                                if ($oldData->HAISO_SYBET_CD == '04'){
-                                    $dataUpdate['STS_CD'] = '06';
-                                }else{
-                                    $dataUpdate['STS_CD'] = '10';
-                                }
-                            }
-                        }elseif ($countNoHin == 0){
-                            $dataUpdate['STS_CD'] = '02';
-                        }else{
-                            $dataUpdate['STS_CD'] = '03';
-                        }
-                    
-                    }elseif($oldData->STS_CD == '06' && $driverChange){
-                        $dataUpdate['STS_CD'] = '07';
-                    }
                     $dataUpdate['UPD_TANTCD'] = $user->TANT_CD;
                     $dataUpdate['UPD_YMD'] = $date;
                     DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($dataUpdate);
