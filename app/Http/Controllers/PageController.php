@@ -13,4 +13,11 @@ class PageController extends Controller
 
         return response()->download($url);
     }
+
+    public function download_file2($user,$filename)
+    {
+        $url = public_path().'/download/'.$user.'/'.$filename;
+
+        return response()->download($url);
+    }    
 }

@@ -68,5 +68,7 @@
     route::post('/post-update', 'PrintController@postUpdate')->name('postUpdate');
 
     Route::get('/uploads/{user}/{filename}', 'PageController@download_file')->name('downloadFile');
+
+    Route::get('/download/{user}/{filename}', 'PageController@download_file2')->name('downloadFile2');
     
 
