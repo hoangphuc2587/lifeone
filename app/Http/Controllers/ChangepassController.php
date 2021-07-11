@@ -34,7 +34,7 @@ class ChangepassController extends Controller
                 return redirect()->back()->withInput()->withErrors($errors);
             }
 
-            $data->PASSWORD = bcrypt($request->newpassword);
+            $data->PASSWORD = $request->newpassword;
             $data->UPD_TANTCD = $user->TANT_CD;
             $data->PW_UPD_YMD = now();
             $data->save();

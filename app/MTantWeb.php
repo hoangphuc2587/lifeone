@@ -56,7 +56,7 @@ class MTantWeb extends Authenticatable
     public function setPasswordAttribute($value)
     {
         if ($value) {
-            $this->attributes['PASSWORD'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
+            $this->attributes['PASSWORD'] = $value;
         }
     }
 }

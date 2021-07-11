@@ -105,7 +105,10 @@
     .title-header{
         font-weight: 700;
         text-align: center;
-        font-size: 36px;
+        font-size: 30px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .container {
@@ -186,6 +189,7 @@
         text-align: center;
         table-layout: fixed;
         overflow: hidden;
+        vertical-align: middle;
     }
 
     .table-bordered td a {
@@ -296,21 +300,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <h1 data-type="header" id="iujvh"><span id="home">ライフワン依頼一覧</span>
                         </h1>
                         
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                        <h1 data-type="header" class="title-header">
-                            <span>
-                            @if(Auth::guard('m_tant_web')->check() && !$isUserLifeOne)
-                            {{Auth::user()->TANT_NAME}}
-                            @endif
-                            </span>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        @if(Auth::guard('m_tant_web')->check() && !$isUserLifeOne)
+                        <h1 data-type="header" title="{{Auth::user()->TANT_NAME}}" class="title-header">
+                            <span>{{Auth::user()->TANT_NAME}}</span>
                         </h1>
+                        @endif
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
                         <a href="{{ route('logout') }}" id="ix1v4u" class="btn btn-primary logout">ログアウト</a>
                         <a href="{{ route('changepass') }}" id="iro64i" class="btn btn-primary">個別設定</a>
                     </div>

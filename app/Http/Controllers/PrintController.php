@@ -533,15 +533,11 @@ class PrintController extends Controller
 
                         if (!empty($oddDetail)){
 
+                            $HACYUMSAI['SURYO'] = isset($HACYUMSAI['SURYO']) ? $HACYUMSAI['SURYO'] : $oddDetail->SURYO; 
+
                             $dataUpdateDetail['SURYO'] = $HACYUMSAI['SURYO'];
                             $dataUpdateDetail['KINGAK'] = $HACYUMSAI['SURYO'] * $oddDetail->ZEINUKI_TANKA;
                             $dataUpdateDetail['NEBIKI_GAK'] = $HACYUMSAI['SURYO'] * $oddDetail->NEBIKI_TANKA;
-
-
-                            echo '<pre>',print_r($HACYUMSAI,1),'</pre>';
-                            echo '<pre>',print_r($oddDetail,1),'</pre>';
-
-
                             if(empty($HACYUMSAI['KAITO_NOKI'])){
                                 $dataUpdateDetail['KAITO_NOKI'] = null;
                             }elseif(!empty($HACYUMSAI['KAITO_NOKI']) && $oddDetail->KAITO_NOKI != $HACYUMSAI['KAITO_NOKI']){
@@ -610,7 +606,7 @@ class PrintController extends Controller
                             $dataUpdateDetailNew['NEBIKI_YM'] = $oddDetailFisrt->NEBIKI_YM;
                             $dataUpdateDetailNew['NOHIN_KIBO_YMD'] = $oddDetailFisrt->NOHIN_KIBO_YMD;
                             $dataUpdateDetailNew['BIKO'] = $oddDetailFisrt->BIKO;
-                            $dataUpdateDetailNew['NYUKA_ID'] = $oddDetailFisrt->NYUKA_ID;
+                            $dataUpdateDetailNew['MOTO_NYUKA_ID'] = $oddDetailFisrt->NYUKA_ID;
                             $dataUpdateDetailNew['DEL_FLG'] = 0;
                             $dataUpdateDetailNew['ADD_TANTCD'] = $user->TANT_CD;
                             $dataUpdateDetailNew['ADD_YMD'] = $date; 

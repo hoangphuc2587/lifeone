@@ -372,6 +372,12 @@
         box-shadow: none;
         outline: none;        
     }
+    .taio-tant-name{
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: center;
+    }
 
     </style>
 </head>
@@ -449,36 +455,39 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
                         <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <span style="padding-left: 65px;">
-                                {{ $item->HACYUSAKI_NAME }}　御中												
-                                </span>
-                            </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-4">
-                                <p style="padding-left: 20px; font-size: 11px;">
-                                    拝啓、平素は格別のお引き立てにあずかり御礼申し上げます。<br >
-                                    本日、下記商品を注文いたしますので、宜しくお願い致します。
-                                </p>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <span>{{ $item->HACYUSAKI_NAME }}　御中</span>
                             </div>
                         </div>
-                    </div>
+                        <div class="row mt-4">
+                            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
+                                <div class="row">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <p style="font-size: 11px;">
+                                            拝啓、平素は格別のお引き立てにあずかり御礼申し上げます。<br >
+                                            本日、下記商品を注文いたしますので、宜しくお願い致します。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12"> 
-                        @if($isUserLifeOne)
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                               {{ $item->TAIO_TANT_NAME }}
+                            <div class="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12"> 
+                                @if($isUserLifeOne)
+                                <div class="row">
+                                    <div title="{{ $item->TAIO_TANT_NAME }}" class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12 taio-tant-name">{{ $item->TAIO_TANT_NAME }}
+                                    </div>
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="padding:0px">
+                                        <input name="data[{{ $item->HACYU_ID }}][TAIO_CD1]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> class="{{ $isUserLifeOne ? 'chkTaiOCd1' : 'no-chk' }}" style="position: relative; top: 4px;" />
+                                        <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}" style="margin-right: 10px;">対応中</label>
+                                        <input name="data[{{ $item->HACYU_ID }}][TAIO_CD2]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" class="ml-1 {{ $isUserLifeOne ? 'chkTaiOCd2' : 'no-chk' }}" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
+                                        <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}">対応完了</label> 
+                                    </div>
+                                </div>
+                                @endif
                             </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <input name="data[{{ $item->HACYU_ID }}][TAIO_CD1]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" type="checkbox" <?php if($item->TAIO_CD == '01'){ echo 'checked';} ?> class="{{ $isUserLifeOne ? 'chkTaiOCd1' : 'no-chk' }}" style="position: relative; top: 4px;" />
-                                <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}" style="margin-right: 10px;">対応中</label>
-                                <input name="data[{{ $item->HACYU_ID }}][TAIO_CD2]" onclick="return {{ $isUserLifeOne ? 'true' : 'false' }};" class="ml-1 {{ $isUserLifeOne ? 'chkTaiOCd2' : 'no-chk' }}" type="checkbox" <?php if($item->TAIO_CD == '02'){ echo 'checked';} ?> style="position: relative; top: 4px;" />
-                                <label class="{{ $isUserLifeOne ? 'brg-edit' : 'no-edit' }}">対応完了</label> 
-                            </div>
-                        </div>
-                        @endif
+                        </div>                         
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
@@ -498,7 +507,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </div>               
 
                 <div class="row">
                     <div class="table-cover">
@@ -540,7 +549,7 @@
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
-                            <label>納品日：</label>
+                            <label>最短納品予定日：</label>
                             <input data-date-format="yyyy/mm/dd" {{ !$isUserLifeOne ? '' : 'disabled' }} autocomplete="off" class="{{ !$isUserLifeOne ? 'datepicker-change brg-edit' : '' }}" type="text" data-id="{{ $item->HACYU_ID }}"  class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
@@ -564,7 +573,7 @@
                                     <th class="th9" width="80">値引予定月</th>
                                     <th class="th9" width="80">納品希望日</th>
                                     <th class="th9" width="180">備考</th>
-                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" class="th9" width="auto">納品日<br/>※分納の場合は数量を変更して下さい。</th>
+                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" class="th9" width="auto">最短納品予定日<br/>※日付の入力以外の場合は、ライフワンへのコメントに入力してください。</th>
                                 </tr>
                             </thead>
                             <tbody class="tbody-{{ $item->HACYU_ID }}">
@@ -582,7 +591,7 @@
                                     <td>{{ $detail->HINBAN }}</td>
                                     <td class="text-right data-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">{{ number_format($detail->TANKA) }}</td>
                                     <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
-                                        <input data-nebiki="{{ $detail->NEBIKI_TANKA }}" data-zeinuki="{{ $detail->ZEINUKI_TANKA }}" data-no="{{ $detail->SPLIT_NO }}" data-value="{{ $detail->SURYO }}" data-id="{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}" type="text" {{ !$isUserLifeOne ? '' : 'disabled' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}-{{ $detail->SPLIT_NO }}][SURYO]" class="txt-suryo" maxlength="10" value="{{ $detail->SURYO }}">
+                                        <input data-nebiki="{{ $detail->NEBIKI_TANKA }}" data-zeinuki="{{ $detail->ZEINUKI_TANKA }}" data-no="{{ $detail->SPLIT_NO }}" data-value="{{ $detail->SURYO }}" data-id="{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}" type="text" {{ ($isUserLifeOne || $item->IRAI_CD != '03') ? 'disabled' : '' }} name="data[{{ $item->HACYU_ID }}][DETAIL][{{ $detail->HACYUMSAI_ID }}-{{ $detail->SPLIT_NO }}][SURYO]" class="txt-suryo" maxlength="10" value="{{ $detail->SURYO }}">
                                     </td>
                                     <td class="text-right"><input type="text" readonly="" value="{{ number_format($detail->KINGAK) }}" class="txt-no-border KINGAK"></td>
                                     <td class="text-right">{{ $detail->SIKIRI_RATE }}%</td>
