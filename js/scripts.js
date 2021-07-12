@@ -881,7 +881,7 @@ $(function(){
         });
 
         var ob = $(tr).clone();
-        var newNo = parseInt($(".hdSPLITNO-"+id).val()) + 1;
+        var newNo = parseInt($(".hdSPLITNO-"+id+'-'+iddetail).val()) + 1;
         ob.find('input').each(function(){ 
             var nameStr = this.name;
             var oldNo = $(this).data('no');
@@ -917,7 +917,7 @@ $(function(){
             $(this).attr('data-no', newNo);
         });   
         tr.after(ob);
-        $(".hdSPLITNO-"+id).val(newNo);
+        $(".hdSPLITNO-"+id+'-'+iddetail).val(newNo);
       }
     })
 

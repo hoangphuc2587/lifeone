@@ -579,10 +579,12 @@
                             <tbody class="tbody-{{ $item->HACYU_ID }}">
                                 @php
                                   $SPLIT_NO = 1;
+                                  $dataSplitNo = array();
                                 @endphp
                                 @foreach ($item->HACYUMSAI as $detail)
                                 @php
                                   $SPLIT_NO = $detail->SPLIT_NO;
+                                  $dataSplitNo[$detail->HACYUMSAI_ID] = $SPLIT_NO;
                                 @endphp
                                 <tr class="cacl-total-{{ $item->HACYU_ID }}-{{ $detail->HACYUMSAI_ID }}">
                                     <td>{{ $detail->HACYUMSAI_ID }}</td>
@@ -610,7 +612,9 @@
                                 @endforeach
                             </tbody>                            
                         </table>
-                        <input type="hidden" class="hdSPLITNO-{{ $item->HACYU_ID }}" value="{{ $SPLIT_NO }}">
+                        @foreach ($dataSplitNo as $key => $value)
+                        <input type="hidden" class="hdSPLITNO-{{ $item->HACYU_ID }}-{{ $key }}" value="{{ $value }}">
+                        @endforeach
                     </div>
                 </div>
 

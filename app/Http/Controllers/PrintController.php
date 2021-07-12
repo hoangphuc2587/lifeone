@@ -601,9 +601,7 @@ class PrintController extends Controller
                                 ->update($dataUpdateDetail);
                             }                           
                         }else{
-                             if(empty($oddDetailFisrt)){
-                                $oddDetailFisrt = $this->getDataOneHACYUMSAI($HACYU_ID, $HACYUMSAI_ID, 0);
-                             }                            
+                            $oddDetailFisrt = $this->getDataOneHACYUMSAI($HACYU_ID, $HACYUMSAI_ID, 0);
                             $dataUpdateDetailNew = array();
                             $dataUpdateDetailNew['HACYU_ID'] = $HACYU_ID;
                             $dataUpdateDetailNew['HACYUMSAI_ID'] = $HACYUMSAI_ID;
@@ -622,6 +620,8 @@ class PrintController extends Controller
                             $dataUpdateDetailNew['DEL_FLG'] = 0;
                             $dataUpdateDetailNew['ADD_TANTCD'] = $user->TANT_CD;
                             $dataUpdateDetailNew['ADD_YMD'] = $date; 
+                            $dataUpdateDetailNew['UPD_TANTCD'] = $user->TANT_CD;
+                            $dataUpdateDetailNew['UPD_YMD'] = $date; 
 
                             if(empty($HACYUMSAI['KAITO_NOKI'])){
                                 $dataUpdateDetailNew['KAITO_NOKI'] = null;
