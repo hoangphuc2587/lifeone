@@ -933,8 +933,16 @@ $(function(){
             var new_val =  this.value;
             var $this = this;         
             var d_value = $(this).data('value');
-            if (d_value == '' || CompareDate(new_val, d_value) == false){              
-               $(this).val(new_val);
+            var id =  $(this).data('hacyuid');
+            var sybet = $('.data-haiso-sybet-cd-'+id).val(); 
+            if (d_value == '' || CompareDate(new_val, d_value) == false){  
+               var d_check = new_val.replace(/\//g,"-") 
+               if (sybet == '01' && holidays.includes(d_check)){
+                    $("#modalHolidays").modal('show'); 
+                    setTimeout(function(){ $this.value = d_value; }, 1000);
+               }else{
+                    $(this).val(new_val);
+               }                
             }
             else{
                $("#modalCallLifeOne").modal('show'); 
@@ -955,17 +963,24 @@ $(function(){
             var id = $(this).data('id');
             var $this = this;
             var new_val =  this.value;
-            $( ".date-" + id ).each(function( index ) {
-                var d_value = $(this).data('value');
-                if (d_value == '' || CompareDate(new_val, d_value) == false){
-                   $(this).val(new_val);
-                }
-                else{
-                   $("#modalCallLifeOne").modal('show');
-                   $this.value = '';
-                   $(this).val(d_value);
-                }
-            });           
+            var sybet = $('.data-haiso-sybet-cd-'+id).val(); 
+            var d_check = new_val.replace(/\//g,"-") 
+            if (sybet == '01' && holidays.includes(d_check)){
+                 $("#modalHolidays").modal('show');
+                 $this.value = ''; 
+            }else{
+                $( ".date-" + id ).each(function( index ) {
+                    var d_value = $(this).data('value');
+                    if (d_value == '' || CompareDate(new_val, d_value) == false){
+                       $(this).val(new_val);
+                    }
+                    else{
+                       $("#modalCallLifeOne").modal('show');
+                       $this.value = '';
+                       $(this).val(d_value);
+                    }
+                });
+            }    
         });
     }
 

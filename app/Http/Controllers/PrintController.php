@@ -280,9 +280,20 @@ class PrintController extends Controller
            $arr[] = $value->KBNMSAI_NAME;          
         }
         return $arr;
-    } 
+    }
 
-
+    private function getHolidays(){
+        $query = DB::table('M_HOLIDAY_WEB')
+        ->select(
+        'M_HOLIDAY_WEB.HOLIDAY'
+        );
+        $data =  $query->get();
+        $arr = array();
+        foreach ($data as $value) { 
+           $arr[] = $value->HOLIDAY;
+        }
+        return $arr;
+    }
     private function deliveryCompany(){
         // 配送業者
         $query = DB::table('M_KBN_WEB')
@@ -315,7 +326,8 @@ class PrintController extends Controller
             session()->forget('hasSTS01');
         }
         $driverList = $this->getDriverInfo();     
-        return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne' ,'hasSTS01Load', 'driverList'); 
+        $holidays = $this->getHolidays();
+        return compact('deliveryCompany', 'data', 'sourceName', 'isUserLifeOne' ,'hasSTS01Load', 'driverList','holidays'); 
     }
 
     public function search_print($id)

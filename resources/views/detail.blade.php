@@ -600,7 +600,7 @@
                                     <td>{{ empty($detail->NOHIN_KIBO_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_KIBO_YMD))}}</td>
                                     <td>{{ $detail->BIKO }}</td>
                                     <td class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}">
-                                        <input data-no="{{ $detail->SPLIT_NO }}" type="text"
+                                        <input data-hacyuid="{{ $item->HACYU_ID }}" data-no="{{ $detail->SPLIT_NO }}" type="text"
                                         data-date-format="yyyy/mm/dd" data-value="{{ $item->IRAI_CD == '03' ? (empty($detail->NOHIN_YMD) ? '' : date('Y/m/d', strtotime($detail->NOHIN_YMD)))  :  (empty($detail->KAITO_NOKI) ? '' : date('Y/m/d', strtotime($detail->KAITO_NOKI))) }}"
                                         autocomplete="off" class="{{ !$isUserLifeOne ? 'datepicker-input' : 'no-edit' }} date-{{ $item->HACYU_ID }}" style="width: 95px;"
                                         {{ !$isUserLifeOne ? '' : 'disabled' }} 
@@ -933,6 +933,19 @@
                 </div>
             </div>
 
+            <div class="modal fade in" id="modalHolidays" tabindex="-1" role="dialog" aria-hidden="false">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>休日を入力することはできません。</p>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+
             <div class="modal fade in" id="modalCaclTotal" tabindex="-1" role="dialog" aria-hidden="false">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
@@ -1016,6 +1029,7 @@
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
     <script>
     var driverList = {!! json_encode($driverList) !!};
+    var holidays = {!! json_encode($holidays) !!};
     </script>
     <script src="{{ URL::asset('js/scripts.js') }}"></script>
 </body>
