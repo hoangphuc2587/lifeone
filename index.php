@@ -1,7 +1,7 @@
 <?php
 define('USE_AUTHENTICATION', 1);
 define('USERNAME', 'lifeone');
-define('PASSWORD', 'nittei2019');
+define('PASSWORD', 'hacyu2021');
 
 if ( USE_AUTHENTICATION == 1 ) {
     if ( !isset($_SERVER['PHP_AUTH_USER'] ) || !isset( $_SERVER['PHP_AUTH_PW'] ) ||    
