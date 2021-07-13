@@ -494,6 +494,7 @@ class PrintController extends Controller
 
                 $oldData = $this->getOneSQLHACYU($HACYU_ID);
                 $arrDateNoHin = array();
+                $isUpdate = false;
 
                 if($user->HACYUSAKI_CD != ''){
                     if (isset($value['TAIO_CD1'])){
@@ -540,12 +541,17 @@ class PrintController extends Controller
                             $HACYUMSAI['NOHIN_YMD'] = str_replace('/', '-', $HACYUMSAI['NOHIN_YMD']);
                             $arrDateNoHin[] = $HACYUMSAI['NOHIN_YMD'];
                         }
-
+                        
                         $dataUpdateDetail = array();
 
                         if (!empty($oddDetail)){
 
                             $HACYUMSAI['SURYO'] = isset($HACYUMSAI['SURYO']) ? $HACYUMSAI['SURYO'] : $oddDetail->SURYO; 
+
+                            if ($HACYUMSAI['SURYO'] != $oddDetail->SURYO){
+                                $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
+                                $dataUpdateDetail['UPD_YMD'] = $date; 
+                            }
 
                             $dataUpdateDetail['SURYO'] = $HACYUMSAI['SURYO'];
                             $dataUpdateDetail['KINGAK'] = $HACYUMSAI['SURYO'] * $oddDetail->ZEINUKI_TANKA;
@@ -588,18 +594,19 @@ class PrintController extends Controller
                                     $pre_text = $oddDetail->HINBAN.'('.$HACYUMSAI['SURYO'].'):';
                                     $comment2 .= '【'.date('Y/m/d H:i').'　'.$pre_text.$dateNoHinOld.' → '.$pre_text.$dateNoHinChange.'】';   
                                 }
+
+                                $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
+                                $dataUpdateDetail['UPD_YMD'] = $date;  
+                                $isUpdate = true;
                             }
 
                             if (!empty($dataUpdateDetail)){
-                                $dataUpdateDetail['UPD_TANTCD'] = $user->TANT_CD;
-                                $dataUpdateDetail['UPD_YMD'] = $date;
-
                                 DB::table('T_HACYUMSAI')
                                 ->where('HACYU_ID',$HACYU_ID)
                                 ->where('HACYUMSAI_ID',$HACYUMSAI_ID)
                                 ->where('SPLIT_NO',$HACYUMSAI['SPLIT_NO'])
                                 ->update($dataUpdateDetail);
-                            }                           
+                            }
                         }else{
                             $oddDetailFisrt = $this->getDataOneHACYUMSAI($HACYU_ID, $HACYUMSAI_ID, 0);
                             $dataUpdateDetailNew = array();
@@ -660,6 +667,7 @@ class PrintController extends Controller
                                         $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
                                     }
                                     $driverChange = true;
+                                    $isUpdate = true;
                                 }
                             }
                         }
@@ -669,7 +677,8 @@ class PrintController extends Controller
                         if (!empty($comment2)){
                             $comment2 .= PHP_EOL;
                         }                         
-                        $comment2 .= '【'.date('Y/m/d H:i').'　'.implode(', ', $dataChange).'】';  
+                        $comment2 .= '【'.date('Y/m/d H:i').'　'.implode(', ', $dataChange).'】'; 
+                        $isUpdate = true; 
                     } 
 
                     if (!empty($comment2)){
@@ -692,6 +701,7 @@ class PrintController extends Controller
                     if ($TAIO_CD != $oldData->TAIO_CD){
                         $dataUpdate['TAIO_CD'] = $TAIO_CD;
                         $dataUpdate['TAIO_TANT_CD'] = $TAIO_CD == '' ? '' : $user->TANT_CD;
+                        $isUpdate = true;
                     }
                     if (empty($HACYU['COMMENT1'])){
                         $dataUpdate['COMMENT1']  = '';
@@ -728,9 +738,10 @@ class PrintController extends Controller
                             $dataUpdate['STS_CD'] = '07';
                         }
                     }
-
-                    $dataUpdate['UPD_TANTCD'] = $user->TANT_CD;
-                    $dataUpdate['UPD_YMD'] = $date;
+                    if ($isUpdate){
+                        $dataUpdate['UPD_TANTCD'] = $user->TANT_CD;
+                        $dataUpdate['UPD_YMD'] = $date;
+                    }
                     DB::table('T_HACYU')->where('HACYU_ID',$HACYU_ID)->update($dataUpdate);
                 }
 
