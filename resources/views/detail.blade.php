@@ -549,7 +549,7 @@
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="iro66i">
                         <div>
-                            <label>最短納品予定日：</label>
+                            <label>{{ $item->IRAI_CD != '03' ? '最短納品予定日' : '納品日'}}：</label>
                             <input data-date-format="yyyy/mm/dd" {{ !$isUserLifeOne ? '' : 'disabled' }} autocomplete="off" class="{{ !$isUserLifeOne ? 'datepicker-change brg-edit' : '' }}" type="text" data-id="{{ $item->HACYU_ID }}"  class="brg-input"  style="width: 120px;"/>        
                         </div>
                     </div>
@@ -573,7 +573,14 @@
                                     <th class="th9" width="80">値引予定月</th>
                                     <th class="th9" width="80">納品希望日</th>
                                     <th class="th9" width="180">備考</th>
-                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" class="th9" width="auto">最短納品予定日<br/>※日付の入力以外の場合は、ライフワンへのコメントに入力してください。</th>
+                                    
+                                    <th class="brg-input{{ !$isUserLifeOne ? ' brg-edit' : '' }}" class="th9" width="auto">
+                                        @if($item->IRAI_CD != '03')
+                                        最短納品予定日<br/>※日付の入力以外の場合は、ライフワンへのコメントに入力してください。
+                                        @else
+                                        納品日<br/>※分納の場合は数量を変更して下さい。
+                                        @endif 
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="tbody-{{ $item->HACYU_ID }}">

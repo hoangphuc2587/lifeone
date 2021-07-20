@@ -106,9 +106,9 @@
         font-weight: 700;
         text-align: center;
         font-size: 30px;
-        text-overflow: ellipsis;
+/*        text-overflow: ellipsis;
         white-space: nowrap;
-        overflow: hidden;
+        overflow: hidden;*/
     }
 
     .container {
@@ -288,7 +288,7 @@
     <form action="{{  route('post_search_print')}}" method="POST" class="form_list">
         @csrf
         <div class="container-fluid sticky">
-            <div class="container grey-bg">
+            <div class="container grey-bg wapper-list">
                 <div class="header-box">
                 </div>
                 <div class="row">
@@ -607,7 +607,7 @@
 
         <div class="container-fluid">
             <div class="container grey-bg">
-                <div class="row" style="margin-top:370px;"></div>
+                <div class="row mask-height"></div>
                 <div class="row">
                     <div class="table-cover">                    
                     <table class="table table-bordered table2">

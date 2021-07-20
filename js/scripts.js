@@ -997,7 +997,12 @@ $(function(){
         }).focus(function(){            
             $(this).data("uiAutocomplete").search($(this).val());
         });
-    }    
+    }
+
+    if($('.mask-height').length) {
+        var h_title = $(".wapper-list").height() - 66; 
+        $('.mask-height').css('margin-top', h_title);
+    }        
 })
 
 function download(files) {
