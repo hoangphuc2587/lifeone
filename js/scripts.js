@@ -1001,6 +1001,10 @@ $(function(){
 
     if($('.mask-height').length) {
         var h_title = $(".wapper-list").height() - 66; 
+        if ($("#hdUserLifeOne").val() == 1){
+            h_title = $(".wapper-list").height() - 47; 
+        }
+        
         $('.mask-height').css('margin-top', h_title);
     }        
 })
