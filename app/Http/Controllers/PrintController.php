@@ -656,8 +656,12 @@ class PrintController extends Controller
                     if ($oldData->HAISO_SYBET_CD == '04' && $oldData->IRAI_CD == '03' ){
                         foreach ($arrItemChange as $itemChange) {
                             if ($oldData->HAISOGYOSYA_MULTI_FLG == 0){                    
-                                if (in_array($itemChange, array('HAISOGYOSYA3_1', 'DENPYONO3_1', 'HAISOGYOSYA3_2', 'DENPYONO3_2')))
-                                $canChange = false;
+                                if (in_array($itemChange, array('HAISOGYOSYA3_1', 'DENPYONO3_1', 'HAISOGYOSYA3_2', 'DENPYONO3_2'))){
+                                    $canChange = false;
+                                }
+                                else{
+                                    $canChange = true;
+                                }
                             }
                             if ($canChange){
                                 if ($HACYU[$itemChange]  != $oldData->$itemChange ){
@@ -666,7 +670,9 @@ class PrintController extends Controller
                                     }elseif ($itemChange === 'NO_DENPYO_FLG'){
                                         $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
                                     }
-                                    $driverChange = true;
+                                    if ($itemChange !== 'BIKO'){
+                                       $driverChange = true;
+                                    }
                                     $isUpdate = true;
                                 }
                             }
