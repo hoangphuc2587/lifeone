@@ -668,7 +668,7 @@ class PrintController extends Controller
                                     if (!empty($oldData->$itemChange) && $itemChange !== 'NO_DENPYO_FLG'){
                                         $dataChange[] = $oldData->$itemChange.' → '.$HACYU[$itemChange];
                                     }elseif ($itemChange === 'NO_DENPYO_FLG'){
-                                        $dataChange[] =  $arrDENPYO[$oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
+                                        $dataChange[] =  $arrDENPYO[ ($oldData->$itemChange == '') ? 0: $oldData->$itemChange].' → '. $arrDENPYO[$HACYU[$itemChange]]; 
                                     }
                                     if ($itemChange !== 'BIKO'){
                                        $driverChange = true;
